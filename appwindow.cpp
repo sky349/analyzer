@@ -25,9 +25,14 @@
 class PlotItem:public NRadarItem
 {
 public:
-	PlotItem(const QPointF& pos, const NRadarPlot *plot,int type,const QColor *notAssociatedColor) :
+	PlotItem(const QPointF& pos,
+             const NRadarPlot *plot,
+             int type,
+             const QColor *notAssociatedColor,
+             const bool *blackWhiteMode) :
         NRadarItem(NRadarItem::Point),
-        m_notAssociatedColor(notAssociatedColor)
+        m_notAssociatedColor(notAssociatedColor),
+        m_blackWhiteMode(blackWhiteMode)
 	{
 		this->type=type;
 		this->plot=plot;
@@ -57,8 +62,9 @@ public:
 
 	QColor color1(const NRadarItemOption *option) const
 	{
+        const bool isBlackWhite = (m_blackWhiteMode && *m_blackWhiteMode);
         if(option->state&QStyle::State_Selected)
-            return Qt::red; //Qt::white;
+            return isBlackWhite ? Qt::red : Qt::white;
 
         if(fixedColor.isValid())
             return fixedColor;
@@ -66,28 +72,28 @@ public:
         if (plot->getSource() == 2)
         {
             if (plot->getPlotAssociation() == NRadarPlot::NotAssociated)
-                return Qt::black; //(m_notAssociatedColor ? *m_notAssociatedColor : Qt::gray);
+                return isBlackWhite ? Qt::black : (m_notAssociatedColor ? *m_notAssociatedColor : Qt::gray);
 
             if (plot->getSSRType()==NRadarPlot::ModeS && (plot->getOption(NRadarPlot::AllCall)).toBool())
-                return Qt::black; //Qt::cyan;
+                return isBlackWhite ? Qt::black : Qt::cyan;
 
             if (plot->getSSRType() == NRadarPlot::ModeS)
-                return Qt::black; //Qt::blue;
+                return isBlackWhite ? Qt::black : QColor(0xCAF0F8); //Qt::blue;
 
-            return Qt::black; //Qt::yellow;
+            return isBlackWhite ? Qt::black : Qt::yellow;
         }
 
         switch(type)
 			{
-            case 1: return Qt::black; //Qt::red;
+            case 1: return isBlackWhite ? Qt::black : Qt::red;
             //case 2: return Qt::yellow;
-            case 3: return Qt::black; //QColor(0,162,232);
+            case 3: return isBlackWhite ? Qt::black : QColor(0,162,232);
 
-            case 12: return Qt::black; //QColor(255,128,0);
-            case 13: return Qt::black; //QColor(0,255,255);
-            case 14: return Qt::black; //Qt::green;
+            case 12: return isBlackWhite ? Qt::black : QColor(255,128,0);
+            case 13: return isBlackWhite ? Qt::black : QColor(0,255,255);
+            case 14: return isBlackWhite ? Qt::black : Qt::green;
 			}
-        return Qt::black; //Qt::white;
+        return isBlackWhite ? Qt::black : Qt::white;
 	}
 
 	void switchToGeoPos(int alt_mul=0)
@@ -104,10 +110,12 @@ public:
 	QPointF posGeo;
 	QColor fixedColor;
     const QColor *m_notAssociatedColor;
+    const bool *m_blackWhiteMode;
 };
 
 AppWindow::AppWindow():QMainWindow(0),
-	m_notAssociated(Qt::gray)
+    m_notAssociated(Qt::gray),
+    m_blackWhiteMode(false)
 {
 	setupUi(this);
 
@@ -145,6 +153,19 @@ AppWindow::AppWindow():QMainWindow(0),
 	header->setVisible(false);
 
 	connect(radarScene,SIGNAL(itemSelectionChanged(NRadarItem*)),this,SLOT(onPlotSelected(NRadarItem*)));
+
+    connect(blackWhite_chk, &QCheckBox::clicked, this, [this](bool checked){
+        m_blackWhiteMode = checked;
+
+        if(QAction *tilesAct = radarView->getControlAction(NRadarView::ActTilesOn))
+        {
+            tilesAct->setChecked(!checked);
+            tilesAct->activate(QAction::Trigger);
+        }
+
+        radarView->resetCachedContent();
+        radarView->viewport()->update();
+    });
 
 	dataPack=new DataPack();
 
@@ -258,8 +279,6 @@ bool AppWindow::importData(bool confirm)
 	qDebug()<<"Imported data size: "<<dataPack->getData().size();
 
 	setProperty("valid",true);
-
-    QMessageBox::information(this, "Warning", "Dont forget to switch on the Satellite view to have the white background color!");
 
 	return true;
 }
@@ -378,8 +397,8 @@ void AppWindow::applyFilter(bool fullFilter)
 	QString aircraftId=(cmbAircraftID->currentIndex() ? cmbAircraftID->currentText() : "");
 	uint trackNo=(cmbTrackNo->currentIndex()==0 ? 0 : cmbTrackNo->currentText().toUInt());
 
-	uint begin=dateBegin->dateTime().toTime_t();
-	uint end=dateEnd->dateTime().toTime_t();
+	const QDateTime begin = dateBegin->dateTime();
+	const QDateTime end = dateEnd->dateTime();
 
 	uint modeS=cmbModeS->currentIndex();
 
@@ -454,8 +473,8 @@ void AppWindow::applyFilter(bool fullFilter)
 
 		if(!filterOut)
 		{
-			uint t=plot->getTime().toTime_t();
-			filterOut = (t<begin || t>end);
+			const QDateTime t = plot->getTime();
+			filterOut = (t < begin || t > end);
 		}
 
 		if(!filterOut && !area.isEmpty() && !area.containsPoint(plot->getXYCoord(),Qt::OddEvenFill))
@@ -483,7 +502,11 @@ void AppWindow::applyFilter(bool fullFilter)
 
 			if(id)
 			{
-				pi=new PlotItem(plot->getXYCoord(),plot,id==11 ? id+plot->getSource() : id,&m_notAssociated);
+				pi=new PlotItem(plot->getXYCoord(),
+                                plot,
+                                id==11 ? id+plot->getSource() : id,
+                                &m_notAssociated,
+                                &m_blackWhiteMode);
 				radarScene->addItem(pi,layers[id]);
 			}
 		}
