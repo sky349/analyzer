@@ -4,6 +4,11 @@
 #include <radarview/nradardecoration.h>
 #include <radarview/nradaritem.h>
 
+#include <QGraphicsLineItem>
+#include <QGraphicsProxyWidget>
+#include <QHeaderView>
+#include <QMouseEvent>
+
 #include "commondefs.h"
 
 #include "appwindow.h"
@@ -21,6 +26,7 @@
 #include "ampscattertask.h"
 #include "duplicatetask.h"
 #include "ampfiltertask.h"
+#include "plotlabel.h"
 
 class PlotItem:public NRadarItem
 {
@@ -115,7 +121,11 @@ public:
 
 AppWindow::AppWindow():QMainWindow(0),
     m_notAssociated(Qt::gray),
-    m_blackWhiteMode(false)
+    m_blackWhiteMode(false),
+    m_plotPopupProxy(0),
+    m_plotPopupLine(0),
+    m_plotPopupLabel(0),
+    m_plotPopupItem(0)
 {
 	setupUi(this);
 
@@ -123,6 +133,7 @@ AppWindow::AppWindow():QMainWindow(0),
 	radarView->setScene(radarScene);
 	radarView->setScaleLimits(1);
 	radarScene->getMap()->initTiles();
+    radarView->viewport()->installEventFilter(this);
 
 	//radarView->set3DAllowed(true);
 
@@ -176,6 +187,7 @@ AppWindow::AppWindow():QMainWindow(0),
 
 AppWindow::~AppWindow()
 {
+    closePlotPopup();
 	delete dataPack;
 
 	qDeleteAll(tasks);
@@ -536,7 +548,13 @@ QTreeWidgetItem* AppWindow::addItemToDetails(QTreeWidgetItem *parent,const QStri
 //копипаста из RadarClient-а
 void AppWindow::onPlotSelected(NRadarItem* radarItem)
 {
-	if(!radarItem || !radarItem->getLayer()) return;
+    if(!radarItem || !radarItem->getLayer())
+        return;
+
+    if (QGuiApplication::mouseButtons() & Qt::RightButton)
+    {
+        showPlotPopup(radarItem,radarItem->scenePos());
+    }
 
 	const NRadarPlot* plot=static_cast<PlotItem*>(radarItem)->plot;
 	if(!plot) return;
@@ -862,6 +880,115 @@ const NRadarMap* AppWindow::getActiveMap() const
 NRadarScene* AppWindow::getRadarScene() const
 {
 	return radarScene;
+}
+
+bool AppWindow::eventFilter(QObject *obj,QEvent *event)
+{
+    if(obj==radarView->viewport() && event->type()==QEvent::MouseButtonPress)
+    {
+        QMouseEvent *mouseEvent=static_cast<QMouseEvent*>(event);
+        if(mouseEvent->button()==Qt::RightButton)
+        {
+            QPointF scenePos=radarView->mapToScene(mouseEvent->pos());
+
+            if(m_plotPopupProxy && m_plotPopupProxy->sceneBoundingRect().contains(scenePos))
+            {
+                closePlotPopup();
+                return true;
+            }
+        }
+    }
+
+    return QMainWindow::eventFilter(obj,event);
+}
+
+void AppWindow::showPlotPopup(NRadarItem *radarItem,const QPointF& scenePos)
+{
+    if(!radarItem) return;
+
+    if(!m_plotPopupProxy)
+    {
+        m_plotPopupLabel=new PlotLabel(treeDetails);
+        m_plotPopupProxy=new QGraphicsProxyWidget();
+        m_plotPopupProxy->setWidget(m_plotPopupLabel);
+        m_plotPopupProxy->setFlag(QGraphicsItem::ItemIgnoresTransformations,true);
+        m_plotPopupProxy->setFlag(QGraphicsItem::ItemIsMovable,true);
+        m_plotPopupProxy->setFlag(QGraphicsItem::ItemIsSelectable,true);
+        m_plotPopupProxy->setAcceptedMouseButtons(Qt::LeftButton|Qt::RightButton);
+        m_plotPopupProxy->setZValue(10000.0);
+        radarScene->addItem(m_plotPopupProxy);
+
+        connect(m_plotPopupProxy,&QGraphicsObject::xChanged,this,&AppWindow::updatePlotPopupLine);
+        connect(m_plotPopupProxy,&QGraphicsObject::yChanged,this,&AppWindow::updatePlotPopupLine);
+    }
+
+    if(!m_plotPopupLine)
+    {
+        QPen pen(Qt::yellow,0);
+        pen.setCosmetic(true);
+        m_plotPopupLine=radarScene->addLine(QLineF(),pen);
+        m_plotPopupLine->setZValue(9999.0);
+    }
+
+    m_plotPopupItem=radarItem;
+    populatePlotPopup(radarItem);
+
+    m_plotPopupProxy->setPos(scenePos+QPointF(20,20));
+    m_plotPopupProxy->setSelected(true);
+    updatePlotPopupLine();
+}
+
+void AppWindow::populatePlotPopup(NRadarItem *radarItem)
+{
+    if(!m_plotPopupLabel || !radarItem) return;
+
+    PlotItem *plotItem=dynamic_cast<PlotItem*>(radarItem);
+    if(!plotItem || !plotItem->plot) return;
+
+    const NRadarPlot *plot=plotItem->plot;
+
+    QString source;
+    switch(plot->getSource())
+    {
+    case NRadarPlot::PSR: source="PSR"; break;
+    case NRadarPlot::SSR: source="SSR"; break;
+    case NRadarPlot::Combined: source="Combined"; break;
+    case NRadarPlot::ADSB: source="ADS-B"; break;
+    default: source="Unknown"; break;
+    }
+
+    QVector<QPair<QString, QString> > entries;
+    entries << qMakePair(tr("Date"), plot->getTime().date().toString("dd/MM/yyyy"));
+    entries << qMakePair(tr("Time"), plot->getTime().time().toString("HH:mm:ss.zzz"));
+    entries << qMakePair(tr("Source"), source);
+
+    m_plotPopupLabel->setEntries(entries);
+}
+
+void AppWindow::updatePlotPopupLine()
+{
+    if(!m_plotPopupProxy || !m_plotPopupLine || !m_plotPopupItem) return;
+
+    QPointF start=m_plotPopupProxy->sceneBoundingRect().topLeft();
+    QPointF end=m_plotPopupItem->scenePos();
+    m_plotPopupLine->setLine(QLineF(start,end));
+}
+
+void AppWindow::closePlotPopup()
+{
+    if(m_plotPopupLine)
+    {
+        delete m_plotPopupLine;
+        m_plotPopupLine=0;
+    }
+    if(m_plotPopupProxy)
+    {
+        delete m_plotPopupProxy;
+        m_plotPopupProxy=0;
+    }
+
+    m_plotPopupLabel=0;
+    m_plotPopupItem=0;
 }
 
 //set plot color

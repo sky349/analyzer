@@ -13,6 +13,7 @@ debug/podtask.o
 debug/reflectorstask.o
 debug/sampletask.o
 debug/amplitudestask.o
+debug/plotlabel.o
 debug/amplitudedlg.o
 debug/moc_appwindow.o
 debug/moc_ampscatterdlg.o
@@ -23,3 +24,4 @@ debug/moc_podtask.o
 debug/moc_ianalyser.o
 debug/moc_reflectorstask.o
 debug/moc_amplitudedlg.o
+debug/moc_plotlabel.o

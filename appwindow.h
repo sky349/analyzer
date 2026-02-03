@@ -13,6 +13,9 @@
 
 class DataPack;
 class GuiFilter;
+class QGraphicsLineItem;
+class QGraphicsProxyWidget;
+class PlotLabel;
 
 class AppWindow:public QMainWindow,public IAnalyser,private Ui_AppWindow
 {
@@ -49,6 +52,7 @@ protected slots:
 protected:
     void initGUI();
     void initActions();
+    bool eventFilter(QObject *obj,QEvent *event) override;
 
     void fillComboBox(QComboBox *cmb,const QMap<QString,bool>& list);
 
@@ -67,6 +71,17 @@ private:
     QTime lastWorkingUpdate;
 
     QColor m_notAssociated, m_allCall, m_ssr, m_modeS, m_psr, m_combined;
+    bool m_blackWhiteMode;
+
+    void showPlotPopup(NRadarItem *radarItem,const QPointF& scenePos);
+    void closePlotPopup();
+    void updatePlotPopupLine();
+    void populatePlotPopup(NRadarItem *radarItem);
+
+    QGraphicsProxyWidget *m_plotPopupProxy;
+    QGraphicsLineItem *m_plotPopupLine;
+    PlotLabel *m_plotPopupLabel;
+    NRadarItem *m_plotPopupItem;
 };
 
 #endif // APPWINDOW_H

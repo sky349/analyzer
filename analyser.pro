@@ -25,6 +25,7 @@ SOURCES += main.cpp\
 	reflectorstask.cpp \
 	sampletask.cpp \
 	amplitudestask.cpp \
+    plotlabel.cpp \
 	amplitudedlg.cpp
 
 HEADERS  += appwindow.h \
@@ -43,6 +44,7 @@ HEADERS  += appwindow.h \
 	sampletask.h \
 	amplitudestask.h \
 	amplitudedlg.h \
+    plotlabel.h \
 	spline.h
 
 INCLUDEPATH += ../../../out/include \

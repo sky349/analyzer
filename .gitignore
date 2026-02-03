@@ -1,0 +1,6 @@
+ui_*.*
+*.Debug
+*.Release
+Makefile.*
+object_script.analyser.Debug
+object_script.analyser.Release

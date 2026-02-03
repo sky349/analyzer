@@ -298,7 +298,7 @@
             </sizepolicy>
            </property>
            <property name="displayFormat">
-            <string>d/M/yy HH:mm</string>
+            <string>d/M/yy HH:mm:ss</string>
            </property>
            <property name="calendarPopup">
             <bool>true</bool>
@@ -317,7 +317,7 @@
             </sizepolicy>
            </property>
            <property name="displayFormat">
-            <string>d/M/yy HH:mm</string>
+            <string>d/M/yy HH:mm:ss</string>
            </property>
            <property name="calendarPopup">
             <bool>true</bool>
@@ -526,6 +526,13 @@
          <string notr="true">1</string>
         </property>
        </column>
+      </widget>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="blackWhite_chk">
+       <property name="text">
+        <string>Black and white mode</string>
+       </property>
       </widget>
      </item>
     </layout>

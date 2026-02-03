@@ -12,6 +12,7 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDateTimeEdit>
 #include <QtWidgets/QDockWidget>
@@ -86,6 +87,7 @@ public:
     QWidget *dockWidgetContents_3;
     QVBoxLayout *verticalLayout_6;
     QTreeWidget *treeDetails;
+    QCheckBox *blackWhite_chk;
     QDockWidget *dockView;
     QWidget *dockWidgetContents;
     QHBoxLayout *horizontalLayout_2;
@@ -408,6 +410,11 @@ public:
 
         verticalLayout_6->addWidget(treeDetails);
 
+        blackWhite_chk = new QCheckBox(dockWidgetContents_3);
+        blackWhite_chk->setObjectName(QString::fromUtf8("blackWhite_chk"));
+
+        verticalLayout_6->addWidget(blackWhite_chk);
+
         dockDetails->setWidget(dockWidgetContents_3);
         AppWindow->addDockWidget(Qt::RightDockWidgetArea, dockDetails);
         dockView = new QDockWidget(AppWindow);
@@ -492,8 +499,8 @@ public:
         cmbModeS->setItemText(2, QCoreApplication::translate("AppWindow", "Yes", nullptr));
 
         btnArea->setText(QCoreApplication::translate("AppWindow", "click to define...", nullptr));
-        dateBegin->setDisplayFormat(QCoreApplication::translate("AppWindow", "d/M/yy HH:mm", nullptr));
-        dateEnd->setDisplayFormat(QCoreApplication::translate("AppWindow", "d/M/yy HH:mm", nullptr));
+        dateBegin->setDisplayFormat(QCoreApplication::translate("AppWindow", "d/M/yy HH:mm:ss", nullptr));
+        dateEnd->setDisplayFormat(QCoreApplication::translate("AppWindow", "d/M/yy HH:mm:ss", nullptr));
         btnSourceClear->setText(QCoreApplication::translate("AppWindow", "X", nullptr));
         btnTypeClear->setText(QCoreApplication::translate("AppWindow", "X", nullptr));
         btnModeSClear->setText(QCoreApplication::translate("AppWindow", "X", nullptr));
@@ -505,6 +512,7 @@ public:
         btnAddressClear->setText(QCoreApplication::translate("AppWindow", "X", nullptr));
         btnTrackNoClear->setText(QCoreApplication::translate("AppWindow", "X", nullptr));
         dockDetails->setWindowTitle(QCoreApplication::translate("AppWindow", "Selection details", nullptr));
+        blackWhite_chk->setText(QCoreApplication::translate("AppWindow", "Black and white mode", nullptr));
         dockView->setWindowTitle(QCoreApplication::translate("AppWindow", "View mode", nullptr));
         radioViewNormal->setText(QCoreApplication::translate("AppWindow", "Geo", nullptr));
         radioViewRA->setText(QCoreApplication::translate("AppWindow", "Range / Alt", nullptr));

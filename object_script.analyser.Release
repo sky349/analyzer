@@ -13,6 +13,7 @@ release/podtask.o
 release/reflectorstask.o
 release/sampletask.o
 release/amplitudestask.o
+release/plotlabel.o
 release/amplitudedlg.o
 release/moc_appwindow.o
 release/moc_ampscatterdlg.o
@@ -23,3 +24,4 @@ release/moc_podtask.o
 release/moc_ianalyser.o
 release/moc_reflectorstask.o
 release/moc_amplitudedlg.o
+release/moc_plotlabel.o
