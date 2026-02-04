@@ -122,11 +122,8 @@ public:
 AppWindow::AppWindow():QMainWindow(0),
     m_notAssociated(Qt::gray),
     m_blackWhiteMode(false),
-    m_plotPopupProxy(0),
-    m_plotPopupLine(0),
-    m_plotPopupLabel(0),
-    m_plotPopupItem(0),
-    m_draggingPopup(false)
+    m_draggingPopup(false),
+    m_draggingPopupIndex(-1)
 {
 	setupUi(this);
 
@@ -188,7 +185,7 @@ AppWindow::AppWindow():QMainWindow(0),
 
 AppWindow::~AppWindow()
 {
-    closePlotPopup();
+    closeAllPlotPopups();
 	delete dataPack;
 
 	qDeleteAll(tasks);
@@ -891,36 +888,35 @@ bool AppWindow::eventFilter(QObject *obj,QEvent *event)
         {
             QMouseEvent *mouseEvent=static_cast<QMouseEvent*>(event);
 
-            if(m_plotPopupProxy)
+            int popupIndex=findPopupAtPos(mouseEvent->pos());
+            if(popupIndex>=0)
             {
-                QList<QGraphicsItem*> itemsAtPos=radarView->items(mouseEvent->pos());
-                if(itemsAtPos.contains(m_plotPopupProxy))
+                QPointF scenePos=radarView->mapToScene(mouseEvent->pos());
+                if(mouseEvent->button()==Qt::RightButton)
                 {
-                    QPointF scenePos=radarView->mapToScene(mouseEvent->pos());
-                    if(mouseEvent->button()==Qt::RightButton)
-                    {
-                        closePlotPopup();
-                        return true;
-                    }
-                    if(mouseEvent->button()==Qt::LeftButton)
-                    {
-                        m_draggingPopup=true;
-                        m_popupDragOffset=scenePos-m_plotPopupProxy->pos();
-                        return true;
-                    }
+                    closePlotPopup(popupIndex);
+                    return true;
+                }
+                if(mouseEvent->button()==Qt::LeftButton)
+                {
+                    m_draggingPopup=true;
+                    m_draggingPopupIndex=popupIndex;
+                    m_popupDragOffset=scenePos-m_plotPopups[popupIndex].proxy->pos();
+                    return true;
                 }
             }
         }
-        else if(event->type()==QEvent::MouseMove && m_draggingPopup)
+        else if(event->type()==QEvent::MouseMove && m_draggingPopup && m_draggingPopupIndex>=0)
         {
             QMouseEvent *mouseEvent=static_cast<QMouseEvent*>(event);
             QPointF scenePos=radarView->mapToScene(mouseEvent->pos());
-            m_plotPopupProxy->setPos(scenePos-m_popupDragOffset);
+            m_plotPopups[m_draggingPopupIndex].proxy->setPos(scenePos-m_popupDragOffset);
             return true;
         }
         else if(event->type()==QEvent::MouseButtonRelease && m_draggingPopup)
         {
             m_draggingPopup=false;
+            m_draggingPopupIndex=-1;
             return true;
         }
     }
@@ -932,41 +928,39 @@ void AppWindow::showPlotPopup(NRadarItem *radarItem,const QPointF& scenePos)
 {
     if(!radarItem) return;
 
-    if(!m_plotPopupProxy)
-    {
-        m_plotPopupLabel=new PlotLabel(treeDetails);
-        m_plotPopupProxy=new QGraphicsProxyWidget();
-        m_plotPopupProxy->setWidget(m_plotPopupLabel);
-        m_plotPopupProxy->setFlag(QGraphicsItem::ItemIgnoresTransformations,true);
-        m_plotPopupProxy->setFlag(QGraphicsItem::ItemIsMovable,true);
-        m_plotPopupProxy->setFlag(QGraphicsItem::ItemIsSelectable,true);
-        m_plotPopupProxy->setAcceptedMouseButtons(Qt::LeftButton|Qt::RightButton);
-        m_plotPopupProxy->setZValue(10000.0);
-        radarScene->addItem(m_plotPopupProxy);
+    PlotPopupData popupData;
 
-        connect(m_plotPopupProxy,&QGraphicsObject::xChanged,this,&AppWindow::updatePlotPopupLine);
-        connect(m_plotPopupProxy,&QGraphicsObject::yChanged,this,&AppWindow::updatePlotPopupLine);
-    }
+    popupData.label=new PlotLabel(treeDetails);
+    popupData.proxy=new QGraphicsProxyWidget();
+    popupData.proxy->setWidget(popupData.label);
+    popupData.proxy->setFlag(QGraphicsItem::ItemIgnoresTransformations,true);
+    popupData.proxy->setFlag(QGraphicsItem::ItemIsMovable,true);
+    popupData.proxy->setFlag(QGraphicsItem::ItemIsSelectable,true);
+    popupData.proxy->setAcceptedMouseButtons(Qt::LeftButton|Qt::RightButton);
+    popupData.proxy->setZValue(10000.0+m_plotPopups.size());
+    radarScene->addItem(popupData.proxy);
 
-    if(!m_plotPopupLine)
-    {
-        QPen pen(Qt::yellow,0);
-        pen.setCosmetic(true);
-        m_plotPopupLine=radarScene->addLine(QLineF(),pen);
-        m_plotPopupLine->setZValue(9999.0);
-    }
+    connect(popupData.proxy,&QGraphicsObject::xChanged,this,&AppWindow::updatePlotPopupLines);
+    connect(popupData.proxy,&QGraphicsObject::yChanged,this,&AppWindow::updatePlotPopupLines);
 
-    m_plotPopupItem=radarItem;
-    populatePlotPopup(radarItem);
+    QPen pen(Qt::yellow,0);
+    pen.setCosmetic(true);
+    popupData.line=radarScene->addLine(QLineF(),pen);
+    popupData.line->setZValue(9999.0);
 
-    m_plotPopupProxy->setPos(scenePos+QPointF(20,20));
-    m_plotPopupProxy->setSelected(true);
-    updatePlotPopupLine();
+    popupData.radarItem=radarItem;
+    populatePlotPopup(popupData, radarItem);
+
+    popupData.proxy->setPos(scenePos+QPointF(20,20));
+    popupData.proxy->setSelected(true);
+
+    m_plotPopups.append(popupData);
+    updatePlotPopupLines();
 }
 
-void AppWindow::populatePlotPopup(NRadarItem *radarItem)
+void AppWindow::populatePlotPopup(PlotPopupData &popupData, NRadarItem *radarItem)
 {
-    if(!m_plotPopupLabel || !radarItem) return;
+    if(!popupData.label || !radarItem) return;
 
     PlotItem *plotItem=dynamic_cast<PlotItem*>(radarItem);
     if(!plotItem || !plotItem->plot) return;
@@ -988,33 +982,63 @@ void AppWindow::populatePlotPopup(NRadarItem *radarItem)
     entries << qMakePair(tr("Time"), plot->getTime().time().toString("HH:mm:ss.zzz"));
     entries << qMakePair(tr("Source"), source);
 
-    m_plotPopupLabel->setEntries(entries);
+    popupData.label->setEntries(entries);
 }
 
-void AppWindow::updatePlotPopupLine()
+void AppWindow::updatePlotPopupLines()
 {
-    if(!m_plotPopupProxy || !m_plotPopupLine || !m_plotPopupItem) return;
+    for(int i=0; i<m_plotPopups.size(); ++i)
+    {
+        const PlotPopupData &popup=m_plotPopups[i];
+        if(!popup.proxy || !popup.line || !popup.radarItem) continue;
 
-    QPointF start=m_plotPopupProxy->sceneBoundingRect().topLeft();
-    QPointF end=m_plotPopupItem->scenePos();
-    m_plotPopupLine->setLine(QLineF(start,end));
+        QPointF start=popup.proxy->sceneBoundingRect().topLeft();
+        QPointF end=popup.radarItem->scenePos();
+        popup.line->setLine(QLineF(start,end));
+    }
 }
 
-void AppWindow::closePlotPopup()
+void AppWindow::closePlotPopup(int index)
 {
-    if(m_plotPopupLine)
-    {
-        delete m_plotPopupLine;
-        m_plotPopupLine=0;
-    }
-    if(m_plotPopupProxy)
-    {
-        delete m_plotPopupProxy;
-        m_plotPopupProxy=0;
-    }
+    if(index<0 || index>=m_plotPopups.size()) return;
 
-    m_plotPopupLabel=0;
-    m_plotPopupItem=0;
+    PlotPopupData &popup=m_plotPopups[index];
+
+    if(popup.line)
+        delete popup.line;
+
+    if(popup.proxy)
+        delete popup.proxy;
+
+    m_plotPopups.removeAt(index);
+
+    if(m_draggingPopupIndex==index)
+    {
+        m_draggingPopup=false;
+        m_draggingPopupIndex=-1;
+    }
+    else if(m_draggingPopupIndex>index)
+    {
+        m_draggingPopupIndex--;
+    }
+}
+
+void AppWindow::closeAllPlotPopups()
+{
+    while(!m_plotPopups.isEmpty())
+        closePlotPopup(0);
+}
+
+int AppWindow::findPopupAtPos(const QPoint& viewPos)
+{
+    QList<QGraphicsItem*> itemsAtPos=radarView->items(viewPos);
+
+    for(int i=m_plotPopups.size()-1; i>=0; --i)
+    {
+        if(itemsAtPos.contains(m_plotPopups[i].proxy))
+            return i;
+    }
+    return -1;
 }
 
 //set plot color

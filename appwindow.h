@@ -17,6 +17,14 @@ class QGraphicsLineItem;
 class QGraphicsProxyWidget;
 class PlotLabel;
 
+struct PlotPopupData
+{
+    QGraphicsProxyWidget *proxy;
+    QGraphicsLineItem *line;
+    PlotLabel *label;
+    NRadarItem *radarItem;
+};
+
 class AppWindow:public QMainWindow,public IAnalyser,private Ui_AppWindow
 {
     Q_OBJECT
@@ -74,16 +82,16 @@ private:
     bool m_blackWhiteMode;
 
     void showPlotPopup(NRadarItem *radarItem,const QPointF& scenePos);
-    void closePlotPopup();
-    void updatePlotPopupLine();
-    void populatePlotPopup(NRadarItem *radarItem);
+    void closeAllPlotPopups();
+    void closePlotPopup(int index);
+    void updatePlotPopupLines();
+    void populatePlotPopup(PlotPopupData &popupData, NRadarItem *radarItem);
+    int findPopupAtPos(const QPoint& viewPos);
 
-    QGraphicsProxyWidget *m_plotPopupProxy;
-    QGraphicsLineItem *m_plotPopupLine;
-    PlotLabel *m_plotPopupLabel;
-    NRadarItem *m_plotPopupItem;
+    QList<PlotPopupData> m_plotPopups;
 
     bool m_draggingPopup;
+    int m_draggingPopupIndex;
     QPointF m_popupDragOffset;
 };
 
