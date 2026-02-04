@@ -34,8 +34,6 @@ PlotLabel::PlotLabel(const QTreeWidget *styleSource, QWidget *parent)
     setPalette(pal);
 
     applyTreeStyle(styleSource);
-
-    setAttribute(Qt::WA_TransparentForMouseEvents, true);
 }
 
 void PlotLabel::applyTreeStyle(const QTreeWidget *styleSource)

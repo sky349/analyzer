@@ -82,6 +82,9 @@ private:
     QGraphicsLineItem *m_plotPopupLine;
     PlotLabel *m_plotPopupLabel;
     NRadarItem *m_plotPopupItem;
+
+    bool m_draggingPopup;
+    QPointF m_popupDragOffset;
 };
 
 #endif // APPWINDOW_H

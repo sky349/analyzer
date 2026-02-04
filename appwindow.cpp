@@ -125,7 +125,8 @@ AppWindow::AppWindow():QMainWindow(0),
     m_plotPopupProxy(0),
     m_plotPopupLine(0),
     m_plotPopupLabel(0),
-    m_plotPopupItem(0)
+    m_plotPopupItem(0),
+    m_draggingPopup(false)
 {
 	setupUi(this);
 
@@ -884,18 +885,43 @@ NRadarScene* AppWindow::getRadarScene() const
 
 bool AppWindow::eventFilter(QObject *obj,QEvent *event)
 {
-    if(obj==radarView->viewport() && event->type()==QEvent::MouseButtonPress)
+    if(obj==radarView->viewport())
     {
-        QMouseEvent *mouseEvent=static_cast<QMouseEvent*>(event);
-        if(mouseEvent->button()==Qt::RightButton)
+        if(event->type()==QEvent::MouseButtonPress)
         {
-            QPointF scenePos=radarView->mapToScene(mouseEvent->pos());
+            QMouseEvent *mouseEvent=static_cast<QMouseEvent*>(event);
 
-            if(m_plotPopupProxy && m_plotPopupProxy->sceneBoundingRect().contains(scenePos))
+            if(m_plotPopupProxy)
             {
-                closePlotPopup();
-                return true;
+                QList<QGraphicsItem*> itemsAtPos=radarView->items(mouseEvent->pos());
+                if(itemsAtPos.contains(m_plotPopupProxy))
+                {
+                    QPointF scenePos=radarView->mapToScene(mouseEvent->pos());
+                    if(mouseEvent->button()==Qt::RightButton)
+                    {
+                        closePlotPopup();
+                        return true;
+                    }
+                    if(mouseEvent->button()==Qt::LeftButton)
+                    {
+                        m_draggingPopup=true;
+                        m_popupDragOffset=scenePos-m_plotPopupProxy->pos();
+                        return true;
+                    }
+                }
             }
+        }
+        else if(event->type()==QEvent::MouseMove && m_draggingPopup)
+        {
+            QMouseEvent *mouseEvent=static_cast<QMouseEvent*>(event);
+            QPointF scenePos=radarView->mapToScene(mouseEvent->pos());
+            m_plotPopupProxy->setPos(scenePos-m_popupDragOffset);
+            return true;
+        }
+        else if(event->type()==QEvent::MouseButtonRelease && m_draggingPopup)
+        {
+            m_draggingPopup=false;
+            return true;
         }
     }
 
