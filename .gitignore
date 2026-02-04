@@ -4,3 +4,8 @@ ui_*.*
 Makefile.*
 object_script.analyser.Debug
 object_script.analyser.Release
+moc_*.*
+*.exe
+*.o
+release/*.*
+

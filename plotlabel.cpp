@@ -2,77 +2,73 @@
 
 #include <QHeaderView>
 #include <QPalette>
-#include <QTableWidget>
-#include <QTreeWidget>
-#include <QVBoxLayout>
 
 PlotLabel::PlotLabel(const QTreeWidget *styleSource, QWidget *parent)
-    : QFrame(parent),
-      m_table(0)
+    : QTreeWidget(parent)
 {
+    setColumnCount(2);
+    setHeaderHidden(true);
+    header()->setFixedHeight(0);
+    setRootIsDecorated(false);
+    setSelectionMode(QAbstractItemView::NoSelection);
+    setFocusPolicy(Qt::NoFocus);
+    setIndentation(0);
+    setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+    setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    header()->setStretchLastSection(false);
+    header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
     setFrameShape(QFrame::Box);
     setFrameShadow(QFrame::Plain);
     setLineWidth(1);
-    setAutoFillBackground(true);
+    QPalette framePal = palette();
+    framePal.setColor(QPalette::WindowText, Qt::black);
+    setPalette(framePal);
+    setViewportMargins(0, 0, 0, 0);
 
     QPalette pal = palette();
-    pal.setColor(QPalette::Window, QColor(255, 255, 255, 220));
+    pal.setColor(QPalette::Base, QColor(255, 255, 255, 220));
     setPalette(pal);
 
-    QVBoxLayout *layout = new QVBoxLayout(this);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(2);
-
-    m_table = new QTableWidget(3, 2, this);
     applyTreeStyle(styleSource);
 
-    m_table->horizontalHeader()->setVisible(false);
-    m_table->verticalHeader()->setVisible(false);
-    m_table->setShowGrid(false);
-    m_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    m_table->setSelectionMode(QAbstractItemView::NoSelection);
-    m_table->setFocusPolicy(Qt::NoFocus);
-
-    m_table->horizontalHeader()->setStretchLastSection(false);
-    m_table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-    m_table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
-
-    layout->addWidget(m_table);
-
     setAttribute(Qt::WA_TransparentForMouseEvents, true);
-    m_table->setAttribute(Qt::WA_TransparentForMouseEvents, false);
 }
 
 void PlotLabel::applyTreeStyle(const QTreeWidget *styleSource)
 {
-    if(!styleSource || !m_table)
+    if(!styleSource)
         return;
 
-    m_table->setStyle(styleSource->style());
-    m_table->setFont(styleSource->font());
-    m_table->setPalette(styleSource->palette());
-    m_table->setStyleSheet(styleSource->styleSheet());
-    m_table->setFrameShape(styleSource->frameShape());
-    m_table->setFrameShadow(styleSource->frameShadow());
-    m_table->setLineWidth(styleSource->lineWidth());
-    m_table->setMidLineWidth(styleSource->midLineWidth());
-    m_table->setAlternatingRowColors(styleSource->alternatingRowColors());
+    setStyle(styleSource->style());
+    setFont(styleSource->font());
+    setStyleSheet(styleSource->styleSheet());
+    setAlternatingRowColors(styleSource->alternatingRowColors());
 }
 
 void PlotLabel::setEntries(const QVector<QPair<QString, QString> > &entries)
 {
-    if(!m_table)
-        return;
-
-    m_table->setRowCount(entries.size());
-    m_table->setColumnCount(2);
+    clear();
 
     for(int i = 0; i < entries.size(); ++i)
     {
-        m_table->setItem(i, 0, new QTableWidgetItem(entries[i].first));
-        m_table->setItem(i, 1, new QTableWidgetItem(entries[i].second));
+        QTreeWidgetItem *item = new QTreeWidgetItem(this);
+        item->setText(0, entries[i].first);
+        item->setText(1, entries[i].second);
     }
 
-    m_table->resizeColumnsToContents();
-    m_table->resizeRowsToContents();
+    resizeColumnToContents(0);
+    resizeColumnToContents(1);
+
+    int height = 0;
+    for(int i = 0; i < topLevelItemCount(); ++i)
+        height += sizeHintForRow(i);
+    height += frameWidth() * 2;
+    setFixedHeight(height);
+
+    int width = columnWidth(0) + columnWidth(1) + frameWidth() * 2;
+    setFixedWidth(width);
 }

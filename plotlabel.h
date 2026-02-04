@@ -1,14 +1,11 @@
 #ifndef PLOTLABEL_H
 #define PLOTLABEL_H
 
-#include <QFrame>
 #include <QPair>
+#include <QTreeWidget>
 #include <QVector>
 
-class QTableWidget;
-class QTreeWidget;
-
-class PlotLabel : public QFrame
+class PlotLabel : public QTreeWidget
 {
     Q_OBJECT
 
@@ -19,8 +16,6 @@ public:
 
 private:
     void applyTreeStyle(const QTreeWidget *styleSource);
-
-    QTableWidget *m_table;
 };
 
 #endif // PLOTLABEL_H
