@@ -7,5 +7,9 @@ object_script.analyser.Release
 moc_*.*
 *.exe
 *.o
-release/*.*
+release/
+.qtcreator/
+.qtc_clangd/
+.claude/
+*.pro.user
 
