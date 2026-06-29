@@ -6,12 +6,12 @@
 PlotLabel::PlotLabel(const QTreeWidget *styleSource, QWidget *parent)
     : QTreeWidget(parent)
 {
-    setColumnCount(2);
+    setColumnCount(1);
     setHeaderHidden(true);
-    header()->setFixedHeight(0);
     setRootIsDecorated(false);
     setSelectionMode(QAbstractItemView::NoSelection);
     setFocusPolicy(Qt::NoFocus);
+    setContextMenuPolicy(Qt::NoContextMenu);
     setIndentation(0);
     setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
@@ -20,16 +20,14 @@ PlotLabel::PlotLabel(const QTreeWidget *styleSource, QWidget *parent)
 
     header()->setStretchLastSection(false);
     header()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-    header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+
     setFrameShape(QFrame::Box);
     setFrameShadow(QFrame::Plain);
     setLineWidth(1);
-    QPalette framePal = palette();
-    framePal.setColor(QPalette::WindowText, Qt::black);
-    setPalette(framePal);
     setViewportMargins(0, 0, 0, 0);
 
     QPalette pal = palette();
+    pal.setColor(QPalette::WindowText, Qt::black);
     pal.setColor(QPalette::Base, QColor(255, 255, 255, 220));
     setPalette(pal);
 
@@ -47,26 +45,23 @@ void PlotLabel::applyTreeStyle(const QTreeWidget *styleSource)
     setAlternatingRowColors(styleSource->alternatingRowColors());
 }
 
-void PlotLabel::setEntries(const QVector<QPair<QString, QString> > &entries)
+void PlotLabel::setEntries(const QVector<QString> &entries)
 {
     clear();
 
-    for(int i = 0; i < entries.size(); ++i)
+    for(const auto &entry : entries)
     {
         QTreeWidgetItem *item = new QTreeWidgetItem(this);
-        item->setText(0, entries[i].first);
-        item->setText(1, entries[i].second);
+        item->setText(0, entry);
     }
 
-    resizeColumnToContents(0);
-    resizeColumnToContents(1);
+    doItemsLayout();
 
-    int height = 0;
+    int height = frameWidth() * 2;
     for(int i = 0; i < topLevelItemCount(); ++i)
         height += sizeHintForRow(i);
-    height += frameWidth() * 2;
     setFixedHeight(height);
 
-    int width = columnWidth(0) + columnWidth(1) + frameWidth() * 2;
+    int width = sizeHintForColumn(0) + frameWidth() * 2;
     setFixedWidth(width);
 }

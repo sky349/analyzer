@@ -122,7 +122,6 @@ public:
 AppWindow::AppWindow():QMainWindow(0),
     m_notAssociated(Qt::gray),
     m_blackWhiteMode(false),
-    m_draggingPopup(false),
     m_draggingPopupIndex(-1)
 {
 	setupUi(this);
@@ -887,11 +886,10 @@ bool AppWindow::eventFilter(QObject *obj,QEvent *event)
         if(event->type()==QEvent::MouseButtonPress)
         {
             QMouseEvent *mouseEvent=static_cast<QMouseEvent*>(event);
-
             int popupIndex=findPopupAtPos(mouseEvent->pos());
+
             if(popupIndex>=0)
             {
-                QPointF scenePos=radarView->mapToScene(mouseEvent->pos());
                 if(mouseEvent->button()==Qt::RightButton)
                 {
                     closePlotPopup(popupIndex);
@@ -899,23 +897,22 @@ bool AppWindow::eventFilter(QObject *obj,QEvent *event)
                 }
                 if(mouseEvent->button()==Qt::LeftButton)
                 {
-                    m_draggingPopup=true;
+                    QPointF scenePos=radarView->mapToScene(mouseEvent->pos());
                     m_draggingPopupIndex=popupIndex;
                     m_popupDragOffset=scenePos-m_plotPopups[popupIndex].proxy->pos();
                     return true;
                 }
             }
         }
-        else if(event->type()==QEvent::MouseMove && m_draggingPopup && m_draggingPopupIndex>=0)
+        else if(event->type()==QEvent::MouseMove && m_draggingPopupIndex>=0)
         {
             QMouseEvent *mouseEvent=static_cast<QMouseEvent*>(event);
             QPointF scenePos=radarView->mapToScene(mouseEvent->pos());
             m_plotPopups[m_draggingPopupIndex].proxy->setPos(scenePos-m_popupDragOffset);
             return true;
         }
-        else if(event->type()==QEvent::MouseButtonRelease && m_draggingPopup)
+        else if(event->type()==QEvent::MouseButtonRelease && m_draggingPopupIndex>=0)
         {
-            m_draggingPopup=false;
             m_draggingPopupIndex=-1;
             return true;
         }
@@ -928,15 +925,12 @@ void AppWindow::showPlotPopup(NRadarItem *radarItem,const QPointF& scenePos)
 {
     if(!radarItem) return;
 
-    PlotPopupData popupData;
+    PlotLabel *label=new PlotLabel(treeDetails);
 
-    popupData.label=new PlotLabel(treeDetails);
+    PlotPopupData popupData;
     popupData.proxy=new QGraphicsProxyWidget();
-    popupData.proxy->setWidget(popupData.label);
+    popupData.proxy->setWidget(label);
     popupData.proxy->setFlag(QGraphicsItem::ItemIgnoresTransformations,true);
-    popupData.proxy->setFlag(QGraphicsItem::ItemIsMovable,true);
-    popupData.proxy->setFlag(QGraphicsItem::ItemIsSelectable,true);
-    popupData.proxy->setAcceptedMouseButtons(Qt::LeftButton|Qt::RightButton);
     popupData.proxy->setZValue(10000.0+m_plotPopups.size());
     radarScene->addItem(popupData.proxy);
 
@@ -949,47 +943,114 @@ void AppWindow::showPlotPopup(NRadarItem *radarItem,const QPointF& scenePos)
     popupData.line->setZValue(9999.0);
 
     popupData.radarItem=radarItem;
-    populatePlotPopup(popupData, radarItem);
+    populatePlotPopup(label, radarItem);
 
     popupData.proxy->setPos(scenePos+QPointF(20,20));
-    popupData.proxy->setSelected(true);
 
     m_plotPopups.append(popupData);
     updatePlotPopupLines();
 }
 
-void AppWindow::populatePlotPopup(PlotPopupData &popupData, NRadarItem *radarItem)
+void AppWindow::populatePlotPopup(PlotLabel *label, NRadarItem *radarItem)
 {
-    if(!popupData.label || !radarItem) return;
+    if (!label || !radarItem)
+        return;
 
-    PlotItem *plotItem=dynamic_cast<PlotItem*>(radarItem);
-    if(!plotItem || !plotItem->plot) return;
+    PlotItem *plotItem = dynamic_cast<PlotItem *>(radarItem);
+    if (!plotItem || !plotItem->plot)
+        return;
 
-    const NRadarPlot *plot=plotItem->plot;
+    const NRadarPlot *plot = plotItem->plot;
 
     QString source;
-    switch(plot->getSource())
+    switch (plot->getSource())
     {
-    case NRadarPlot::PSR: source="PSR"; break;
-    case NRadarPlot::SSR: source="SSR"; break;
-    case NRadarPlot::Combined: source="Combined"; break;
-    case NRadarPlot::ADSB: source="ADS-B"; break;
-    default: source="Unknown"; break;
+    case NRadarPlot::PSR:      source = "PSR";      break;
+    case NRadarPlot::Combined: source = "Combined"; break;
+    case NRadarPlot::ADSB:     source = "ADS-B";    break;
+    case NRadarPlot::SSR:
+        if (plot->getSSRType() == NRadarPlot::ChannelRBS)
+            source = "A/C";
+        else if (plot->getSSRType() == NRadarPlot::ModeS)
+            source = "Mode S";
+        else
+            source = "Unknown SSR";
+        break;
+    default:
+        source = "Unknown";
+        break;
     }
 
-    QVector<QPair<QString, QString> > entries;
-    entries << qMakePair(tr("Date"), plot->getTime().date().toString("dd/MM/yyyy"));
-    entries << qMakePair(tr("Time"), plot->getTime().time().toString("HH:mm:ss.zzz"));
-    entries << qMakePair(tr("Source"), source);
+    QString type;
+    if (plot->getType() == NRadarAbstractPlot::TypeTrack)
+    {
+        const auto *tplot = static_cast<const NRadarTrackPlot *>(plot);
 
-    popupData.label->setEntries(entries);
+        switch (tplot->getTrackPlotType())
+        {
+        case NRadarTrackPlot::PredictedPoint: type = "Predicted"; break;
+        case NRadarTrackPlot::EndPoint:       type = "End";       break;
+        case NRadarTrackPlot::NormalPoint:    break;
+        }
+        source = "Track, " + source;
+    }
+    else
+    {
+        if (plot->getSSRType() == NRadarPlot::ModeS)
+        {
+            if (plot->getOption(NRadarPlot::AllCall).toBool())
+                type = "All-call, ";
+            else
+                type = "Roll-call, ";
+        }
+
+        switch (plot->getPlotAssociation())
+        {
+        case NRadarPlot::NotAssociated:       type += "Not assoc.";       break;
+        case NRadarPlot::AssociatedWithPlot:  type += "Assoc.";           break;
+        case NRadarPlot::AssociatedWithTrack: type += "Assoc. to track";  break;
+        }
+        source = "Plot, " + source;
+    }
+
+    QString squawk;
+    if (plot->getSource() != NRadarPlot::PSR)
+    {
+        if (plot->hasBoardNumber())
+        {
+            int digits = (plot->getSSRType() == NRadarPlot::ChannelUVD) ? 5 : 4;
+            squawk = QString("%1").arg(plot->getBoardNumber(), digits, 10, QChar('0'));
+        }
+        else
+        {
+            squawk = "No squawk";
+        }
+
+        uint address = plot->getOption(NRadarPlot::AircraftAddress).toUInt();
+        if (address)
+            squawk += " / " + QString("%1").arg(address, 6, 16, QChar('0'));
+        else
+            squawk += " / No address";
+    }
+
+    QPointF pt = plot->getADCoord();
+
+    QVector<QString> entries;
+    entries << plot->getTime().date().toString("dd/MM/yyyy") + " / " + plot->getTime().time().toString("HH:mm:ss.zzz");
+    entries << source;
+    if (!type.isEmpty())
+        entries << type;
+    if (!squawk.isEmpty())
+        entries << squawk;
+    entries << NUnitsConverter::angleStr(pt.x(), 1) + " / " + NUnitsConverter::length1kStr(pt.y() / 1000.0, 3);
+
+    label->setEntries(entries);
 }
 
 void AppWindow::updatePlotPopupLines()
 {
-    for(int i=0; i<m_plotPopups.size(); ++i)
+    for(const auto &popup : m_plotPopups)
     {
-        const PlotPopupData &popup=m_plotPopups[i];
         if(!popup.proxy || !popup.line || !popup.radarItem) continue;
 
         QPointF start=popup.proxy->sceneBoundingRect().topLeft();
@@ -1004,29 +1065,21 @@ void AppWindow::closePlotPopup(int index)
 
     PlotPopupData &popup=m_plotPopups[index];
 
-    if(popup.line)
-        delete popup.line;
-
-    if(popup.proxy)
-        delete popup.proxy;
+    delete popup.line;
+    delete popup.proxy;
 
     m_plotPopups.removeAt(index);
 
     if(m_draggingPopupIndex==index)
-    {
-        m_draggingPopup=false;
         m_draggingPopupIndex=-1;
-    }
     else if(m_draggingPopupIndex>index)
-    {
         m_draggingPopupIndex--;
-    }
 }
 
 void AppWindow::closeAllPlotPopups()
 {
-    while(!m_plotPopups.isEmpty())
-        closePlotPopup(0);
+    for(int i=m_plotPopups.size()-1; i>=0; --i)
+        closePlotPopup(i);
 }
 
 int AppWindow::findPopupAtPos(const QPoint& viewPos)

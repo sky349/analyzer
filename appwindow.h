@@ -21,7 +21,6 @@ struct PlotPopupData
 {
     QGraphicsProxyWidget *proxy;
     QGraphicsLineItem *line;
-    PlotLabel *label;
     NRadarItem *radarItem;
 };
 
@@ -85,12 +84,11 @@ private:
     void closeAllPlotPopups();
     void closePlotPopup(int index);
     void updatePlotPopupLines();
-    void populatePlotPopup(PlotPopupData &popupData, NRadarItem *radarItem);
+    void populatePlotPopup(PlotLabel *label, NRadarItem *radarItem);
     int findPopupAtPos(const QPoint& viewPos);
 
     QList<PlotPopupData> m_plotPopups;
 
-    bool m_draggingPopup;
     int m_draggingPopupIndex;
     QPointF m_popupDragOffset;
 };

@@ -1,21 +1,15 @@
-#ifndef PLOTLABEL_H
-#define PLOTLABEL_H
+#pragma once
 
-#include <QPair>
 #include <QTreeWidget>
 #include <QVector>
 
 class PlotLabel : public QTreeWidget
 {
-    Q_OBJECT
-
 public:
-    explicit PlotLabel(const QTreeWidget *styleSource, QWidget *parent = 0);
+    explicit PlotLabel(const QTreeWidget *styleSource, QWidget *parent = nullptr);
 
-    void setEntries(const QVector<QPair<QString, QString> > &entries);
+    void setEntries(const QVector<QString> &entries);
 
 private:
     void applyTreeStyle(const QTreeWidget *styleSource);
 };
-
-#endif // PLOTLABEL_H
