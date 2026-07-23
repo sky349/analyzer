@@ -1,0 +1,4004 @@
+Scenario Printout for "COPY_OF_SSR_RES_Z2"					
+Date:	23/07/2026				
+Time:	12:07				
+Target/Sentence	TP/Target	Action/Acode	Value/S address	 Set	unit
+FIX000	Transponder1	512	200	Set1	
+t0=0.056 sec	Ro= 30.999 Nm	Azo= 5.000 Deg	Zo= 8700 ft	Head= 5.000 Deg	
+1	FIX000	Flies		250.000	Nm/h
+2	FIX000	Flies		201.000	Seconds
+ 					
+VAR000	Transponder1	1024	400	Set2	
+t0=0.056 sec	Ro= 29.999 Nm	Azo= 5.000 Deg	Zo= 8800 ft	Head= 5.000 Deg	
+1	VAR000	Flies		250.000	Nm/h
+2	VAR000	Flies		201.000	Seconds
+ 					
+FIX001	Transponder1	513	201	Set1	
+t0=0.189 sec	Ro= 30.999 Nm	Azo= 17.000 Deg	Zo= 5200 ft	Head= 17.000 Deg	
+1	FIX001	Flies		250.000	Nm/h
+2	FIX001	Flies		201.000	Seconds
+ 					
+VAR001	Transponder1	1025	401	Set2	
+t0=0.189 sec	Ro= 29.999 Nm	Azo= 17.004 Deg	Zo= 5300 ft	Head= 17.004 Deg	
+1	VAR001	Flies		250.000	Nm/h
+2	VAR001	Flies		201.000	Seconds
+ 					
+FIX002	Transponder1	514	202	Set1	
+t0=0.322 sec	Ro= 30.999 Nm	Azo= 29.007 Deg	Zo= 7300 ft	Head= 29.007 Deg	
+1	FIX002	Flies		250.000	Nm/h
+2	FIX002	Flies		201.000	Seconds
+ 					
+VAR002	Transponder1	1026	402	Set2	
+t0=0.322 sec	Ro= 29.999 Nm	Azo= 29.000 Deg	Zo= 7400 ft	Head= 29.000 Deg	
+1	VAR002	Flies		250.000	Nm/h
+2	VAR002	Flies		201.000	Seconds
+ 					
+FIX003	Transponder1	515	203	Set1	
+t0=0.456 sec	Ro= 30.999 Nm	Azo= 41.000 Deg	Zo= 7600 ft	Head= 41.000 Deg	
+1	FIX003	Flies		250.000	Nm/h
+2	FIX003	Flies		201.000	Seconds
+ 					
+VAR003	Transponder1	1027	403	Set2	
+t0=0.456 sec	Ro= 29.999 Nm	Azo= 41.011 Deg	Zo= 7700 ft	Head= 41.011 Deg	
+1	VAR003	Flies		250.000	Nm/h
+2	VAR003	Flies		201.000	Seconds
+ 					
+FIX004	Transponder1	516	204	Set1	
+t0=0.589 sec	Ro= 30.999 Nm	Azo= 53.014 Deg	Zo= 4200 ft	Head= 53.014 Deg	
+1	FIX004	Flies		250.000	Nm/h
+2	FIX004	Flies		201.000	Seconds
+ 					
+VAR004	Transponder1	1028	404	Set2	
+t0=0.589 sec	Ro= 29.999 Nm	Azo= 53.000 Deg	Zo= 4300 ft	Head= 53.000 Deg	
+1	VAR004	Flies		250.000	Nm/h
+2	VAR004	Flies		201.000	Seconds
+ 					
+FIX005	Transponder1	517	205	Set1	
+t0=0.722 sec	Ro= 30.999 Nm	Azo= 65.000 Deg	Zo= 4800 ft	Head= 65.000 Deg	
+1	FIX005	Flies		250.000	Nm/h
+2	FIX005	Flies		201.000	Seconds
+ 					
+VAR005	Transponder1	1029	405	Set2	
+t0=0.722 sec	Ro= 29.999 Nm	Azo= 65.018 Deg	Zo= 4900 ft	Head= 65.018 Deg	
+1	VAR005	Flies		250.000	Nm/h
+2	VAR005	Flies		201.000	Seconds
+ 					
+FIX006	Transponder1	518	206	Set1	
+t0=0.856 sec	Ro= 30.999 Nm	Azo= 77.022 Deg	Zo= 8800 ft	Head= 77.022 Deg	
+1	FIX006	Flies		250.000	Nm/h
+2	FIX006	Flies		201.000	Seconds
+ 					
+VAR006	Transponder1	1030	406	Set2	
+t0=0.856 sec	Ro= 29.999 Nm	Azo= 77.000 Deg	Zo= 8900 ft	Head= 77.000 Deg	
+1	VAR006	Flies		250.000	Nm/h
+2	VAR006	Flies		201.000	Seconds
+ 					
+FIX007	Transponder1	519	207	Set1	
+t0=0.989 sec	Ro= 31.000 Nm	Azo= 89.000 Deg	Zo= 1800 ft	Head= 89.000 Deg	
+1	FIX007	Flies		250.000	Nm/h
+2	FIX007	Flies		201.000	Seconds
+ 					
+VAR007	Transponder1	1031	407	Set2	
+t0=0.989 sec	Ro= 30.000 Nm	Azo= 89.025 Deg	Zo= 1900 ft	Head= 89.025 Deg	
+1	VAR007	Flies		250.000	Nm/h
+2	VAR007	Flies		201.000	Seconds
+ 					
+FIX008	Transponder1	520	208	Set1	
+t0=1.122 sec	Ro= 30.999 Nm	Azo= 101.029 Deg	Zo= 8900 ft	Head= 101.029 Deg	
+1	FIX008	Flies		250.000	Nm/h
+2	FIX008	Flies		201.000	Seconds
+ 					
+VAR008	Transponder1	1032	408	Set2	
+t0=1.122 sec	Ro= 29.999 Nm	Azo= 101.000 Deg	Zo= 9000 ft	Head= 101.000 Deg	
+1	VAR008	Flies		250.000	Nm/h
+2	VAR008	Flies		201.000	Seconds
+ 					
+FIX009	Transponder1	521	209	Set1	
+t0=1.256 sec	Ro= 31.000 Nm	Azo= 113.000 Deg	Zo= 1000 ft	Head= 113.000 Deg	
+1	FIX009	Flies		250.000	Nm/h
+2	FIX009	Flies		201.000	Seconds
+ 					
+VAR009	Transponder1	1033	409	Set2	
+t0=1.256 sec	Ro= 30.000 Nm	Azo= 113.032 Deg	Zo= 1100 ft	Head= 113.032 Deg	
+1	VAR009	Flies		250.000	Nm/h
+2	VAR009	Flies		201.000	Seconds
+ 					
+FIX010	Transponder1	522	20A	Set1	
+t0=1.389 sec	Ro= 30.999 Nm	Azo= 125.036 Deg	Zo= 4200 ft	Head= 125.036 Deg	
+1	FIX010	Flies		250.000	Nm/h
+2	FIX010	Flies		201.000	Seconds
+ 					
+VAR010	Transponder1	1034	40A	Set2	
+t0=1.389 sec	Ro= 29.999 Nm	Azo= 125.000 Deg	Zo= 4300 ft	Head= 125.000 Deg	
+1	VAR010	Flies		250.000	Nm/h
+2	VAR010	Flies		201.000	Seconds
+ 					
+FIX011	Transponder1	523	20B	Set1	
+t0=1.522 sec	Ro= 30.999 Nm	Azo= 137.000 Deg	Zo= 5700 ft	Head= 137.000 Deg	
+1	FIX011	Flies		250.000	Nm/h
+2	FIX011	Flies		201.000	Seconds
+ 					
+VAR011	Transponder1	1035	40B	Set2	
+t0=1.522 sec	Ro= 29.999 Nm	Azo= 137.040 Deg	Zo= 5800 ft	Head= 137.040 Deg	
+1	VAR011	Flies		250.000	Nm/h
+2	VAR011	Flies		201.000	Seconds
+ 					
+FIX012	Transponder1	524	20C	Set1	
+t0=1.656 sec	Ro= 30.999 Nm	Azo= 149.043 Deg	Zo= 7900 ft	Head= 149.043 Deg	
+1	FIX012	Flies		250.000	Nm/h
+2	FIX012	Flies		201.000	Seconds
+ 					
+VAR012	Transponder1	1036	40C	Set2	
+t0=1.656 sec	Ro= 29.999 Nm	Azo= 149.000 Deg	Zo= 8000 ft	Head= 149.000 Deg	
+1	VAR012	Flies		250.000	Nm/h
+2	VAR012	Flies		201.000	Seconds
+ 					
+FIX013	Transponder1	525	20D	Set1	
+t0=1.789 sec	Ro= 30.999 Nm	Azo= 161.000 Deg	Zo= 5600 ft	Head= 161.000 Deg	
+1	FIX013	Flies		250.000	Nm/h
+2	FIX013	Flies		201.000	Seconds
+ 					
+VAR013	Transponder1	1037	40D	Set2	
+t0=1.789 sec	Ro= 29.999 Nm	Azo= 161.047 Deg	Zo= 5700 ft	Head= 161.047 Deg	
+1	VAR013	Flies		250.000	Nm/h
+2	VAR013	Flies		201.000	Seconds
+ 					
+FIX014	Transponder1	526	20E	Set1	
+t0=1.922 sec	Ro= 30.999 Nm	Azo= 173.051 Deg	Zo= 8600 ft	Head= 173.051 Deg	
+1	FIX014	Flies		250.000	Nm/h
+2	FIX014	Flies		201.000	Seconds
+ 					
+VAR014	Transponder1	1038	40E	Set2	
+t0=1.922 sec	Ro= 29.999 Nm	Azo= 173.000 Deg	Zo= 8700 ft	Head= 173.000 Deg	
+1	VAR014	Flies		250.000	Nm/h
+2	VAR014	Flies		201.000	Seconds
+ 					
+FIX015	Transponder1	527	20F	Set1	
+t0=2.056 sec	Ro= 31.000 Nm	Azo= 185.000 Deg	Zo= 1800 ft	Head= 185.000 Deg	
+1	FIX015	Flies		250.000	Nm/h
+2	FIX015	Flies		201.000	Seconds
+ 					
+VAR015	Transponder1	1039	40F	Set2	
+t0=2.056 sec	Ro= 30.000 Nm	Azo= 185.054 Deg	Zo= 1900 ft	Head= 185.054 Deg	
+1	VAR015	Flies		250.000	Nm/h
+2	VAR015	Flies		201.000	Seconds
+ 					
+FIX016	Transponder1	528	210	Set1	
+t0=2.189 sec	Ro= 31.000 Nm	Azo= 197.058 Deg	Zo= 3000 ft	Head= 197.058 Deg	
+1	FIX016	Flies		250.000	Nm/h
+2	FIX016	Flies		201.000	Seconds
+ 					
+VAR016	Transponder1	1040	410	Set2	
+t0=2.189 sec	Ro= 30.000 Nm	Azo= 197.000 Deg	Zo= 3100 ft	Head= 197.000 Deg	
+1	VAR016	Flies		250.000	Nm/h
+2	VAR016	Flies		201.000	Seconds
+ 					
+FIX017	Transponder1	529	211	Set1	
+t0=2.322 sec	Ro= 30.999 Nm	Azo= 209.000 Deg	Zo= 5700 ft	Head= 209.000 Deg	
+1	FIX017	Flies		250.000	Nm/h
+2	FIX017	Flies		201.000	Seconds
+ 					
+VAR017	Transponder1	1041	411	Set2	
+t0=2.322 sec	Ro= 29.999 Nm	Azo= 209.061 Deg	Zo= 5800 ft	Head= 209.061 Deg	
+1	VAR017	Flies		250.000	Nm/h
+2	VAR017	Flies		201.000	Seconds
+ 					
+FIX018	Transponder1	530	212	Set1	
+t0=2.456 sec	Ro= 30.999 Nm	Azo= 221.065 Deg	Zo= 6500 ft	Head= 221.065 Deg	
+1	FIX018	Flies		250.000	Nm/h
+2	FIX018	Flies		201.000	Seconds
+ 					
+VAR018	Transponder1	1042	412	Set2	
+t0=2.456 sec	Ro= 29.999 Nm	Azo= 221.000 Deg	Zo= 6600 ft	Head= 221.000 Deg	
+1	VAR018	Flies		250.000	Nm/h
+2	VAR018	Flies		201.000	Seconds
+ 					
+FIX019	Transponder1	531	213	Set1	
+t0=2.589 sec	Ro= 31.000 Nm	Azo= 233.000 Deg	Zo= 3200 ft	Head= 233.000 Deg	
+1	FIX019	Flies		250.000	Nm/h
+2	FIX019	Flies		201.000	Seconds
+ 					
+VAR019	Transponder1	1043	413	Set2	
+t0=2.589 sec	Ro= 30.000 Nm	Azo= 233.069 Deg	Zo= 3300 ft	Head= 233.069 Deg	
+1	VAR019	Flies		250.000	Nm/h
+2	VAR019	Flies		201.000	Seconds
+ 					
+FIX020	Transponder1	532	214	Set1	
+t0=2.722 sec	Ro= 30.999 Nm	Azo= 245.072 Deg	Zo= 4600 ft	Head= 245.072 Deg	
+1	FIX020	Flies		250.000	Nm/h
+2	FIX020	Flies		201.000	Seconds
+ 					
+VAR020	Transponder1	1044	414	Set2	
+t0=2.722 sec	Ro= 29.999 Nm	Azo= 245.000 Deg	Zo= 4700 ft	Head= 245.000 Deg	
+1	VAR020	Flies		250.000	Nm/h
+2	VAR020	Flies		201.000	Seconds
+ 					
+FIX021	Transponder1	533	215	Set1	
+t0=2.856 sec	Ro= 30.999 Nm	Azo= 257.000 Deg	Zo= 8100 ft	Head= 257.000 Deg	
+1	FIX021	Flies		250.000	Nm/h
+2	FIX021	Flies		201.000	Seconds
+ 					
+VAR021	Transponder1	1045	415	Set2	
+t0=2.856 sec	Ro= 29.999 Nm	Azo= 257.076 Deg	Zo= 8200 ft	Head= 257.076 Deg	
+1	VAR021	Flies		250.000	Nm/h
+2	VAR021	Flies		201.000	Seconds
+ 					
+FIX022	Transponder1	534	216	Set1	
+t0=2.989 sec	Ro= 30.999 Nm	Azo= 269.079 Deg	Zo= 8900 ft	Head= 269.079 Deg	
+1	FIX022	Flies		250.000	Nm/h
+2	FIX022	Flies		201.000	Seconds
+ 					
+VAR022	Transponder1	1046	416	Set2	
+t0=2.989 sec	Ro= 29.999 Nm	Azo= 269.000 Deg	Zo= 9000 ft	Head= 269.000 Deg	
+1	VAR022	Flies		250.000	Nm/h
+2	VAR022	Flies		201.000	Seconds
+ 					
+FIX023	Transponder1	535	217	Set1	
+t0=3.122 sec	Ro= 30.999 Nm	Azo= 281.000 Deg	Zo= 8800 ft	Head= 281.000 Deg	
+1	FIX023	Flies		250.000	Nm/h
+2	FIX023	Flies		201.000	Seconds
+ 					
+VAR023	Transponder1	1047	417	Set2	
+t0=3.122 sec	Ro= 29.999 Nm	Azo= 281.083 Deg	Zo= 8900 ft	Head= 281.083 Deg	
+1	VAR023	Flies		250.000	Nm/h
+2	VAR023	Flies		201.000	Seconds
+ 					
+FIX024	Transponder1	536	218	Set1	
+t0=3.256 sec	Ro= 30.999 Nm	Azo= 293.087 Deg	Zo= 5700 ft	Head= 293.087 Deg	
+1	FIX024	Flies		250.000	Nm/h
+2	FIX024	Flies		201.000	Seconds
+ 					
+VAR024	Transponder1	1048	418	Set2	
+t0=3.256 sec	Ro= 29.999 Nm	Azo= 293.000 Deg	Zo= 5800 ft	Head= 293.000 Deg	
+1	VAR024	Flies		250.000	Nm/h
+2	VAR024	Flies		201.000	Seconds
+ 					
+FIX025	Transponder1	537	219	Set1	
+t0=3.389 sec	Ro= 30.999 Nm	Azo= 305.000 Deg	Zo= 3800 ft	Head= 305.000 Deg	
+1	FIX025	Flies		250.000	Nm/h
+2	FIX025	Flies		201.000	Seconds
+ 					
+VAR025	Transponder1	1049	419	Set2	
+t0=3.389 sec	Ro= 29.999 Nm	Azo= 305.090 Deg	Zo= 3900 ft	Head= 305.090 Deg	
+1	VAR025	Flies		250.000	Nm/h
+2	VAR025	Flies		201.000	Seconds
+ 					
+FIX026	Transponder1	538	21A	Set1	
+t0=3.522 sec	Ro= 31.000 Nm	Azo= 317.094 Deg	Zo= 2400 ft	Head= 317.094 Deg	
+1	FIX026	Flies		250.000	Nm/h
+2	FIX026	Flies		201.000	Seconds
+ 					
+VAR026	Transponder1	1050	41A	Set2	
+t0=3.522 sec	Ro= 30.000 Nm	Azo= 317.000 Deg	Zo= 2500 ft	Head= 317.000 Deg	
+1	VAR026	Flies		250.000	Nm/h
+2	VAR026	Flies		201.000	Seconds
+ 					
+FIX027	Transponder1	539	21B	Set1	
+t0=3.656 sec	Ro= 30.999 Nm	Azo= 329.000 Deg	Zo= 8500 ft	Head= 329.000 Deg	
+1	FIX027	Flies		250.000	Nm/h
+2	FIX027	Flies		201.000	Seconds
+ 					
+VAR027	Transponder1	1051	41B	Set2	
+t0=3.656 sec	Ro= 29.999 Nm	Azo= 329.097 Deg	Zo= 8600 ft	Head= 329.097 Deg	
+1	VAR027	Flies		250.000	Nm/h
+2	VAR027	Flies		201.000	Seconds
+ 					
+FIX028	Transponder1	540	21C	Set1	
+t0=3.789 sec	Ro= 30.999 Nm	Azo= 341.101 Deg	Zo= 4700 ft	Head= 341.101 Deg	
+1	FIX028	Flies		250.000	Nm/h
+2	FIX028	Flies		201.000	Seconds
+ 					
+VAR028	Transponder1	1052	41C	Set2	
+t0=3.789 sec	Ro= 29.999 Nm	Azo= 341.000 Deg	Zo= 4800 ft	Head= 341.000 Deg	
+1	VAR028	Flies		250.000	Nm/h
+2	VAR028	Flies		201.000	Seconds
+ 					
+FIX029	Transponder1	541	21D	Set1	
+t0=3.922 sec	Ro= 30.999 Nm	Azo= 353.000 Deg	Zo= 7300 ft	Head= 353.000 Deg	
+1	FIX029	Flies		250.000	Nm/h
+2	FIX029	Flies		201.000	Seconds
+ 					
+VAR029	Transponder1	1053	41D	Set2	
+t0=3.922 sec	Ro= 29.999 Nm	Azo= 353.105 Deg	Zo= 7400 ft	Head= 353.105 Deg	
+1	VAR029	Flies		267.100	Nm/h
+2	VAR029	Flies		201.000	Seconds
+ 					
+FIX030	Transponder1	542	21E	Set1	
+t0=0.056 sec	Ro= 45.999 Nm	Azo= 5.108 Deg	Zo= 8300 ft	Head= 5.108 Deg	
+1	FIX030	Flies		250.000	Nm/h
+2	FIX030	Flies		201.000	Seconds
+ 					
+VAR030	Transponder1	1054	41E	Set2	
+t0=0.056 sec	Ro= 44.999 Nm	Azo= 5.000 Deg	Zo= 8400 ft	Head= 5.000 Deg	
+1	VAR030	Flies		250.000	Nm/h
+2	VAR030	Flies		201.000	Seconds
+ 					
+FIX031	Transponder1	543	21F	Set1	
+t0=0.189 sec	Ro= 46.000 Nm	Azo= 17.000 Deg	Zo= 3000 ft	Head= 17.000 Deg	
+1	FIX031	Flies		250.000	Nm/h
+2	FIX031	Flies		201.000	Seconds
+ 					
+VAR031	Transponder1	1055	41F	Set2	
+t0=0.189 sec	Ro= 45.000 Nm	Azo= 17.112 Deg	Zo= 3100 ft	Head= 17.112 Deg	
+1	VAR031	Flies		250.000	Nm/h
+2	VAR031	Flies		201.000	Seconds
+ 					
+FIX032	Transponder1	544	220	Set1	
+t0=0.322 sec	Ro= 46.000 Nm	Azo= 29.115 Deg	Zo= 3900 ft	Head= 29.115 Deg	
+1	FIX032	Flies		250.000	Nm/h
+2	FIX032	Flies		201.000	Seconds
+ 					
+VAR032	Transponder1	1056	420	Set2	
+t0=0.322 sec	Ro= 45.000 Nm	Azo= 29.000 Deg	Zo= 4000 ft	Head= 29.000 Deg	
+1	VAR032	Flies		250.000	Nm/h
+2	VAR032	Flies		201.000	Seconds
+ 					
+FIX033	Transponder1	545	221	Set1	
+t0=0.456 sec	Ro= 45.999 Nm	Azo= 41.000 Deg	Zo= 9700 ft	Head= 41.000 Deg	
+1	FIX033	Flies		250.000	Nm/h
+2	FIX033	Flies		201.000	Seconds
+ 					
+VAR033	Transponder1	1057	421	Set2	
+t0=0.456 sec	Ro= 44.999 Nm	Azo= 41.119 Deg	Zo= 9800 ft	Head= 41.119 Deg	
+1	VAR033	Flies		250.000	Nm/h
+2	VAR033	Flies		201.000	Seconds
+ 					
+FIX034	Transponder1	546	222	Set1	
+t0=0.589 sec	Ro= 45.999 Nm	Azo= 53.123 Deg	Zo= 10000 ft	Head= 53.123 Deg	
+1	FIX034	Flies		250.000	Nm/h
+2	FIX034	Flies		201.000	Seconds
+ 					
+VAR034	Transponder1	1058	422	Set2	
+t0=0.589 sec	Ro= 44.999 Nm	Azo= 53.000 Deg	Zo= 10100 ft	Head= 53.000 Deg	
+1	VAR034	Flies		250.000	Nm/h
+2	VAR034	Flies		201.000	Seconds
+ 					
+FIX035	Transponder1	547	223	Set1	
+t0=0.722 sec	Ro= 46.000 Nm	Azo= 65.000 Deg	Zo= 4000 ft	Head= 65.000 Deg	
+1	FIX035	Flies		250.000	Nm/h
+2	FIX035	Flies		201.000	Seconds
+ 					
+VAR035	Transponder1	1059	423	Set2	
+t0=0.722 sec	Ro= 45.000 Nm	Azo= 65.126 Deg	Zo= 4100 ft	Head= 65.126 Deg	
+1	VAR035	Flies		250.000	Nm/h
+2	VAR035	Flies		201.000	Seconds
+ 					
+FIX036	Transponder1	548	224	Set1	
+t0=0.856 sec	Ro= 46.000 Nm	Azo= 77.130 Deg	Zo= 1100 ft	Head= 77.130 Deg	
+1	FIX036	Flies		250.000	Nm/h
+2	FIX036	Flies		201.000	Seconds
+ 					
+VAR036	Transponder1	1060	424	Set2	
+t0=0.856 sec	Ro= 45.000 Nm	Azo= 77.000 Deg	Zo= 1200 ft	Head= 77.000 Deg	
+1	VAR036	Flies		250.000	Nm/h
+2	VAR036	Flies		201.000	Seconds
+ 					
+FIX037	Transponder1	549	225	Set1	
+t0=0.989 sec	Ro= 45.999 Nm	Azo= 89.000 Deg	Zo= 6800 ft	Head= 89.000 Deg	
+1	FIX037	Flies		250.000	Nm/h
+2	FIX037	Flies		201.000	Seconds
+ 					
+VAR037	Transponder1	1061	425	Set2	
+t0=0.989 sec	Ro= 44.999 Nm	Azo= 89.134 Deg	Zo= 6900 ft	Head= 89.134 Deg	
+1	VAR037	Flies		250.000	Nm/h
+2	VAR037	Flies		201.000	Seconds
+ 					
+FIX038	Transponder1	550	226	Set1	
+t0=1.122 sec	Ro= 46.000 Nm	Azo= 101.137 Deg	Zo= 1900 ft	Head= 101.137 Deg	
+1	FIX038	Flies		250.000	Nm/h
+2	FIX038	Flies		201.000	Seconds
+ 					
+VAR038	Transponder1	1062	426	Set2	
+t0=1.122 sec	Ro= 45.000 Nm	Azo= 101.000 Deg	Zo= 2000 ft	Head= 101.000 Deg	
+1	VAR038	Flies		250.000	Nm/h
+2	VAR038	Flies		201.000	Seconds
+ 					
+FIX039	Transponder1	551	227	Set1	
+t0=1.256 sec	Ro= 46.000 Nm	Azo= 113.000 Deg	Zo= 1300 ft	Head= 113.000 Deg	
+1	FIX039	Flies		250.000	Nm/h
+2	FIX039	Flies		201.000	Seconds
+ 					
+VAR039	Transponder1	1063	427	Set2	
+t0=1.256 sec	Ro= 45.000 Nm	Azo= 113.141 Deg	Zo= 1400 ft	Head= 113.141 Deg	
+1	VAR039	Flies		250.000	Nm/h
+2	VAR039	Flies		201.000	Seconds
+ 					
+FIX040	Transponder1	552	228	Set1	
+t0=1.389 sec	Ro= 45.999 Nm	Azo= 125.144 Deg	Zo= 6400 ft	Head= 125.144 Deg	
+1	FIX040	Flies		250.000	Nm/h
+2	FIX040	Flies		201.000	Seconds
+ 					
+VAR040	Transponder1	1064	428	Set2	
+t0=1.389 sec	Ro= 44.999 Nm	Azo= 125.000 Deg	Zo= 6500 ft	Head= 125.000 Deg	
+1	VAR040	Flies		250.000	Nm/h
+2	VAR040	Flies		201.000	Seconds
+ 					
+FIX041	Transponder1	553	229	Set1	
+t0=1.522 sec	Ro= 45.999 Nm	Azo= 137.000 Deg	Zo= 9600 ft	Head= 137.000 Deg	
+1	FIX041	Flies		250.000	Nm/h
+2	FIX041	Flies		201.000	Seconds
+ 					
+VAR041	Transponder1	1065	429	Set2	
+t0=1.522 sec	Ro= 44.999 Nm	Azo= 137.148 Deg	Zo= 9700 ft	Head= 137.148 Deg	
+1	VAR041	Flies		250.000	Nm/h
+2	VAR041	Flies		201.000	Seconds
+ 					
+FIX042	Transponder1	554	22A	Set1	
+t0=1.656 sec	Ro= 45.999 Nm	Azo= 149.152 Deg	Zo= 8500 ft	Head= 149.152 Deg	
+1	FIX042	Flies		250.000	Nm/h
+2	FIX042	Flies		201.000	Seconds
+ 					
+VAR042	Transponder1	1066	42A	Set2	
+t0=1.656 sec	Ro= 44.999 Nm	Azo= 149.000 Deg	Zo= 8600 ft	Head= 149.000 Deg	
+1	VAR042	Flies		250.000	Nm/h
+2	VAR042	Flies		201.000	Seconds
+ 					
+FIX043	Transponder1	555	22B	Set1	
+t0=1.789 sec	Ro= 45.999 Nm	Azo= 161.000 Deg	Zo= 8600 ft	Head= 161.000 Deg	
+1	FIX043	Flies		250.000	Nm/h
+2	FIX043	Flies		201.000	Seconds
+ 					
+VAR043	Transponder1	1067	42B	Set2	
+t0=1.789 sec	Ro= 44.999 Nm	Azo= 161.155 Deg	Zo= 8700 ft	Head= 161.155 Deg	
+1	VAR043	Flies		250.000	Nm/h
+2	VAR043	Flies		201.000	Seconds
+ 					
+FIX044	Transponder1	556	22C	Set1	
+t0=1.922 sec	Ro= 45.999 Nm	Azo= 173.159 Deg	Zo= 6300 ft	Head= 173.159 Deg	
+1	FIX044	Flies		250.000	Nm/h
+2	FIX044	Flies		201.000	Seconds
+ 					
+VAR044	Transponder1	1068	42C	Set2	
+t0=1.922 sec	Ro= 44.999 Nm	Azo= 173.000 Deg	Zo= 6400 ft	Head= 173.000 Deg	
+1	VAR044	Flies		250.000	Nm/h
+2	VAR044	Flies		201.000	Seconds
+ 					
+FIX045	Transponder1	557	22D	Set1	
+t0=2.056 sec	Ro= 46.000 Nm	Azo= 185.000 Deg	Zo= 4300 ft	Head= 185.000 Deg	
+1	FIX045	Flies		250.000	Nm/h
+2	FIX045	Flies		201.000	Seconds
+ 					
+VAR045	Transponder1	1069	42D	Set2	
+t0=2.056 sec	Ro= 45.000 Nm	Azo= 185.162 Deg	Zo= 4400 ft	Head= 185.162 Deg	
+1	VAR045	Flies		250.000	Nm/h
+2	VAR045	Flies		201.000	Seconds
+ 					
+FIX046	Transponder1	558	22E	Set1	
+t0=2.189 sec	Ro= 45.999 Nm	Azo= 197.166 Deg	Zo= 9200 ft	Head= 197.166 Deg	
+1	FIX046	Flies		250.000	Nm/h
+2	FIX046	Flies		201.000	Seconds
+ 					
+VAR046	Transponder1	1070	42E	Set2	
+t0=2.189 sec	Ro= 44.999 Nm	Azo= 197.000 Deg	Zo= 9300 ft	Head= 197.000 Deg	
+1	VAR046	Flies		250.000	Nm/h
+2	VAR046	Flies		201.000	Seconds
+ 					
+FIX047	Transponder1	559	22F	Set1	
+t0=2.322 sec	Ro= 46.000 Nm	Azo= 209.000 Deg	Zo= 5100 ft	Head= 209.000 Deg	
+1	FIX047	Flies		250.000	Nm/h
+2	FIX047	Flies		201.000	Seconds
+ 					
+VAR047	Transponder1	1071	42F	Set2	
+t0=2.322 sec	Ro= 44.999 Nm	Azo= 209.170 Deg	Zo= 5200 ft	Head= 209.170 Deg	
+1	VAR047	Flies		250.000	Nm/h
+2	VAR047	Flies		201.000	Seconds
+ 					
+FIX048	Transponder1	560	230	Set1	
+t0=2.456 sec	Ro= 45.999 Nm	Azo= 221.173 Deg	Zo= 6500 ft	Head= 221.173 Deg	
+1	FIX048	Flies		250.000	Nm/h
+2	FIX048	Flies		201.000	Seconds
+ 					
+VAR048	Transponder1	1072	430	Set2	
+t0=2.456 sec	Ro= 44.999 Nm	Azo= 221.000 Deg	Zo= 6600 ft	Head= 221.000 Deg	
+1	VAR048	Flies		250.000	Nm/h
+2	VAR048	Flies		201.000	Seconds
+ 					
+FIX049	Transponder1	561	231	Set1	
+t0=2.589 sec	Ro= 45.999 Nm	Azo= 233.000 Deg	Zo= 9800 ft	Head= 233.000 Deg	
+1	FIX049	Flies		250.000	Nm/h
+2	FIX049	Flies		201.000	Seconds
+ 					
+VAR049	Transponder1	1073	431	Set2	
+t0=2.589 sec	Ro= 44.999 Nm	Azo= 233.177 Deg	Zo= 9900 ft	Head= 233.177 Deg	
+1	VAR049	Flies		250.000	Nm/h
+2	VAR049	Flies		201.000	Seconds
+ 					
+FIX050	Transponder1	562	232	Set1	
+t0=2.722 sec	Ro= 45.999 Nm	Azo= 245.180 Deg	Zo= 8200 ft	Head= 245.180 Deg	
+1	FIX050	Flies		250.000	Nm/h
+2	FIX050	Flies		201.000	Seconds
+ 					
+VAR050	Transponder1	1074	432	Set2	
+t0=2.722 sec	Ro= 44.999 Nm	Azo= 245.000 Deg	Zo= 8300 ft	Head= 245.000 Deg	
+1	VAR050	Flies		250.000	Nm/h
+2	VAR050	Flies		201.000	Seconds
+ 					
+FIX051	Transponder1	563	233	Set1	
+t0=2.856 sec	Ro= 46.000 Nm	Azo= 257.000 Deg	Zo= 4100 ft	Head= 257.000 Deg	
+1	FIX051	Flies		250.000	Nm/h
+2	FIX051	Flies		201.000	Seconds
+ 					
+VAR051	Transponder1	1075	433	Set2	
+t0=2.856 sec	Ro= 45.000 Nm	Azo= 257.184 Deg	Zo= 4200 ft	Head= 257.184 Deg	
+1	VAR051	Flies		250.000	Nm/h
+2	VAR051	Flies		201.000	Seconds
+ 					
+FIX052	Transponder1	564	234	Set1	
+t0=2.989 sec	Ro= 46.000 Nm	Azo= 269.188 Deg	Zo= 2000 ft	Head= 269.188 Deg	
+1	FIX052	Flies		250.000	Nm/h
+2	FIX052	Flies		201.000	Seconds
+ 					
+VAR052	Transponder1	1076	434	Set2	
+t0=2.989 sec	Ro= 45.000 Nm	Azo= 269.000 Deg	Zo= 2100 ft	Head= 269.000 Deg	
+1	VAR052	Flies		250.000	Nm/h
+2	VAR052	Flies		201.000	Seconds
+ 					
+FIX053	Transponder1	565	235	Set1	
+t0=3.122 sec	Ro= 45.999 Nm	Azo= 281.000 Deg	Zo= 7500 ft	Head= 281.000 Deg	
+1	FIX053	Flies		250.000	Nm/h
+2	FIX053	Flies		201.000	Seconds
+ 					
+VAR053	Transponder1	1077	435	Set2	
+t0=3.122 sec	Ro= 44.999 Nm	Azo= 281.191 Deg	Zo= 7600 ft	Head= 281.191 Deg	
+1	VAR053	Flies		250.000	Nm/h
+2	VAR053	Flies		201.000	Seconds
+ 					
+FIX054	Transponder1	566	236	Set1	
+t0=3.256 sec	Ro= 45.999 Nm	Azo= 293.195 Deg	Zo= 6900 ft	Head= 293.195 Deg	
+1	FIX054	Flies		250.000	Nm/h
+2	FIX054	Flies		201.000	Seconds
+ 					
+VAR054	Transponder1	1078	436	Set2	
+t0=3.256 sec	Ro= 44.999 Nm	Azo= 293.000 Deg	Zo= 7000 ft	Head= 293.000 Deg	
+1	VAR054	Flies		250.000	Nm/h
+2	VAR054	Flies		201.000	Seconds
+ 					
+FIX055	Transponder1	567	237	Set1	
+t0=3.389 sec	Ro= 46.000 Nm	Azo= 305.000 Deg	Zo= 2800 ft	Head= 305.000 Deg	
+1	FIX055	Flies		250.000	Nm/h
+2	FIX055	Flies		201.000	Seconds
+ 					
+VAR055	Transponder1	1079	437	Set2	
+t0=3.389 sec	Ro= 45.000 Nm	Azo= 305.198 Deg	Zo= 2900 ft	Head= 305.198 Deg	
+1	VAR055	Flies		250.000	Nm/h
+2	VAR055	Flies		201.000	Seconds
+ 					
+FIX056	Transponder1	568	238	Set1	
+t0=3.522 sec	Ro= 46.000 Nm	Azo= 317.202 Deg	Zo= 3100 ft	Head= 317.202 Deg	
+1	FIX056	Flies		250.000	Nm/h
+2	FIX056	Flies		201.000	Seconds
+ 					
+VAR056	Transponder1	1080	438	Set2	
+t0=3.522 sec	Ro= 45.000 Nm	Azo= 317.000 Deg	Zo= 3200 ft	Head= 317.000 Deg	
+1	VAR056	Flies		250.000	Nm/h
+2	VAR056	Flies		201.000	Seconds
+ 					
+FIX057	Transponder1	569	239	Set1	
+t0=3.656 sec	Ro= 46.000 Nm	Azo= 329.000 Deg	Zo= 3900 ft	Head= 329.000 Deg	
+1	FIX057	Flies		250.000	Nm/h
+2	FIX057	Flies		201.000	Seconds
+ 					
+VAR057	Transponder1	1081	439	Set2	
+t0=3.656 sec	Ro= 45.000 Nm	Azo= 329.206 Deg	Zo= 4000 ft	Head= 329.206 Deg	
+1	VAR057	Flies		250.000	Nm/h
+2	VAR057	Flies		201.000	Seconds
+ 					
+FIX058	Transponder1	570	23A	Set1	
+t0=3.789 sec	Ro= 46.000 Nm	Azo= 341.209 Deg	Zo= 2100 ft	Head= 341.209 Deg	
+1	FIX058	Flies		250.000	Nm/h
+2	FIX058	Flies		201.000	Seconds
+ 					
+VAR058	Transponder1	1082	43A	Set2	
+t0=3.789 sec	Ro= 45.000 Nm	Azo= 341.000 Deg	Zo= 2200 ft	Head= 341.000 Deg	
+1	VAR058	Flies		250.000	Nm/h
+2	VAR058	Flies		201.000	Seconds
+ 					
+FIX059	Transponder1	571	23B	Set1	
+t0=3.922 sec	Ro= 45.999 Nm	Azo= 353.000 Deg	Zo= 8200 ft	Head= 353.000 Deg	
+1	FIX059	Flies		250.000	Nm/h
+2	FIX059	Flies		201.000	Seconds
+ 					
+VAR059	Transponder1	1083	43B	Set2	
+t0=3.922 sec	Ro= 44.999 Nm	Azo= 353.213 Deg	Zo= 8300 ft	Head= 353.213 Deg	
+1	VAR059	Flies		250.000	Nm/h
+2	VAR059	Flies		201.000	Seconds
+ 					
+FIX060	Transponder1	572	23C	Set1	
+t0=0.056 sec	Ro= 61.000 Nm	Azo= 5.217 Deg	Zo= 3100 ft	Head= 5.217 Deg	
+1	FIX060	Flies		250.000	Nm/h
+2	FIX060	Flies		201.000	Seconds
+ 					
+VAR060	Transponder1	1084	43C	Set2	
+t0=0.056 sec	Ro= 60.000 Nm	Azo= 5.000 Deg	Zo= 3200 ft	Head= 5.000 Deg	
+1	VAR060	Flies		250.000	Nm/h
+2	VAR060	Flies		201.000	Seconds
+ 					
+FIX061	Transponder1	573	23D	Set1	
+t0=0.189 sec	Ro= 61.000 Nm	Azo= 17.000 Deg	Zo= 1100 ft	Head= 17.000 Deg	
+1	FIX061	Flies		250.000	Nm/h
+2	FIX061	Flies		201.000	Seconds
+ 					
+VAR061	Transponder1	1085	43D	Set2	
+t0=0.189 sec	Ro= 60.000 Nm	Azo= 17.220 Deg	Zo= 1200 ft	Head= 17.220 Deg	
+1	VAR061	Flies		250.000	Nm/h
+2	VAR061	Flies		201.000	Seconds
+ 					
+FIX062	Transponder1	574	23E	Set1	
+t0=0.322 sec	Ro= 61.000 Nm	Azo= 29.224 Deg	Zo= 4100 ft	Head= 29.224 Deg	
+1	FIX062	Flies		250.000	Nm/h
+2	FIX062	Flies		201.000	Seconds
+ 					
+VAR062	Transponder1	1086	43E	Set2	
+t0=0.322 sec	Ro= 60.000 Nm	Azo= 29.000 Deg	Zo= 4200 ft	Head= 29.000 Deg	
+1	VAR062	Flies		250.000	Nm/h
+2	VAR062	Flies		201.000	Seconds
+ 					
+FIX063	Transponder1	575	23F	Set1	
+t0=0.456 sec	Ro= 60.999 Nm	Azo= 41.000 Deg	Zo= 7900 ft	Head= 41.000 Deg	
+1	FIX063	Flies		250.000	Nm/h
+2	FIX063	Flies		201.000	Seconds
+ 					
+VAR063	Transponder1	1087	43F	Set2	
+t0=0.456 sec	Ro= 59.999 Nm	Azo= 41.227 Deg	Zo= 8000 ft	Head= 41.227 Deg	
+1	VAR063	Flies		250.000	Nm/h
+2	VAR063	Flies		201.000	Seconds
+ 					
+FIX064	Transponder1	576	240	Set1	
+t0=0.589 sec	Ro= 61.000 Nm	Azo= 53.231 Deg	Zo= 1300 ft	Head= 53.231 Deg	
+1	FIX064	Flies		250.000	Nm/h
+2	FIX064	Flies		201.000	Seconds
+ 					
+VAR064	Transponder1	1088	440	Set2	
+t0=0.589 sec	Ro= 60.000 Nm	Azo= 53.000 Deg	Zo= 1400 ft	Head= 53.000 Deg	
+1	VAR064	Flies		250.000	Nm/h
+2	VAR064	Flies		201.000	Seconds
+ 					
+FIX065	Transponder1	577	241	Set1	
+t0=0.722 sec	Ro= 61.000 Nm	Azo= 65.000 Deg	Zo= 3900 ft	Head= 65.000 Deg	
+1	FIX065	Flies		250.000	Nm/h
+2	FIX065	Flies		201.000	Seconds
+ 					
+VAR065	Transponder1	1089	441	Set2	
+t0=0.722 sec	Ro= 60.000 Nm	Azo= 65.235 Deg	Zo= 4000 ft	Head= 65.235 Deg	
+1	VAR065	Flies		250.000	Nm/h
+2	VAR065	Flies		201.000	Seconds
+ 					
+FIX066	Transponder1	578	242	Set1	
+t0=0.856 sec	Ro= 61.000 Nm	Azo= 77.238 Deg	Zo= 3500 ft	Head= 77.238 Deg	
+1	FIX066	Flies		250.000	Nm/h
+2	FIX066	Flies		201.000	Seconds
+ 					
+VAR066	Transponder1	1090	442	Set2	
+t0=0.856 sec	Ro= 60.000 Nm	Azo= 77.000 Deg	Zo= 3600 ft	Head= 77.000 Deg	
+1	VAR066	Flies		250.000	Nm/h
+2	VAR066	Flies		201.000	Seconds
+ 					
+FIX067	Transponder1	579	243	Set1	
+t0=0.989 sec	Ro= 61.000 Nm	Azo= 89.000 Deg	Zo= 2700 ft	Head= 89.000 Deg	
+1	FIX067	Flies		250.000	Nm/h
+2	FIX067	Flies		201.000	Seconds
+ 					
+VAR067	Transponder1	1091	443	Set2	
+t0=0.989 sec	Ro= 60.000 Nm	Azo= 89.242 Deg	Zo= 2800 ft	Head= 89.242 Deg	
+1	VAR067	Flies		250.000	Nm/h
+2	VAR067	Flies		201.000	Seconds
+ 					
+FIX068	Transponder1	580	244	Set1	
+t0=1.122 sec	Ro= 60.999 Nm	Azo= 101.245 Deg	Zo= 9000 ft	Head= 101.245 Deg	
+1	FIX068	Flies		250.000	Nm/h
+2	FIX068	Flies		201.000	Seconds
+ 					
+VAR068	Transponder1	1092	444	Set2	
+t0=1.122 sec	Ro= 59.999 Nm	Azo= 101.000 Deg	Zo= 9100 ft	Head= 101.000 Deg	
+1	VAR068	Flies		250.000	Nm/h
+2	VAR068	Flies		201.000	Seconds
+ 					
+FIX069	Transponder1	581	245	Set1	
+t0=1.256 sec	Ro= 61.000 Nm	Azo= 113.000 Deg	Zo= 2300 ft	Head= 113.000 Deg	
+1	FIX069	Flies		250.000	Nm/h
+2	FIX069	Flies		201.000	Seconds
+ 					
+VAR069	Transponder1	1093	445	Set2	
+t0=1.256 sec	Ro= 60.000 Nm	Azo= 113.249 Deg	Zo= 2400 ft	Head= 113.249 Deg	
+1	VAR069	Flies		250.000	Nm/h
+2	VAR069	Flies		201.000	Seconds
+ 					
+FIX070	Transponder1	582	246	Set1	
+t0=1.389 sec	Ro= 61.000 Nm	Azo= 125.253 Deg	Zo= 2900 ft	Head= 125.253 Deg	
+1	FIX070	Flies		250.000	Nm/h
+2	FIX070	Flies		201.000	Seconds
+ 					
+VAR070	Transponder1	1094	446	Set2	
+t0=1.389 sec	Ro= 60.000 Nm	Azo= 125.000 Deg	Zo= 3000 ft	Head= 125.000 Deg	
+1	VAR070	Flies		250.000	Nm/h
+2	VAR070	Flies		201.000	Seconds
+ 					
+FIX071	Transponder1	583	247	Set1	
+t0=1.522 sec	Ro= 61.000 Nm	Azo= 137.000 Deg	Zo= 6600 ft	Head= 137.000 Deg	
+1	FIX071	Flies		250.000	Nm/h
+2	FIX071	Flies		201.000	Seconds
+ 					
+VAR071	Transponder1	1095	447	Set2	
+t0=1.522 sec	Ro= 60.000 Nm	Azo= 137.256 Deg	Zo= 6700 ft	Head= 137.256 Deg	
+1	VAR071	Flies		250.000	Nm/h
+2	VAR071	Flies		201.000	Seconds
+ 					
+FIX072	Transponder1	584	248	Set1	
+t0=1.656 sec	Ro= 61.000 Nm	Azo= 149.260 Deg	Zo= 5200 ft	Head= 149.260 Deg	
+1	FIX072	Flies		250.000	Nm/h
+2	FIX072	Flies		201.000	Seconds
+ 					
+VAR072	Transponder1	1096	448	Set2	
+t0=1.656 sec	Ro= 60.000 Nm	Azo= 149.000 Deg	Zo= 5300 ft	Head= 149.000 Deg	
+1	VAR072	Flies		250.000	Nm/h
+2	VAR072	Flies		201.000	Seconds
+ 					
+FIX073	Transponder1	585	249	Set1	
+t0=1.789 sec	Ro= 60.999 Nm	Azo= 161.000 Deg	Zo= 7200 ft	Head= 161.000 Deg	
+1	FIX073	Flies		250.000	Nm/h
+2	FIX073	Flies		201.000	Seconds
+ 					
+VAR073	Transponder1	1097	449	Set2	
+t0=1.789 sec	Ro= 59.999 Nm	Azo= 161.263 Deg	Zo= 7300 ft	Head= 161.263 Deg	
+1	VAR073	Flies		250.000	Nm/h
+2	VAR073	Flies		201.000	Seconds
+ 					
+FIX074	Transponder1	586	24A	Set1	
+t0=1.922 sec	Ro= 60.999 Nm	Azo= 173.267 Deg	Zo= 9400 ft	Head= 173.267 Deg	
+1	FIX074	Flies		250.000	Nm/h
+2	FIX074	Flies		201.000	Seconds
+ 					
+VAR074	Transponder1	1098	44A	Set2	
+t0=1.922 sec	Ro= 59.999 Nm	Azo= 173.000 Deg	Zo= 9500 ft	Head= 173.000 Deg	
+1	VAR074	Flies		250.000	Nm/h
+2	VAR074	Flies		201.000	Seconds
+ 					
+FIX075	Transponder1	587	24B	Set1	
+t0=2.056 sec	Ro= 61.000 Nm	Azo= 185.000 Deg	Zo= 4400 ft	Head= 185.000 Deg	
+1	FIX075	Flies		250.000	Nm/h
+2	FIX075	Flies		201.000	Seconds
+ 					
+VAR075	Transponder1	1099	44B	Set2	
+t0=2.056 sec	Ro= 60.000 Nm	Azo= 185.271 Deg	Zo= 4500 ft	Head= 185.271 Deg	
+1	VAR075	Flies		250.000	Nm/h
+2	VAR075	Flies		201.000	Seconds
+ 					
+FIX076	Transponder1	588	24C	Set1	
+t0=2.189 sec	Ro= 61.000 Nm	Azo= 197.274 Deg	Zo= 3400 ft	Head= 197.274 Deg	
+1	FIX076	Flies		250.000	Nm/h
+2	FIX076	Flies		201.000	Seconds
+ 					
+VAR076	Transponder1	1100	44C	Set2	
+t0=2.189 sec	Ro= 60.000 Nm	Azo= 197.000 Deg	Zo= 3500 ft	Head= 197.000 Deg	
+1	VAR076	Flies		250.000	Nm/h
+2	VAR076	Flies		201.000	Seconds
+ 					
+FIX077	Transponder1	589	24D	Set1	
+t0=2.322 sec	Ro= 61.000 Nm	Azo= 209.000 Deg	Zo= 5300 ft	Head= 209.000 Deg	
+1	FIX077	Flies		250.000	Nm/h
+2	FIX077	Flies		201.000	Seconds
+ 					
+VAR077	Transponder1	1101	44D	Set2	
+t0=2.322 sec	Ro= 60.000 Nm	Azo= 209.278 Deg	Zo= 5400 ft	Head= 209.278 Deg	
+1	VAR077	Flies		250.000	Nm/h
+2	VAR077	Flies		201.000	Seconds
+ 					
+FIX078	Transponder1	590	24E	Set1	
+t0=2.456 sec	Ro= 60.999 Nm	Azo= 221.282 Deg	Zo= 8800 ft	Head= 221.282 Deg	
+1	FIX078	Flies		250.000	Nm/h
+2	FIX078	Flies		201.000	Seconds
+ 					
+VAR078	Transponder1	1102	44E	Set2	
+t0=2.456 sec	Ro= 59.999 Nm	Azo= 221.000 Deg	Zo= 8900 ft	Head= 221.000 Deg	
+1	VAR078	Flies		250.000	Nm/h
+2	VAR078	Flies		201.000	Seconds
+ 					
+FIX079	Transponder1	591	24F	Set1	
+t0=2.589 sec	Ro= 60.999 Nm	Azo= 233.000 Deg	Zo= 8900 ft	Head= 233.000 Deg	
+1	FIX079	Flies		250.000	Nm/h
+2	FIX079	Flies		201.000	Seconds
+ 					
+VAR079	Transponder1	1103	44F	Set2	
+t0=2.589 sec	Ro= 59.999 Nm	Azo= 233.285 Deg	Zo= 9000 ft	Head= 233.285 Deg	
+1	VAR079	Flies		250.000	Nm/h
+2	VAR079	Flies		201.000	Seconds
+ 					
+FIX080	Transponder1	592	250	Set1	
+t0=2.722 sec	Ro= 61.000 Nm	Azo= 245.289 Deg	Zo= 1800 ft	Head= 245.289 Deg	
+1	FIX080	Flies		250.000	Nm/h
+2	FIX080	Flies		201.000	Seconds
+ 					
+VAR080	Transponder1	1104	450	Set2	
+t0=2.722 sec	Ro= 60.000 Nm	Azo= 245.000 Deg	Zo= 1900 ft	Head= 245.000 Deg	
+1	VAR080	Flies		250.000	Nm/h
+2	VAR080	Flies		201.000	Seconds
+ 					
+FIX081	Transponder1	593	251	Set1	
+t0=2.856 sec	Ro= 60.999 Nm	Azo= 257.000 Deg	Zo= 9900 ft	Head= 257.000 Deg	
+1	FIX081	Flies		250.000	Nm/h
+2	FIX081	Flies		201.000	Seconds
+ 					
+VAR081	Transponder1	1105	451	Set2	
+t0=2.856 sec	Ro= 59.999 Nm	Azo= 257.292 Deg	Zo= 10000 ft	Head= 257.292 Deg	
+1	VAR081	Flies		250.000	Nm/h
+2	VAR081	Flies		201.000	Seconds
+ 					
+FIX082	Transponder1	594	252	Set1	
+t0=2.989 sec	Ro= 61.000 Nm	Azo= 269.296 Deg	Zo= 2300 ft	Head= 269.296 Deg	
+1	FIX082	Flies		250.000	Nm/h
+2	FIX082	Flies		201.000	Seconds
+ 					
+VAR082	Transponder1	1106	452	Set2	
+t0=2.989 sec	Ro= 60.000 Nm	Azo= 269.000 Deg	Zo= 2400 ft	Head= 269.000 Deg	
+1	VAR082	Flies		250.000	Nm/h
+2	VAR082	Flies		201.000	Seconds
+ 					
+FIX083	Transponder1	595	253	Set1	
+t0=3.122 sec	Ro= 61.000 Nm	Azo= 281.000 Deg	Zo= 3000 ft	Head= 281.000 Deg	
+1	FIX083	Flies		250.000	Nm/h
+2	FIX083	Flies		201.000	Seconds
+ 					
+VAR083	Transponder1	1107	453	Set2	
+t0=3.122 sec	Ro= 60.000 Nm	Azo= 281.300 Deg	Zo= 3100 ft	Head= 281.300 Deg	
+1	VAR083	Flies		250.000	Nm/h
+2	VAR083	Flies		201.000	Seconds
+ 					
+FIX084	Transponder1	596	254	Set1	
+t0=3.256 sec	Ro= 61.000 Nm	Azo= 293.303 Deg	Zo= 2400 ft	Head= 293.303 Deg	
+1	FIX084	Flies		250.000	Nm/h
+2	FIX084	Flies		201.000	Seconds
+ 					
+VAR084	Transponder1	1108	454	Set2	
+t0=3.256 sec	Ro= 60.000 Nm	Azo= 293.000 Deg	Zo= 2500 ft	Head= 293.000 Deg	
+1	VAR084	Flies		250.000	Nm/h
+2	VAR084	Flies		201.000	Seconds
+ 					
+FIX085	Transponder1	597	255	Set1	
+t0=3.389 sec	Ro= 61.000 Nm	Azo= 305.000 Deg	Zo= 1100 ft	Head= 305.000 Deg	
+1	FIX085	Flies		250.000	Nm/h
+2	FIX085	Flies		201.000	Seconds
+ 					
+VAR085	Transponder1	1109	455	Set2	
+t0=3.389 sec	Ro= 60.000 Nm	Azo= 305.307 Deg	Zo= 1200 ft	Head= 305.307 Deg	
+1	VAR085	Flies		250.000	Nm/h
+2	VAR085	Flies		201.000	Seconds
+ 					
+FIX086	Transponder1	598	256	Set1	
+t0=3.522 sec	Ro= 61.000 Nm	Azo= 317.310 Deg	Zo= 3800 ft	Head= 317.310 Deg	
+1	FIX086	Flies		250.000	Nm/h
+2	FIX086	Flies		201.000	Seconds
+ 					
+VAR086	Transponder1	1110	456	Set2	
+t0=3.522 sec	Ro= 60.000 Nm	Azo= 317.000 Deg	Zo= 3900 ft	Head= 317.000 Deg	
+1	VAR086	Flies		250.000	Nm/h
+2	VAR086	Flies		201.000	Seconds
+ 					
+FIX087	Transponder1	599	257	Set1	
+t0=3.656 sec	Ro= 61.000 Nm	Azo= 329.000 Deg	Zo= 5600 ft	Head= 329.000 Deg	
+1	FIX087	Flies		250.000	Nm/h
+2	FIX087	Flies		201.000	Seconds
+ 					
+VAR087	Transponder1	1111	457	Set2	
+t0=3.656 sec	Ro= 60.000 Nm	Azo= 329.314 Deg	Zo= 5700 ft	Head= 329.314 Deg	
+1	VAR087	Flies		250.000	Nm/h
+2	VAR087	Flies		201.000	Seconds
+ 					
+FIX088	Transponder1	600	258	Set1	
+t0=3.789 sec	Ro= 61.000 Nm	Azo= 341.318 Deg	Zo= 1800 ft	Head= 341.318 Deg	
+1	FIX088	Flies		250.000	Nm/h
+2	FIX088	Flies		201.000	Seconds
+ 					
+VAR088	Transponder1	1112	458	Set2	
+t0=3.789 sec	Ro= 60.000 Nm	Azo= 341.000 Deg	Zo= 1900 ft	Head= 341.000 Deg	
+1	VAR088	Flies		250.000	Nm/h
+2	VAR088	Flies		201.000	Seconds
+ 					
+FIX089	Transponder1	601	259	Set1	
+t0=3.922 sec	Ro= 60.999 Nm	Azo= 353.000 Deg	Zo= 9100 ft	Head= 353.000 Deg	
+1	FIX089	Flies		250.000	Nm/h
+2	FIX089	Flies		201.000	Seconds
+ 					
+VAR089	Transponder1	1113	459	Set2	
+t0=3.922 sec	Ro= 59.999 Nm	Azo= 353.321 Deg	Zo= 9200 ft	Head= 353.321 Deg	
+1	VAR089	Flies		250.000	Nm/h
+2	VAR089	Flies		201.000	Seconds
+ 					
+FIX090	Transponder1	602	25A	Set1	
+t0=0.056 sec	Ro= 75.999 Nm	Azo= 5.325 Deg	Zo= 9100 ft	Head= 5.325 Deg	
+1	FIX090	Flies		250.000	Nm/h
+2	FIX090	Flies		201.000	Seconds
+ 					
+VAR090	Transponder1	1114	45A	Set2	
+t0=0.056 sec	Ro= 74.999 Nm	Azo= 5.000 Deg	Zo= 9200 ft	Head= 5.000 Deg	
+1	VAR090	Flies		250.000	Nm/h
+2	VAR090	Flies		201.000	Seconds
+ 					
+FIX091	Transponder1	603	25B	Set1	
+t0=0.189 sec	Ro= 75.999 Nm	Azo= 17.000 Deg	Zo= 9900 ft	Head= 17.000 Deg	
+1	FIX091	Flies		250.000	Nm/h
+2	FIX091	Flies		201.000	Seconds
+ 					
+VAR091	Transponder1	1115	45B	Set2	
+t0=0.189 sec	Ro= 74.999 Nm	Azo= 17.328 Deg	Zo= 10000 ft	Head= 17.328 Deg	
+1	VAR091	Flies		250.000	Nm/h
+2	VAR091	Flies		201.000	Seconds
+ 					
+FIX092	Transponder1	604	25C	Set1	
+t0=0.322 sec	Ro= 76.000 Nm	Azo= 29.332 Deg	Zo= 6300 ft	Head= 29.332 Deg	
+1	FIX092	Flies		250.000	Nm/h
+2	FIX092	Flies		201.000	Seconds
+ 					
+VAR092	Transponder1	1116	45C	Set2	
+t0=0.322 sec	Ro= 75.000 Nm	Azo= 29.000 Deg	Zo= 6400 ft	Head= 29.000 Deg	
+1	VAR092	Flies		250.000	Nm/h
+2	VAR092	Flies		201.000	Seconds
+ 					
+FIX093	Transponder1	605	25D	Set1	
+t0=0.456 sec	Ro= 76.000 Nm	Azo= 41.000 Deg	Zo= 2200 ft	Head= 41.000 Deg	
+1	FIX093	Flies		250.000	Nm/h
+2	FIX093	Flies		201.000	Seconds
+ 					
+VAR093	Transponder1	1117	45D	Set2	
+t0=0.456 sec	Ro= 75.000 Nm	Azo= 41.336 Deg	Zo= 2300 ft	Head= 41.336 Deg	
+1	VAR093	Flies		250.000	Nm/h
+2	VAR093	Flies		201.000	Seconds
+ 					
+FIX094	Transponder1	606	25E	Set1	
+t0=0.589 sec	Ro= 75.999 Nm	Azo= 53.339 Deg	Zo= 9000 ft	Head= 53.339 Deg	
+1	FIX094	Flies		250.000	Nm/h
+2	FIX094	Flies		201.000	Seconds
+ 					
+VAR094	Transponder1	1118	45E	Set2	
+t0=0.589 sec	Ro= 74.999 Nm	Azo= 53.000 Deg	Zo= 9100 ft	Head= 53.000 Deg	
+1	VAR094	Flies		250.000	Nm/h
+2	VAR094	Flies		201.000	Seconds
+ 					
+FIX095	Transponder1	607	25F	Set1	
+t0=0.722 sec	Ro= 75.999 Nm	Azo= 65.000 Deg	Zo= 8800 ft	Head= 65.000 Deg	
+1	FIX095	Flies		250.000	Nm/h
+2	FIX095	Flies		201.000	Seconds
+ 					
+VAR095	Transponder1	1119	45F	Set2	
+t0=0.722 sec	Ro= 74.999 Nm	Azo= 65.343 Deg	Zo= 8900 ft	Head= 65.343 Deg	
+1	VAR095	Flies		250.000	Nm/h
+2	VAR095	Flies		201.000	Seconds
+ 					
+FIX096	Transponder1	608	260	Set1	
+t0=0.856 sec	Ro= 76.000 Nm	Azo= 77.346 Deg	Zo= 8100 ft	Head= 77.346 Deg	
+1	FIX096	Flies		250.000	Nm/h
+2	FIX096	Flies		201.000	Seconds
+ 					
+VAR096	Transponder1	1120	460	Set2	
+t0=0.856 sec	Ro= 75.000 Nm	Azo= 77.000 Deg	Zo= 8200 ft	Head= 77.000 Deg	
+1	VAR096	Flies		250.000	Nm/h
+2	VAR096	Flies		201.000	Seconds
+ 					
+FIX097	Transponder1	609	261	Set1	
+t0=0.989 sec	Ro= 76.000 Nm	Azo= 89.000 Deg	Zo= 7400 ft	Head= 89.000 Deg	
+1	FIX097	Flies		250.000	Nm/h
+2	FIX097	Flies		201.000	Seconds
+ 					
+VAR097	Transponder1	1121	461	Set2	
+t0=0.989 sec	Ro= 75.000 Nm	Azo= 89.350 Deg	Zo= 7500 ft	Head= 89.350 Deg	
+1	VAR097	Flies		250.000	Nm/h
+2	VAR097	Flies		201.000	Seconds
+ 					
+FIX098	Transponder1	610	262	Set1	
+t0=1.122 sec	Ro= 76.000 Nm	Azo= 101.354 Deg	Zo= 1100 ft	Head= 101.354 Deg	
+1	FIX098	Flies		250.000	Nm/h
+2	FIX098	Flies		201.000	Seconds
+ 					
+VAR098	Transponder1	1122	462	Set2	
+t0=1.122 sec	Ro= 75.000 Nm	Azo= 101.000 Deg	Zo= 1200 ft	Head= 101.000 Deg	
+1	VAR098	Flies		250.000	Nm/h
+2	VAR098	Flies		201.000	Seconds
+ 					
+FIX099	Transponder1	611	263	Set1	
+t0=1.256 sec	Ro= 76.000 Nm	Azo= 113.000 Deg	Zo= 3700 ft	Head= 113.000 Deg	
+1	FIX099	Flies		250.000	Nm/h
+2	FIX099	Flies		201.000	Seconds
+ 					
+VAR099	Transponder1	1123	463	Set2	
+t0=1.256 sec	Ro= 75.000 Nm	Azo= 113.357 Deg	Zo= 3800 ft	Head= 113.357 Deg	
+1	VAR099	Flies		250.000	Nm/h
+2	VAR099	Flies		201.000	Seconds
+ 					
+FIX100	Transponder1	612	264	Set1	
+t0=1.389 sec	Ro= 76.000 Nm	Azo= 125.361 Deg	Zo= 6700 ft	Head= 125.361 Deg	
+1	FIX100	Flies		250.000	Nm/h
+2	FIX100	Flies		201.000	Seconds
+ 					
+VAR100	Transponder1	1124	464	Set2	
+t0=1.389 sec	Ro= 75.000 Nm	Azo= 125.000 Deg	Zo= 6800 ft	Head= 125.000 Deg	
+1	VAR100	Flies		250.000	Nm/h
+2	VAR100	Flies		201.000	Seconds
+ 					
+FIX101	Transponder1	613	265	Set1	
+t0=1.522 sec	Ro= 76.000 Nm	Azo= 137.000 Deg	Zo= 7800 ft	Head= 137.000 Deg	
+1	FIX101	Flies		250.000	Nm/h
+2	FIX101	Flies		201.000	Seconds
+ 					
+VAR101	Transponder1	1125	465	Set2	
+t0=1.522 sec	Ro= 75.000 Nm	Azo= 137.365 Deg	Zo= 7900 ft	Head= 137.365 Deg	
+1	VAR101	Flies		250.000	Nm/h
+2	VAR101	Flies		201.000	Seconds
+ 					
+FIX102	Transponder1	614	266	Set1	
+t0=1.656 sec	Ro= 76.000 Nm	Azo= 149.368 Deg	Zo= 5500 ft	Head= 149.368 Deg	
+1	FIX102	Flies		250.000	Nm/h
+2	FIX102	Flies		201.000	Seconds
+ 					
+VAR102	Transponder1	1126	466	Set2	
+t0=1.656 sec	Ro= 75.000 Nm	Azo= 149.000 Deg	Zo= 5600 ft	Head= 149.000 Deg	
+1	VAR102	Flies		250.000	Nm/h
+2	VAR102	Flies		201.000	Seconds
+ 					
+FIX103	Transponder1	615	267	Set1	
+t0=1.789 sec	Ro= 76.000 Nm	Azo= 161.000 Deg	Zo= 4300 ft	Head= 161.000 Deg	
+1	FIX103	Flies		250.000	Nm/h
+2	FIX103	Flies		201.000	Seconds
+ 					
+VAR103	Transponder1	1127	467	Set2	
+t0=1.789 sec	Ro= 75.000 Nm	Azo= 161.372 Deg	Zo= 4400 ft	Head= 161.372 Deg	
+1	VAR103	Flies		250.000	Nm/h
+2	VAR103	Flies		201.000	Seconds
+ 					
+FIX104	Transponder1	616	268	Set1	
+t0=1.922 sec	Ro= 76.000 Nm	Azo= 173.375 Deg	Zo= 1900 ft	Head= 173.375 Deg	
+1	FIX104	Flies		250.000	Nm/h
+2	FIX104	Flies		201.000	Seconds
+ 					
+VAR104	Transponder1	1128	468	Set2	
+t0=1.922 sec	Ro= 75.000 Nm	Azo= 173.000 Deg	Zo= 2000 ft	Head= 173.000 Deg	
+1	VAR104	Flies		250.000	Nm/h
+2	VAR104	Flies		201.000	Seconds
+ 					
+FIX105	Transponder1	617	269	Set1	
+t0=2.056 sec	Ro= 76.000 Nm	Azo= 185.000 Deg	Zo= 8200 ft	Head= 185.000 Deg	
+1	FIX105	Flies		250.000	Nm/h
+2	FIX105	Flies		201.000	Seconds
+ 					
+VAR105	Transponder1	1129	469	Set2	
+t0=2.056 sec	Ro= 75.000 Nm	Azo= 185.379 Deg	Zo= 8300 ft	Head= 185.379 Deg	
+1	VAR105	Flies		250.000	Nm/h
+2	VAR105	Flies		201.000	Seconds
+ 					
+FIX106	Transponder1	618	26A	Set1	
+t0=2.189 sec	Ro= 76.000 Nm	Azo= 197.383 Deg	Zo= 2900 ft	Head= 197.383 Deg	
+1	FIX106	Flies		250.000	Nm/h
+2	FIX106	Flies		201.000	Seconds
+ 					
+VAR106	Transponder1	1130	46A	Set2	
+t0=2.189 sec	Ro= 75.000 Nm	Azo= 197.000 Deg	Zo= 3000 ft	Head= 197.000 Deg	
+1	VAR106	Flies		250.000	Nm/h
+2	VAR106	Flies		201.000	Seconds
+ 					
+FIX107	Transponder1	619	26B	Set1	
+t0=2.322 sec	Ro= 76.000 Nm	Azo= 209.000 Deg	Zo= 2100 ft	Head= 209.000 Deg	
+1	FIX107	Flies		250.000	Nm/h
+2	FIX107	Flies		201.000	Seconds
+ 					
+VAR107	Transponder1	1131	46B	Set2	
+t0=2.322 sec	Ro= 75.000 Nm	Azo= 209.386 Deg	Zo= 2200 ft	Head= 209.386 Deg	
+1	VAR107	Flies		250.000	Nm/h
+2	VAR107	Flies		201.000	Seconds
+ 					
+FIX108	Transponder1	620	26C	Set1	
+t0=2.456 sec	Ro= 76.000 Nm	Azo= 221.390 Deg	Zo= 1500 ft	Head= 221.390 Deg	
+1	FIX108	Flies		250.000	Nm/h
+2	FIX108	Flies		201.000	Seconds
+ 					
+VAR108	Transponder1	1132	46C	Set2	
+t0=2.456 sec	Ro= 75.000 Nm	Azo= 221.000 Deg	Zo= 1600 ft	Head= 221.000 Deg	
+1	VAR108	Flies		250.000	Nm/h
+2	VAR108	Flies		201.000	Seconds
+ 					
+FIX109	Transponder1	621	26D	Set1	
+t0=2.589 sec	Ro= 76.000 Nm	Azo= 233.000 Deg	Zo= 2100 ft	Head= 233.000 Deg	
+1	FIX109	Flies		250.000	Nm/h
+2	FIX109	Flies		201.000	Seconds
+ 					
+VAR109	Transponder1	1133	46D	Set2	
+t0=2.589 sec	Ro= 75.000 Nm	Azo= 233.393 Deg	Zo= 2200 ft	Head= 233.393 Deg	
+1	VAR109	Flies		250.000	Nm/h
+2	VAR109	Flies		201.000	Seconds
+ 					
+FIX110	Transponder1	622	26E	Set1	
+t0=2.722 sec	Ro= 76.000 Nm	Azo= 245.397 Deg	Zo= 2300 ft	Head= 245.397 Deg	
+1	FIX110	Flies		250.000	Nm/h
+2	FIX110	Flies		201.000	Seconds
+ 					
+VAR110	Transponder1	1134	46E	Set2	
+t0=2.722 sec	Ro= 75.000 Nm	Azo= 245.000 Deg	Zo= 2400 ft	Head= 245.000 Deg	
+1	VAR110	Flies		250.000	Nm/h
+2	VAR110	Flies		201.000	Seconds
+ 					
+FIX111	Transponder1	623	26F	Set1	
+t0=2.856 sec	Ro= 76.000 Nm	Azo= 257.000 Deg	Zo= 8100 ft	Head= 257.000 Deg	
+1	FIX111	Flies		250.000	Nm/h
+2	FIX111	Flies		201.000	Seconds
+ 					
+VAR111	Transponder1	1135	46F	Set2	
+t0=2.856 sec	Ro= 75.000 Nm	Azo= 257.401 Deg	Zo= 8200 ft	Head= 257.401 Deg	
+1	VAR111	Flies		267.100	Nm/h
+2	VAR111	Flies		201.000	Seconds
+ 					
+FIX112	Transponder1	624	270	Set1	
+t0=2.989 sec	Ro= 76.000 Nm	Azo= 269.404 Deg	Zo= 2200 ft	Head= 269.404 Deg	
+1	FIX112	Flies		250.000	Nm/h
+2	FIX112	Flies		201.000	Seconds
+ 					
+VAR112	Transponder1	1136	470	Set2	
+t0=2.989 sec	Ro= 75.000 Nm	Azo= 269.000 Deg	Zo= 2300 ft	Head= 269.000 Deg	
+1	VAR112	Flies		250.000	Nm/h
+2	VAR112	Flies		201.000	Seconds
+ 					
+FIX113	Transponder1	625	271	Set1	
+t0=3.122 sec	Ro= 76.000 Nm	Azo= 281.000 Deg	Zo= 8000 ft	Head= 281.000 Deg	
+1	FIX113	Flies		250.000	Nm/h
+2	FIX113	Flies		201.000	Seconds
+ 					
+VAR113	Transponder1	1137	471	Set2	
+t0=3.122 sec	Ro= 75.000 Nm	Azo= 281.408 Deg	Zo= 8100 ft	Head= 281.408 Deg	
+1	VAR113	Flies		250.000	Nm/h
+2	VAR113	Flies		201.000	Seconds
+ 					
+FIX114	Transponder1	626	272	Set1	
+t0=3.256 sec	Ro= 76.000 Nm	Azo= 293.411 Deg	Zo= 6300 ft	Head= 293.411 Deg	
+1	FIX114	Flies		250.000	Nm/h
+2	FIX114	Flies		201.000	Seconds
+ 					
+VAR114	Transponder1	1138	472	Set2	
+t0=3.256 sec	Ro= 75.000 Nm	Azo= 293.000 Deg	Zo= 6400 ft	Head= 293.000 Deg	
+1	VAR114	Flies		250.000	Nm/h
+2	VAR114	Flies		201.000	Seconds
+ 					
+FIX115	Transponder1	627	273	Set1	
+t0=3.389 sec	Ro= 76.000 Nm	Azo= 305.000 Deg	Zo= 1100 ft	Head= 305.000 Deg	
+1	FIX115	Flies		250.000	Nm/h
+2	FIX115	Flies		201.000	Seconds
+ 					
+VAR115	Transponder1	1139	473	Set2	
+t0=3.389 sec	Ro= 75.000 Nm	Azo= 305.415 Deg	Zo= 1200 ft	Head= 305.415 Deg	
+1	VAR115	Flies		250.000	Nm/h
+2	VAR115	Flies		201.000	Seconds
+ 					
+FIX116	Transponder1	628	274	Set1	
+t0=3.522 sec	Ro= 75.999 Nm	Azo= 317.419 Deg	Zo= 9300 ft	Head= 317.419 Deg	
+1	FIX116	Flies		250.000	Nm/h
+2	FIX116	Flies		201.000	Seconds
+ 					
+VAR116	Transponder1	1140	474	Set2	
+t0=3.522 sec	Ro= 74.999 Nm	Azo= 317.000 Deg	Zo= 9400 ft	Head= 317.000 Deg	
+1	VAR116	Flies		250.000	Nm/h
+2	VAR116	Flies		201.000	Seconds
+ 					
+FIX117	Transponder1	629	275	Set1	
+t0=3.656 sec	Ro= 76.000 Nm	Azo= 329.000 Deg	Zo= 3400 ft	Head= 329.000 Deg	
+1	FIX117	Flies		250.000	Nm/h
+2	FIX117	Flies		201.000	Seconds
+ 					
+VAR117	Transponder1	1141	475	Set2	
+t0=3.656 sec	Ro= 75.000 Nm	Azo= 329.422 Deg	Zo= 3500 ft	Head= 329.422 Deg	
+1	VAR117	Flies		250.000	Nm/h
+2	VAR117	Flies		201.000	Seconds
+ 					
+FIX118	Transponder1	630	276	Set1	
+t0=3.789 sec	Ro= 76.000 Nm	Azo= 341.426 Deg	Zo= 4000 ft	Head= 341.426 Deg	
+1	FIX118	Flies		250.000	Nm/h
+2	FIX118	Flies		201.000	Seconds
+ 					
+VAR118	Transponder1	1142	476	Set2	
+t0=3.789 sec	Ro= 75.000 Nm	Azo= 341.000 Deg	Zo= 4100 ft	Head= 341.000 Deg	
+1	VAR118	Flies		250.000	Nm/h
+2	VAR118	Flies		201.000	Seconds
+ 					
+FIX119	Transponder1	631	277	Set1	
+t0=3.922 sec	Ro= 75.999 Nm	Azo= 353.000 Deg	Zo= 9600 ft	Head= 353.000 Deg	
+1	FIX119	Flies		250.000	Nm/h
+2	FIX119	Flies		201.000	Seconds
+ 					
+VAR119	Transponder1	1143	477	Set2	
+t0=3.922 sec	Ro= 74.999 Nm	Azo= 353.429 Deg	Zo= 9700 ft	Head= 353.429 Deg	
+1	VAR119	Flies		250.000	Nm/h
+2	VAR119	Flies		201.000	Seconds
+ 					
+FIX120	Transponder1	632	278	Set1	
+t0=0.056 sec	Ro= 91.000 Nm	Azo= 5.433 Deg	Zo= 7100 ft	Head= 5.433 Deg	
+1	FIX120	Flies		250.000	Nm/h
+2	FIX120	Flies		201.000	Seconds
+ 					
+VAR120	Transponder1	1144	478	Set2	
+t0=0.056 sec	Ro= 90.000 Nm	Azo= 5.000 Deg	Zo= 7200 ft	Head= 5.000 Deg	
+1	VAR120	Flies		250.000	Nm/h
+2	VAR120	Flies		201.000	Seconds
+ 					
+FIX121	Transponder1	633	279	Set1	
+t0=0.189 sec	Ro= 91.000 Nm	Azo= 17.000 Deg	Zo= 6600 ft	Head= 17.000 Deg	
+1	FIX121	Flies		250.000	Nm/h
+2	FIX121	Flies		201.000	Seconds
+ 					
+VAR121	Transponder1	1145	479	Set2	
+t0=0.189 sec	Ro= 90.000 Nm	Azo= 17.437 Deg	Zo= 6700 ft	Head= 17.437 Deg	
+1	VAR121	Flies		250.000	Nm/h
+2	VAR121	Flies		201.000	Seconds
+ 					
+FIX122	Transponder1	634	27A	Set1	
+t0=0.322 sec	Ro= 91.000 Nm	Azo= 29.440 Deg	Zo= 7700 ft	Head= 29.440 Deg	
+1	FIX122	Flies		250.000	Nm/h
+2	FIX122	Flies		201.000	Seconds
+ 					
+VAR122	Transponder1	1146	47A	Set2	
+t0=0.322 sec	Ro= 90.000 Nm	Azo= 29.000 Deg	Zo= 7800 ft	Head= 29.000 Deg	
+1	VAR122	Flies		250.000	Nm/h
+2	VAR122	Flies		201.000	Seconds
+ 					
+FIX123	Transponder1	635	27B	Set1	
+t0=0.456 sec	Ro= 91.000 Nm	Azo= 41.000 Deg	Zo= 6100 ft	Head= 41.000 Deg	
+1	FIX123	Flies		250.000	Nm/h
+2	FIX123	Flies		201.000	Seconds
+ 					
+VAR123	Transponder1	1147	47B	Set2	
+t0=0.456 sec	Ro= 90.000 Nm	Azo= 41.444 Deg	Zo= 6200 ft	Head= 41.444 Deg	
+1	VAR123	Flies		250.000	Nm/h
+2	VAR123	Flies		201.000	Seconds
+ 					
+FIX124	Transponder1	636	27C	Set1	
+t0=0.589 sec	Ro= 91.000 Nm	Azo= 53.448 Deg	Zo= 6100 ft	Head= 53.448 Deg	
+1	FIX124	Flies		250.000	Nm/h
+2	FIX124	Flies		201.000	Seconds
+ 					
+VAR124	Transponder1	1148	47C	Set2	
+t0=0.589 sec	Ro= 90.000 Nm	Azo= 53.000 Deg	Zo= 6200 ft	Head= 53.000 Deg	
+1	VAR124	Flies		250.000	Nm/h
+2	VAR124	Flies		201.000	Seconds
+ 					
+FIX125	Transponder1	637	27D	Set1	
+t0=0.722 sec	Ro= 91.000 Nm	Azo= 65.000 Deg	Zo= 4000 ft	Head= 65.000 Deg	
+1	FIX125	Flies		250.000	Nm/h
+2	FIX125	Flies		201.000	Seconds
+ 					
+VAR125	Transponder1	1149	47D	Set2	
+t0=0.722 sec	Ro= 90.000 Nm	Azo= 65.451 Deg	Zo= 4100 ft	Head= 65.451 Deg	
+1	VAR125	Flies		250.000	Nm/h
+2	VAR125	Flies		201.000	Seconds
+ 					
+FIX126	Transponder1	638	27E	Set1	
+t0=0.856 sec	Ro= 91.000 Nm	Azo= 77.455 Deg	Zo= 3800 ft	Head= 77.455 Deg	
+1	FIX126	Flies		250.000	Nm/h
+2	FIX126	Flies		201.000	Seconds
+ 					
+VAR126	Transponder1	1150	47E	Set2	
+t0=0.856 sec	Ro= 90.000 Nm	Azo= 77.000 Deg	Zo= 3900 ft	Head= 77.000 Deg	
+1	VAR126	Flies		250.000	Nm/h
+2	VAR126	Flies		201.000	Seconds
+ 					
+FIX127	Transponder1	639	27F	Set1	
+t0=0.989 sec	Ro= 91.000 Nm	Azo= 89.000 Deg	Zo= 4300 ft	Head= 89.000 Deg	
+1	FIX127	Flies		250.000	Nm/h
+2	FIX127	Flies		201.000	Seconds
+ 					
+VAR127	Transponder1	1151	47F	Set2	
+t0=0.989 sec	Ro= 90.000 Nm	Azo= 89.458 Deg	Zo= 4400 ft	Head= 89.458 Deg	
+1	VAR127	Flies		250.000	Nm/h
+2	VAR127	Flies		201.000	Seconds
+ 					
+FIX128	Transponder1	640	280	Set1	
+t0=1.122 sec	Ro= 91.000 Nm	Azo= 101.462 Deg	Zo= 5400 ft	Head= 101.462 Deg	
+1	FIX128	Flies		250.000	Nm/h
+2	FIX128	Flies		201.000	Seconds
+ 					
+VAR128	Transponder1	1152	480	Set2	
+t0=1.122 sec	Ro= 90.000 Nm	Azo= 101.000 Deg	Zo= 5500 ft	Head= 101.000 Deg	
+1	VAR128	Flies		250.000	Nm/h
+2	VAR128	Flies		201.000	Seconds
+ 					
+FIX129	Transponder1	641	281	Set1	
+t0=1.256 sec	Ro= 91.000 Nm	Azo= 113.000 Deg	Zo= 7200 ft	Head= 113.000 Deg	
+1	FIX129	Flies		250.000	Nm/h
+2	FIX129	Flies		201.000	Seconds
+ 					
+VAR129	Transponder1	1153	481	Set2	
+t0=1.256 sec	Ro= 90.000 Nm	Azo= 113.466 Deg	Zo= 7300 ft	Head= 113.466 Deg	
+1	VAR129	Flies		250.000	Nm/h
+2	VAR129	Flies		201.000	Seconds
+ 					
+FIX130	Transponder1	642	282	Set1	
+t0=1.389 sec	Ro= 91.000 Nm	Azo= 125.469 Deg	Zo= 7100 ft	Head= 125.469 Deg	
+1	FIX130	Flies		250.000	Nm/h
+2	FIX130	Flies		201.000	Seconds
+ 					
+VAR130	Transponder1	1154	482	Set2	
+t0=1.389 sec	Ro= 90.000 Nm	Azo= 125.000 Deg	Zo= 7200 ft	Head= 125.000 Deg	
+1	VAR130	Flies		250.000	Nm/h
+2	VAR130	Flies		201.000	Seconds
+ 					
+FIX131	Transponder1	643	283	Set1	
+t0=1.522 sec	Ro= 91.000 Nm	Azo= 137.000 Deg	Zo= 1800 ft	Head= 137.000 Deg	
+1	FIX131	Flies		250.000	Nm/h
+2	FIX131	Flies		201.000	Seconds
+ 					
+VAR131	Transponder1	1155	483	Set2	
+t0=1.522 sec	Ro= 90.000 Nm	Azo= 137.473 Deg	Zo= 1900 ft	Head= 137.473 Deg	
+1	VAR131	Flies		250.000	Nm/h
+2	VAR131	Flies		201.000	Seconds
+ 					
+FIX132	Transponder1	644	284	Set1	
+t0=1.656 sec	Ro= 91.000 Nm	Azo= 149.476 Deg	Zo= 4000 ft	Head= 149.476 Deg	
+1	FIX132	Flies		250.000	Nm/h
+2	FIX132	Flies		201.000	Seconds
+ 					
+VAR132	Transponder1	1156	484	Set2	
+t0=1.656 sec	Ro= 90.000 Nm	Azo= 149.000 Deg	Zo= 4100 ft	Head= 149.000 Deg	
+1	VAR132	Flies		250.000	Nm/h
+2	VAR132	Flies		201.000	Seconds
+ 					
+FIX133	Transponder1	645	285	Set1	
+t0=1.789 sec	Ro= 91.000 Nm	Azo= 161.000 Deg	Zo= 9300 ft	Head= 161.000 Deg	
+1	FIX133	Flies		250.000	Nm/h
+2	FIX133	Flies		201.000	Seconds
+ 					
+VAR133	Transponder1	1157	485	Set2	
+t0=1.789 sec	Ro= 90.000 Nm	Azo= 161.480 Deg	Zo= 9400 ft	Head= 161.480 Deg	
+1	VAR133	Flies		250.000	Nm/h
+2	VAR133	Flies		201.000	Seconds
+ 					
+FIX134	Transponder1	646	286	Set1	
+t0=1.922 sec	Ro= 91.000 Nm	Azo= 173.484 Deg	Zo= 2300 ft	Head= 173.484 Deg	
+1	FIX134	Flies		250.000	Nm/h
+2	FIX134	Flies		201.000	Seconds
+ 					
+VAR134	Transponder1	1158	486	Set2	
+t0=1.922 sec	Ro= 90.000 Nm	Azo= 173.000 Deg	Zo= 2400 ft	Head= 173.000 Deg	
+1	VAR134	Flies		250.000	Nm/h
+2	VAR134	Flies		201.000	Seconds
+ 					
+FIX135	Transponder1	647	287	Set1	
+t0=2.056 sec	Ro= 91.000 Nm	Azo= 185.000 Deg	Zo= 7500 ft	Head= 185.000 Deg	
+1	FIX135	Flies		250.000	Nm/h
+2	FIX135	Flies		201.000	Seconds
+ 					
+VAR135	Transponder1	1159	487	Set2	
+t0=2.056 sec	Ro= 90.000 Nm	Azo= 185.487 Deg	Zo= 7600 ft	Head= 185.487 Deg	
+1	VAR135	Flies		250.000	Nm/h
+2	VAR135	Flies		201.000	Seconds
+ 					
+FIX136	Transponder1	648	288	Set1	
+t0=2.189 sec	Ro= 91.000 Nm	Azo= 197.491 Deg	Zo= 3800 ft	Head= 197.491 Deg	
+1	FIX136	Flies		250.000	Nm/h
+2	FIX136	Flies		201.000	Seconds
+ 					
+VAR136	Transponder1	1160	488	Set2	
+t0=2.189 sec	Ro= 90.000 Nm	Azo= 197.000 Deg	Zo= 3900 ft	Head= 197.000 Deg	
+1	VAR136	Flies		250.000	Nm/h
+2	VAR136	Flies		201.000	Seconds
+ 					
+FIX137	Transponder1	649	289	Set1	
+t0=2.322 sec	Ro= 91.000 Nm	Azo= 209.000 Deg	Zo= 9700 ft	Head= 209.000 Deg	
+1	FIX137	Flies		250.000	Nm/h
+2	FIX137	Flies		201.000	Seconds
+ 					
+VAR137	Transponder1	1161	489	Set2	
+t0=2.322 sec	Ro= 90.000 Nm	Azo= 209.494 Deg	Zo= 9800 ft	Head= 209.494 Deg	
+1	VAR137	Flies		250.000	Nm/h
+2	VAR137	Flies		201.000	Seconds
+ 					
+FIX138	Transponder1	650	28A	Set1	
+t0=2.456 sec	Ro= 91.000 Nm	Azo= 221.498 Deg	Zo= 8800 ft	Head= 221.498 Deg	
+1	FIX138	Flies		250.000	Nm/h
+2	FIX138	Flies		201.000	Seconds
+ 					
+VAR138	Transponder1	1162	48A	Set2	
+t0=2.456 sec	Ro= 90.000 Nm	Azo= 221.000 Deg	Zo= 8900 ft	Head= 221.000 Deg	
+1	VAR138	Flies		250.000	Nm/h
+2	VAR138	Flies		201.000	Seconds
+ 					
+FIX139	Transponder1	651	28B	Set1	
+t0=2.589 sec	Ro= 91.000 Nm	Azo= 233.000 Deg	Zo= 5800 ft	Head= 233.000 Deg	
+1	FIX139	Flies		250.000	Nm/h
+2	FIX139	Flies		201.000	Seconds
+ 					
+VAR139	Transponder1	1163	48B	Set2	
+t0=2.589 sec	Ro= 90.000 Nm	Azo= 233.502 Deg	Zo= 5900 ft	Head= 233.502 Deg	
+1	VAR139	Flies		250.000	Nm/h
+2	VAR139	Flies		201.000	Seconds
+ 					
+FIX140	Transponder1	652	28C	Set1	
+t0=2.722 sec	Ro= 91.000 Nm	Azo= 245.505 Deg	Zo= 1900 ft	Head= 245.505 Deg	
+1	FIX140	Flies		250.000	Nm/h
+2	FIX140	Flies		201.000	Seconds
+ 					
+VAR140	Transponder1	1164	48C	Set2	
+t0=2.722 sec	Ro= 90.000 Nm	Azo= 245.000 Deg	Zo= 2000 ft	Head= 245.000 Deg	
+1	VAR140	Flies		250.000	Nm/h
+2	VAR140	Flies		201.000	Seconds
+ 					
+FIX141	Transponder1	653	28D	Set1	
+t0=2.856 sec	Ro= 91.000 Nm	Azo= 257.000 Deg	Zo= 7600 ft	Head= 257.000 Deg	
+1	FIX141	Flies		250.000	Nm/h
+2	FIX141	Flies		201.000	Seconds
+ 					
+VAR141	Transponder1	1165	48D	Set2	
+t0=2.856 sec	Ro= 90.000 Nm	Azo= 257.509 Deg	Zo= 7700 ft	Head= 257.509 Deg	
+1	VAR141	Flies		250.000	Nm/h
+2	VAR141	Flies		201.000	Seconds
+ 					
+FIX142	Transponder1	654	28E	Set1	
+t0=2.989 sec	Ro= 91.000 Nm	Azo= 269.512 Deg	Zo= 4300 ft	Head= 269.512 Deg	
+1	FIX142	Flies		250.000	Nm/h
+2	FIX142	Flies		201.000	Seconds
+ 					
+VAR142	Transponder1	1166	48E	Set2	
+t0=2.989 sec	Ro= 90.000 Nm	Azo= 269.000 Deg	Zo= 4400 ft	Head= 269.000 Deg	
+1	VAR142	Flies		250.000	Nm/h
+2	VAR142	Flies		201.000	Seconds
+ 					
+FIX143	Transponder1	655	28F	Set1	
+t0=3.122 sec	Ro= 91.000 Nm	Azo= 281.000 Deg	Zo= 4200 ft	Head= 281.000 Deg	
+1	FIX143	Flies		250.000	Nm/h
+2	FIX143	Flies		201.000	Seconds
+ 					
+VAR143	Transponder1	1167	48F	Set2	
+t0=3.122 sec	Ro= 90.000 Nm	Azo= 281.516 Deg	Zo= 4300 ft	Head= 281.516 Deg	
+1	VAR143	Flies		250.000	Nm/h
+2	VAR143	Flies		201.000	Seconds
+ 					
+FIX144	Transponder1	656	290	Set1	
+t0=3.256 sec	Ro= 91.000 Nm	Azo= 293.520 Deg	Zo= 6700 ft	Head= 293.520 Deg	
+1	FIX144	Flies		250.000	Nm/h
+2	FIX144	Flies		201.000	Seconds
+ 					
+VAR144	Transponder1	1168	490	Set2	
+t0=3.256 sec	Ro= 90.000 Nm	Azo= 293.000 Deg	Zo= 6800 ft	Head= 293.000 Deg	
+1	VAR144	Flies		250.000	Nm/h
+2	VAR144	Flies		201.000	Seconds
+ 					
+FIX145	Transponder1	657	291	Set1	
+t0=3.389 sec	Ro= 91.000 Nm	Azo= 305.000 Deg	Zo= 5700 ft	Head= 305.000 Deg	
+1	FIX145	Flies		250.000	Nm/h
+2	FIX145	Flies		201.000	Seconds
+ 					
+VAR145	Transponder1	1169	491	Set2	
+t0=3.389 sec	Ro= 90.000 Nm	Azo= 305.523 Deg	Zo= 5800 ft	Head= 305.523 Deg	
+1	VAR145	Flies		250.000	Nm/h
+2	VAR145	Flies		201.000	Seconds
+ 					
+FIX146	Transponder1	658	292	Set1	
+t0=3.522 sec	Ro= 91.000 Nm	Azo= 317.527 Deg	Zo= 9700 ft	Head= 317.527 Deg	
+1	FIX146	Flies		250.000	Nm/h
+2	FIX146	Flies		201.000	Seconds
+ 					
+VAR146	Transponder1	1170	492	Set2	
+t0=3.522 sec	Ro= 90.000 Nm	Azo= 317.000 Deg	Zo= 9800 ft	Head= 317.000 Deg	
+1	VAR146	Flies		250.000	Nm/h
+2	VAR146	Flies		201.000	Seconds
+ 					
+FIX147	Transponder1	659	293	Set1	
+t0=3.656 sec	Ro= 91.000 Nm	Azo= 329.000 Deg	Zo= 5600 ft	Head= 329.000 Deg	
+1	FIX147	Flies		250.000	Nm/h
+2	FIX147	Flies		201.000	Seconds
+ 					
+VAR147	Transponder1	1171	493	Set2	
+t0=3.656 sec	Ro= 90.000 Nm	Azo= 329.531 Deg	Zo= 5700 ft	Head= 329.531 Deg	
+1	VAR147	Flies		250.000	Nm/h
+2	VAR147	Flies		201.000	Seconds
+ 					
+FIX148	Transponder1	660	294	Set1	
+t0=3.789 sec	Ro= 91.000 Nm	Azo= 341.534 Deg	Zo= 9100 ft	Head= 341.534 Deg	
+1	FIX148	Flies		250.000	Nm/h
+2	FIX148	Flies		201.000	Seconds
+ 					
+VAR148	Transponder1	1172	494	Set2	
+t0=3.789 sec	Ro= 90.000 Nm	Azo= 341.000 Deg	Zo= 9200 ft	Head= 341.000 Deg	
+1	VAR148	Flies		250.000	Nm/h
+2	VAR148	Flies		201.000	Seconds
+ 					
+FIX149	Transponder1	661	295	Set1	
+t0=3.922 sec	Ro= 91.000 Nm	Azo= 353.000 Deg	Zo= 1800 ft	Head= 353.000 Deg	
+1	FIX149	Flies		250.000	Nm/h
+2	FIX149	Flies		201.000	Seconds
+ 					
+VAR149	Transponder1	1173	495	Set2	
+t0=3.922 sec	Ro= 90.000 Nm	Azo= 353.538 Deg	Zo= 1900 ft	Head= 353.538 Deg	
+1	VAR149	Flies		250.000	Nm/h
+2	VAR149	Flies		201.000	Seconds
+ 					
+FIX150	Transponder1	662	296	Set1	
+t0=0.056 sec	Ro= 106.000 Nm	Azo= 5.541 Deg	Zo= 6100 ft	Head= 5.541 Deg	
+1	FIX150	Flies		250.000	Nm/h
+2	FIX150	Flies		201.000	Seconds
+ 					
+VAR150	Transponder1	1174	496	Set2	
+t0=0.056 sec	Ro= 105.000 Nm	Azo= 5.000 Deg	Zo= 6200 ft	Head= 5.000 Deg	
+1	VAR150	Flies		250.000	Nm/h
+2	VAR150	Flies		201.000	Seconds
+ 					
+FIX151	Transponder1	663	297	Set1	
+t0=0.189 sec	Ro= 106.000 Nm	Azo= 17.000 Deg	Zo= 2800 ft	Head= 17.000 Deg	
+1	FIX151	Flies		250.000	Nm/h
+2	FIX151	Flies		201.000	Seconds
+ 					
+VAR151	Transponder1	1175	497	Set2	
+t0=0.189 sec	Ro= 105.000 Nm	Azo= 17.545 Deg	Zo= 2900 ft	Head= 17.545 Deg	
+1	VAR151	Flies		250.000	Nm/h
+2	VAR151	Flies		201.000	Seconds
+ 					
+FIX152	Transponder1	664	298	Set1	
+t0=0.322 sec	Ro= 106.000 Nm	Azo= 29.549 Deg	Zo= 6700 ft	Head= 29.549 Deg	
+1	FIX152	Flies		250.000	Nm/h
+2	FIX152	Flies		201.000	Seconds
+ 					
+VAR152	Transponder1	1176	498	Set2	
+t0=0.322 sec	Ro= 105.000 Nm	Azo= 29.000 Deg	Zo= 6800 ft	Head= 29.000 Deg	
+1	VAR152	Flies		250.000	Nm/h
+2	VAR152	Flies		201.000	Seconds
+ 					
+FIX153	Transponder1	665	299	Set1	
+t0=0.456 sec	Ro= 106.000 Nm	Azo= 41.000 Deg	Zo= 9500 ft	Head= 41.000 Deg	
+1	FIX153	Flies		250.000	Nm/h
+2	FIX153	Flies		201.000	Seconds
+ 					
+VAR153	Transponder1	1177	499	Set2	
+t0=0.456 sec	Ro= 105.000 Nm	Azo= 41.552 Deg	Zo= 9600 ft	Head= 41.552 Deg	
+1	VAR153	Flies		250.000	Nm/h
+2	VAR153	Flies		201.000	Seconds
+ 					
+FIX154	Transponder1	666	29A	Set1	
+t0=0.589 sec	Ro= 106.000 Nm	Azo= 53.556 Deg	Zo= 4600 ft	Head= 53.556 Deg	
+1	FIX154	Flies		250.000	Nm/h
+2	FIX154	Flies		201.000	Seconds
+ 					
+VAR154	Transponder1	1178	49A	Set2	
+t0=0.589 sec	Ro= 105.000 Nm	Azo= 53.000 Deg	Zo= 4700 ft	Head= 53.000 Deg	
+1	VAR154	Flies		250.000	Nm/h
+2	VAR154	Flies		201.000	Seconds
+ 					
+FIX155	Transponder1	667	29B	Set1	
+t0=0.722 sec	Ro= 106.000 Nm	Azo= 65.000 Deg	Zo= 9100 ft	Head= 65.000 Deg	
+1	FIX155	Flies		250.000	Nm/h
+2	FIX155	Flies		201.000	Seconds
+ 					
+VAR155	Transponder1	1179	49B	Set2	
+t0=0.722 sec	Ro= 105.000 Nm	Azo= 65.559 Deg	Zo= 9200 ft	Head= 65.559 Deg	
+1	VAR155	Flies		250.000	Nm/h
+2	VAR155	Flies		201.000	Seconds
+ 					
+FIX156	Transponder1	668	29C	Set1	
+t0=0.856 sec	Ro= 106.000 Nm	Azo= 77.563 Deg	Zo= 9800 ft	Head= 77.563 Deg	
+1	FIX156	Flies		250.000	Nm/h
+2	FIX156	Flies		201.000	Seconds
+ 					
+VAR156	Transponder1	1180	49C	Set2	
+t0=0.856 sec	Ro= 105.000 Nm	Azo= 77.000 Deg	Zo= 9900 ft	Head= 77.000 Deg	
+1	VAR156	Flies		250.000	Nm/h
+2	VAR156	Flies		201.000	Seconds
+ 					
+FIX157	Transponder1	669	29D	Set1	
+t0=0.989 sec	Ro= 106.000 Nm	Azo= 89.000 Deg	Zo= 1700 ft	Head= 89.000 Deg	
+1	FIX157	Flies		250.000	Nm/h
+2	FIX157	Flies		201.000	Seconds
+ 					
+VAR157	Transponder1	1181	49D	Set2	
+t0=0.989 sec	Ro= 105.000 Nm	Azo= 89.567 Deg	Zo= 1800 ft	Head= 89.567 Deg	
+1	VAR157	Flies		250.000	Nm/h
+2	VAR157	Flies		201.000	Seconds
+ 					
+FIX158	Transponder1	670	29E	Set1	
+t0=1.122 sec	Ro= 106.000 Nm	Azo= 101.570 Deg	Zo= 5000 ft	Head= 101.570 Deg	
+1	FIX158	Flies		250.000	Nm/h
+2	FIX158	Flies		201.000	Seconds
+ 					
+VAR158	Transponder1	1182	49E	Set2	
+t0=1.122 sec	Ro= 105.000 Nm	Azo= 101.000 Deg	Zo= 5100 ft	Head= 101.000 Deg	
+1	VAR158	Flies		250.000	Nm/h
+2	VAR158	Flies		201.000	Seconds
+ 					
+FIX159	Transponder1	671	29F	Set1	
+t0=1.256 sec	Ro= 106.000 Nm	Azo= 113.000 Deg	Zo= 8500 ft	Head= 113.000 Deg	
+1	FIX159	Flies		250.000	Nm/h
+2	FIX159	Flies		201.000	Seconds
+ 					
+VAR159	Transponder1	1183	49F	Set2	
+t0=1.256 sec	Ro= 105.000 Nm	Azo= 113.574 Deg	Zo= 8600 ft	Head= 113.574 Deg	
+1	VAR159	Flies		250.000	Nm/h
+2	VAR159	Flies		201.000	Seconds
+ 					
+FIX160	Transponder1	672	2A0	Set1	
+t0=1.389 sec	Ro= 106.000 Nm	Azo= 125.577 Deg	Zo= 8800 ft	Head= 125.577 Deg	
+1	FIX160	Flies		250.000	Nm/h
+2	FIX160	Flies		201.000	Seconds
+ 					
+VAR160	Transponder1	1184	4A0	Set2	
+t0=1.389 sec	Ro= 105.000 Nm	Azo= 125.000 Deg	Zo= 8900 ft	Head= 125.000 Deg	
+1	VAR160	Flies		250.000	Nm/h
+2	VAR160	Flies		201.000	Seconds
+ 					
+FIX161	Transponder1	673	2A1	Set1	
+t0=1.522 sec	Ro= 106.000 Nm	Azo= 137.000 Deg	Zo= 3300 ft	Head= 137.000 Deg	
+1	FIX161	Flies		250.000	Nm/h
+2	FIX161	Flies		201.000	Seconds
+ 					
+VAR161	Transponder1	1185	4A1	Set2	
+t0=1.522 sec	Ro= 105.000 Nm	Azo= 137.581 Deg	Zo= 3400 ft	Head= 137.581 Deg	
+1	VAR161	Flies		250.000	Nm/h
+2	VAR161	Flies		201.000	Seconds
+ 					
+FIX162	Transponder1	674	2A2	Set1	
+t0=1.656 sec	Ro= 106.000 Nm	Azo= 149.585 Deg	Zo= 7300 ft	Head= 149.585 Deg	
+1	FIX162	Flies		250.000	Nm/h
+2	FIX162	Flies		201.000	Seconds
+ 					
+VAR162	Transponder1	1186	4A2	Set2	
+t0=1.656 sec	Ro= 105.000 Nm	Azo= 149.000 Deg	Zo= 7400 ft	Head= 149.000 Deg	
+1	VAR162	Flies		250.000	Nm/h
+2	VAR162	Flies		201.000	Seconds
+ 					
+FIX163	Transponder1	675	2A3	Set1	
+t0=1.789 sec	Ro= 106.000 Nm	Azo= 161.000 Deg	Zo= 5100 ft	Head= 161.000 Deg	
+1	FIX163	Flies		250.000	Nm/h
+2	FIX163	Flies		201.000	Seconds
+ 					
+VAR163	Transponder1	1187	4A3	Set2	
+t0=1.789 sec	Ro= 105.000 Nm	Azo= 161.588 Deg	Zo= 5200 ft	Head= 161.588 Deg	
+1	VAR163	Flies		250.000	Nm/h
+2	VAR163	Flies		201.000	Seconds
+ 					
+FIX164	Transponder1	676	2A4	Set1	
+t0=1.922 sec	Ro= 106.000 Nm	Azo= 173.592 Deg	Zo= 5500 ft	Head= 173.592 Deg	
+1	FIX164	Flies		250.000	Nm/h
+2	FIX164	Flies		201.000	Seconds
+ 					
+VAR164	Transponder1	1188	4A4	Set2	
+t0=1.922 sec	Ro= 105.000 Nm	Azo= 173.000 Deg	Zo= 5600 ft	Head= 173.000 Deg	
+1	VAR164	Flies		250.000	Nm/h
+2	VAR164	Flies		201.000	Seconds
+ 					
+FIX165	Transponder1	677	2A5	Set1	
+t0=2.056 sec	Ro= 106.000 Nm	Azo= 185.000 Deg	Zo= 1100 ft	Head= 185.000 Deg	
+1	FIX165	Flies		250.000	Nm/h
+2	FIX165	Flies		201.000	Seconds
+ 					
+VAR165	Transponder1	1189	4A5	Set2	
+t0=2.056 sec	Ro= 105.000 Nm	Azo= 185.595 Deg	Zo= 1200 ft	Head= 185.595 Deg	
+1	VAR165	Flies		250.000	Nm/h
+2	VAR165	Flies		201.000	Seconds
+ 					
+FIX166	Transponder1	678	2A6	Set1	
+t0=2.189 sec	Ro= 106.000 Nm	Azo= 197.599 Deg	Zo= 4900 ft	Head= 197.599 Deg	
+1	FIX166	Flies		250.000	Nm/h
+2	FIX166	Flies		201.000	Seconds
+ 					
+VAR166	Transponder1	1190	4A6	Set2	
+t0=2.189 sec	Ro= 105.000 Nm	Azo= 197.000 Deg	Zo= 5000 ft	Head= 197.000 Deg	
+1	VAR166	Flies		250.000	Nm/h
+2	VAR166	Flies		201.000	Seconds
+ 					
+FIX167	Transponder1	679	2A7	Set1	
+t0=2.322 sec	Ro= 106.000 Nm	Azo= 209.000 Deg	Zo= 10000 ft	Head= 209.000 Deg	
+1	FIX167	Flies		250.000	Nm/h
+2	FIX167	Flies		201.000	Seconds
+ 					
+VAR167	Transponder1	1191	4A7	Set2	
+t0=2.322 sec	Ro= 105.000 Nm	Azo= 209.603 Deg	Zo= 10100 ft	Head= 209.603 Deg	
+1	VAR167	Flies		250.000	Nm/h
+2	VAR167	Flies		201.000	Seconds
+ 					
+FIX168	Transponder1	680	2A8	Set1	
+t0=2.456 sec	Ro= 106.000 Nm	Azo= 221.606 Deg	Zo= 3800 ft	Head= 221.606 Deg	
+1	FIX168	Flies		250.000	Nm/h
+2	FIX168	Flies		201.000	Seconds
+ 					
+VAR168	Transponder1	1192	4A8	Set2	
+t0=2.456 sec	Ro= 105.000 Nm	Azo= 221.000 Deg	Zo= 3900 ft	Head= 221.000 Deg	
+1	VAR168	Flies		250.000	Nm/h
+2	VAR168	Flies		201.000	Seconds
+ 					
+FIX169	Transponder1	681	2A9	Set1	
+t0=2.589 sec	Ro= 106.000 Nm	Azo= 233.000 Deg	Zo= 2000 ft	Head= 233.000 Deg	
+1	FIX169	Flies		250.000	Nm/h
+2	FIX169	Flies		201.000	Seconds
+ 					
+VAR169	Transponder1	1193	4A9	Set2	
+t0=2.589 sec	Ro= 105.000 Nm	Azo= 233.610 Deg	Zo= 2100 ft	Head= 233.610 Deg	
+1	VAR169	Flies		250.000	Nm/h
+2	VAR169	Flies		201.000	Seconds
+ 					
+FIX170	Transponder1	682	2AA	Set1	
+t0=2.722 sec	Ro= 106.000 Nm	Azo= 245.614 Deg	Zo= 3600 ft	Head= 245.614 Deg	
+1	FIX170	Flies		250.000	Nm/h
+2	FIX170	Flies		201.000	Seconds
+ 					
+VAR170	Transponder1	1194	4AA	Set2	
+t0=2.722 sec	Ro= 105.000 Nm	Azo= 245.000 Deg	Zo= 3700 ft	Head= 245.000 Deg	
+1	VAR170	Flies		250.000	Nm/h
+2	VAR170	Flies		201.000	Seconds
+ 					
+FIX171	Transponder1	683	2AB	Set1	
+t0=2.856 sec	Ro= 106.000 Nm	Azo= 257.000 Deg	Zo= 7700 ft	Head= 257.000 Deg	
+1	FIX171	Flies		250.000	Nm/h
+2	FIX171	Flies		201.000	Seconds
+ 					
+VAR171	Transponder1	1195	4AB	Set2	
+t0=2.856 sec	Ro= 105.000 Nm	Azo= 257.617 Deg	Zo= 7800 ft	Head= 257.617 Deg	
+1	VAR171	Flies		250.000	Nm/h
+2	VAR171	Flies		201.000	Seconds
+ 					
+FIX172	Transponder1	684	2AC	Set1	
+t0=2.989 sec	Ro= 106.000 Nm	Azo= 269.621 Deg	Zo= 4900 ft	Head= 269.621 Deg	
+1	FIX172	Flies		250.000	Nm/h
+2	FIX172	Flies		201.000	Seconds
+ 					
+VAR172	Transponder1	1196	4AC	Set2	
+t0=2.989 sec	Ro= 105.000 Nm	Azo= 269.000 Deg	Zo= 5000 ft	Head= 269.000 Deg	
+1	VAR172	Flies		250.000	Nm/h
+2	VAR172	Flies		201.000	Seconds
+ 					
+FIX173	Transponder1	685	2AD	Set1	
+t0=3.122 sec	Ro= 106.000 Nm	Azo= 281.000 Deg	Zo= 3300 ft	Head= 281.000 Deg	
+1	FIX173	Flies		250.000	Nm/h
+2	FIX173	Flies		201.000	Seconds
+ 					
+VAR173	Transponder1	1197	4AD	Set2	
+t0=3.122 sec	Ro= 105.000 Nm	Azo= 281.624 Deg	Zo= 3400 ft	Head= 281.624 Deg	
+1	VAR173	Flies		250.000	Nm/h
+2	VAR173	Flies		201.000	Seconds
+ 					
+FIX174	Transponder1	686	2AE	Set1	
+t0=3.256 sec	Ro= 106.000 Nm	Azo= 293.628 Deg	Zo= 3500 ft	Head= 293.628 Deg	
+1	FIX174	Flies		250.000	Nm/h
+2	FIX174	Flies		201.000	Seconds
+ 					
+VAR174	Transponder1	1198	4AE	Set2	
+t0=3.256 sec	Ro= 105.000 Nm	Azo= 293.000 Deg	Zo= 3600 ft	Head= 293.000 Deg	
+1	VAR174	Flies		250.000	Nm/h
+2	VAR174	Flies		201.000	Seconds
+ 					
+FIX175	Transponder1	687	2AF	Set1	
+t0=3.389 sec	Ro= 106.000 Nm	Azo= 305.000 Deg	Zo= 8300 ft	Head= 305.000 Deg	
+1	FIX175	Flies		250.000	Nm/h
+2	FIX175	Flies		201.000	Seconds
+ 					
+VAR175	Transponder1	1199	4AF	Set2	
+t0=3.389 sec	Ro= 105.000 Nm	Azo= 305.632 Deg	Zo= 8400 ft	Head= 305.632 Deg	
+1	VAR175	Flies		250.000	Nm/h
+2	VAR175	Flies		201.000	Seconds
+ 					
+FIX176	Transponder1	688	2B0	Set1	
+t0=3.522 sec	Ro= 106.000 Nm	Azo= 317.635 Deg	Zo= 9900 ft	Head= 317.635 Deg	
+1	FIX176	Flies		250.000	Nm/h
+2	FIX176	Flies		201.000	Seconds
+ 					
+VAR176	Transponder1	1200	4B0	Set2	
+t0=3.522 sec	Ro= 105.000 Nm	Azo= 317.000 Deg	Zo= 10000 ft	Head= 317.000 Deg	
+1	VAR176	Flies		250.000	Nm/h
+2	VAR176	Flies		201.000	Seconds
+ 					
+FIX177	Transponder1	689	2B1	Set1	
+t0=3.656 sec	Ro= 106.000 Nm	Azo= 329.000 Deg	Zo= 2800 ft	Head= 329.000 Deg	
+1	FIX177	Flies		250.000	Nm/h
+2	FIX177	Flies		201.000	Seconds
+ 					
+VAR177	Transponder1	1201	4B1	Set2	
+t0=3.656 sec	Ro= 105.000 Nm	Azo= 329.639 Deg	Zo= 2900 ft	Head= 329.639 Deg	
+1	VAR177	Flies		250.000	Nm/h
+2	VAR177	Flies		201.000	Seconds
+ 					
+FIX178	Transponder1	690	2B2	Set1	
+t0=3.789 sec	Ro= 106.000 Nm	Azo= 341.642 Deg	Zo= 4500 ft	Head= 341.642 Deg	
+1	FIX178	Flies		250.000	Nm/h
+2	FIX178	Flies		201.000	Seconds
+ 					
+VAR178	Transponder1	1202	4B2	Set2	
+t0=3.789 sec	Ro= 105.000 Nm	Azo= 341.000 Deg	Zo= 4600 ft	Head= 341.000 Deg	
+1	VAR178	Flies		250.000	Nm/h
+2	VAR178	Flies		201.000	Seconds
+ 					
+FIX179	Transponder1	691	2B3	Set1	
+t0=3.922 sec	Ro= 106.000 Nm	Azo= 353.000 Deg	Zo= 9300 ft	Head= 353.000 Deg	
+1	FIX179	Flies		250.000	Nm/h
+2	FIX179	Flies		201.000	Seconds
+ 					
+VAR179	Transponder1	1203	4B3	Set2	
+t0=3.922 sec	Ro= 105.000 Nm	Azo= 353.646 Deg	Zo= 9400 ft	Head= 353.646 Deg	
+1	VAR179	Flies		250.000	Nm/h
+2	VAR179	Flies		201.000	Seconds
+ 					
+FIX180	Transponder1	692	2B4	Set1	
+t0=0.056 sec	Ro= 121.000 Nm	Azo= 5.650 Deg	Zo= 3100 ft	Head= 5.650 Deg	
+1	FIX180	Flies		250.000	Nm/h
+2	FIX180	Flies		201.000	Seconds
+ 					
+VAR180	Transponder1	1204	4B4	Set2	
+t0=0.056 sec	Ro= 120.000 Nm	Azo= 5.000 Deg	Zo= 3200 ft	Head= 5.000 Deg	
+1	VAR180	Flies		250.000	Nm/h
+2	VAR180	Flies		201.000	Seconds
+ 					
+FIX181	Transponder1	693	2B5	Set1	
+t0=0.189 sec	Ro= 121.000 Nm	Azo= 17.000 Deg	Zo= 9100 ft	Head= 17.000 Deg	
+1	FIX181	Flies		250.000	Nm/h
+2	FIX181	Flies		201.000	Seconds
+ 					
+VAR181	Transponder1	1205	4B5	Set2	
+t0=0.189 sec	Ro= 120.000 Nm	Azo= 17.653 Deg	Zo= 9200 ft	Head= 17.653 Deg	
+1	VAR181	Flies		250.000	Nm/h
+2	VAR181	Flies		201.000	Seconds
+ 					
+FIX182	Transponder1	694	2B6	Set1	
+t0=0.322 sec	Ro= 121.000 Nm	Azo= 29.657 Deg	Zo= 1600 ft	Head= 29.657 Deg	
+1	FIX182	Flies		250.000	Nm/h
+2	FIX182	Flies		201.000	Seconds
+ 					
+VAR182	Transponder1	1206	4B6	Set2	
+t0=0.322 sec	Ro= 120.000 Nm	Azo= 29.000 Deg	Zo= 1700 ft	Head= 29.000 Deg	
+1	VAR182	Flies		250.000	Nm/h
+2	VAR182	Flies		201.000	Seconds
+ 					
+FIX183	Transponder1	695	2B7	Set1	
+t0=0.456 sec	Ro= 121.000 Nm	Azo= 41.000 Deg	Zo= 9800 ft	Head= 41.000 Deg	
+1	FIX183	Flies		250.000	Nm/h
+2	FIX183	Flies		201.000	Seconds
+ 					
+VAR183	Transponder1	1207	4B7	Set2	
+t0=0.456 sec	Ro= 120.000 Nm	Azo= 41.660 Deg	Zo= 9900 ft	Head= 41.660 Deg	
+1	VAR183	Flies		250.000	Nm/h
+2	VAR183	Flies		201.000	Seconds
+ 					
+FIX184	Transponder1	696	2B8	Set1	
+t0=0.589 sec	Ro= 121.000 Nm	Azo= 53.664 Deg	Zo= 9800 ft	Head= 53.664 Deg	
+1	FIX184	Flies		250.000	Nm/h
+2	FIX184	Flies		201.000	Seconds
+ 					
+VAR184	Transponder1	1208	4B8	Set2	
+t0=0.589 sec	Ro= 120.000 Nm	Azo= 53.000 Deg	Zo= 9900 ft	Head= 53.000 Deg	
+1	VAR184	Flies		250.000	Nm/h
+2	VAR184	Flies		201.000	Seconds
+ 					
+FIX185	Transponder1	697	2B9	Set1	
+t0=0.722 sec	Ro= 121.000 Nm	Azo= 65.000 Deg	Zo= 7400 ft	Head= 65.000 Deg	
+1	FIX185	Flies		250.000	Nm/h
+2	FIX185	Flies		201.000	Seconds
+ 					
+VAR185	Transponder1	1209	4B9	Set2	
+t0=0.722 sec	Ro= 120.000 Nm	Azo= 65.668 Deg	Zo= 7500 ft	Head= 65.668 Deg	
+1	VAR185	Flies		250.000	Nm/h
+2	VAR185	Flies		201.000	Seconds
+ 					
+FIX186	Transponder1	698	2BA	Set1	
+t0=0.856 sec	Ro= 121.000 Nm	Azo= 77.671 Deg	Zo= 2000 ft	Head= 77.671 Deg	
+1	FIX186	Flies		250.000	Nm/h
+2	FIX186	Flies		201.000	Seconds
+ 					
+VAR186	Transponder1	1210	4BA	Set2	
+t0=0.856 sec	Ro= 120.000 Nm	Azo= 77.000 Deg	Zo= 2100 ft	Head= 77.000 Deg	
+1	VAR186	Flies		250.000	Nm/h
+2	VAR186	Flies		201.000	Seconds
+ 					
+FIX187	Transponder1	699	2BB	Set1	
+t0=0.989 sec	Ro= 121.000 Nm	Azo= 89.000 Deg	Zo= 9300 ft	Head= 89.000 Deg	
+1	FIX187	Flies		250.000	Nm/h
+2	FIX187	Flies		201.000	Seconds
+ 					
+VAR187	Transponder1	1211	4BB	Set2	
+t0=0.989 sec	Ro= 120.000 Nm	Azo= 89.675 Deg	Zo= 9400 ft	Head= 89.675 Deg	
+1	VAR187	Flies		250.000	Nm/h
+2	VAR187	Flies		201.000	Seconds
+ 					
+FIX188	Transponder1	700	2BC	Set1	
+t0=1.122 sec	Ro= 121.000 Nm	Azo= 101.678 Deg	Zo= 8300 ft	Head= 101.678 Deg	
+1	FIX188	Flies		250.000	Nm/h
+2	FIX188	Flies		201.000	Seconds
+ 					
+VAR188	Transponder1	1212	4BC	Set2	
+t0=1.122 sec	Ro= 120.000 Nm	Azo= 101.000 Deg	Zo= 8400 ft	Head= 101.000 Deg	
+1	VAR188	Flies		250.000	Nm/h
+2	VAR188	Flies		201.000	Seconds
+ 					
+FIX189	Transponder1	701	2BD	Set1	
+t0=1.256 sec	Ro= 121.000 Nm	Azo= 113.000 Deg	Zo= 4000 ft	Head= 113.000 Deg	
+1	FIX189	Flies		250.000	Nm/h
+2	FIX189	Flies		201.000	Seconds
+ 					
+VAR189	Transponder1	1213	4BD	Set2	
+t0=1.256 sec	Ro= 120.000 Nm	Azo= 113.682 Deg	Zo= 4100 ft	Head= 113.682 Deg	
+1	VAR189	Flies		250.000	Nm/h
+2	VAR189	Flies		201.000	Seconds
+ 					
+FIX190	Transponder1	702	2BE	Set1	
+t0=1.389 sec	Ro= 121.000 Nm	Azo= 125.686 Deg	Zo= 1500 ft	Head= 125.686 Deg	
+1	FIX190	Flies		250.000	Nm/h
+2	FIX190	Flies		201.000	Seconds
+ 					
+VAR190	Transponder1	1214	4BE	Set2	
+t0=1.389 sec	Ro= 120.000 Nm	Azo= 125.000 Deg	Zo= 1600 ft	Head= 125.000 Deg	
+1	VAR190	Flies		250.000	Nm/h
+2	VAR190	Flies		201.000	Seconds
+ 					
+FIX191	Transponder1	703	2BF	Set1	
+t0=1.522 sec	Ro= 121.000 Nm	Azo= 137.000 Deg	Zo= 1900 ft	Head= 137.000 Deg	
+1	FIX191	Flies		250.000	Nm/h
+2	FIX191	Flies		201.000	Seconds
+ 					
+VAR191	Transponder1	1215	4BF	Set2	
+t0=1.522 sec	Ro= 120.000 Nm	Azo= 137.689 Deg	Zo= 2000 ft	Head= 137.689 Deg	
+1	VAR191	Flies		250.000	Nm/h
+2	VAR191	Flies		201.000	Seconds
+ 					
+FIX192	Transponder1	704	2C0	Set1	
+t0=1.656 sec	Ro= 121.000 Nm	Azo= 149.693 Deg	Zo= 1900 ft	Head= 149.693 Deg	
+1	FIX192	Flies		250.000	Nm/h
+2	FIX192	Flies		201.000	Seconds
+ 					
+VAR192	Transponder1	1216	4C0	Set2	
+t0=1.656 sec	Ro= 120.000 Nm	Azo= 149.000 Deg	Zo= 2000 ft	Head= 149.000 Deg	
+1	VAR192	Flies		250.000	Nm/h
+2	VAR192	Flies		201.000	Seconds
+ 					
+FIX193	Transponder1	705	2C1	Set1	
+t0=1.789 sec	Ro= 121.000 Nm	Azo= 161.000 Deg	Zo= 9100 ft	Head= 161.000 Deg	
+1	FIX193	Flies		250.000	Nm/h
+2	FIX193	Flies		201.000	Seconds
+ 					
+VAR193	Transponder1	1217	4C1	Set2	
+t0=1.789 sec	Ro= 120.000 Nm	Azo= 161.697 Deg	Zo= 9200 ft	Head= 161.697 Deg	
+1	VAR193	Flies		250.000	Nm/h
+2	VAR193	Flies		201.000	Seconds
+ 					
+FIX194	Transponder1	706	2C2	Set1	
+t0=1.922 sec	Ro= 121.000 Nm	Azo= 173.700 Deg	Zo= 4900 ft	Head= 173.700 Deg	
+1	FIX194	Flies		250.000	Nm/h
+2	FIX194	Flies		201.000	Seconds
+ 					
+VAR194	Transponder1	1218	4C2	Set2	
+t0=1.922 sec	Ro= 120.000 Nm	Azo= 173.000 Deg	Zo= 5000 ft	Head= 173.000 Deg	
+1	VAR194	Flies		250.000	Nm/h
+2	VAR194	Flies		201.000	Seconds
+ 					
+FIX195	Transponder1	707	2C3	Set1	
+t0=2.056 sec	Ro= 121.000 Nm	Azo= 185.000 Deg	Zo= 7300 ft	Head= 185.000 Deg	
+1	FIX195	Flies		250.000	Nm/h
+2	FIX195	Flies		201.000	Seconds
+ 					
+VAR195	Transponder1	1219	4C3	Set2	
+t0=2.056 sec	Ro= 120.000 Nm	Azo= 185.704 Deg	Zo= 7400 ft	Head= 185.704 Deg	
+1	VAR195	Flies		250.000	Nm/h
+2	VAR195	Flies		201.000	Seconds
+ 					
+FIX196	Transponder1	708	2C4	Set1	
+t0=2.189 sec	Ro= 121.000 Nm	Azo= 197.707 Deg	Zo= 8000 ft	Head= 197.707 Deg	
+1	FIX196	Flies		250.000	Nm/h
+2	FIX196	Flies		201.000	Seconds
+ 					
+VAR196	Transponder1	1220	4C4	Set2	
+t0=2.189 sec	Ro= 120.000 Nm	Azo= 197.000 Deg	Zo= 8100 ft	Head= 197.000 Deg	
+1	VAR196	Flies		250.000	Nm/h
+2	VAR196	Flies		201.000	Seconds
+ 					
+FIX197	Transponder1	709	2C5	Set1	
+t0=2.322 sec	Ro= 121.000 Nm	Azo= 209.000 Deg	Zo= 8900 ft	Head= 209.000 Deg	
+1	FIX197	Flies		250.000	Nm/h
+2	FIX197	Flies		201.000	Seconds
+ 					
+VAR197	Transponder1	1221	4C5	Set2	
+t0=2.322 sec	Ro= 120.000 Nm	Azo= 209.711 Deg	Zo= 9000 ft	Head= 209.711 Deg	
+1	VAR197	Flies		250.000	Nm/h
+2	VAR197	Flies		201.000	Seconds
+ 					
+FIX198	Transponder1	710	2C6	Set1	
+t0=2.456 sec	Ro= 121.000 Nm	Azo= 221.715 Deg	Zo= 7600 ft	Head= 221.715 Deg	
+1	FIX198	Flies		250.000	Nm/h
+2	FIX198	Flies		201.000	Seconds
+ 					
+VAR198	Transponder1	1222	4C6	Set2	
+t0=2.456 sec	Ro= 120.000 Nm	Azo= 221.000 Deg	Zo= 7700 ft	Head= 221.000 Deg	
+1	VAR198	Flies		250.000	Nm/h
+2	VAR198	Flies		201.000	Seconds
+ 					
+FIX199	Transponder1	711	2C7	Set1	
+t0=2.589 sec	Ro= 121.000 Nm	Azo= 233.000 Deg	Zo= 5400 ft	Head= 233.000 Deg	
+1	FIX199	Flies		250.000	Nm/h
+2	FIX199	Flies		201.000	Seconds
+ 					
+VAR199	Transponder1	1223	4C7	Set2	
+t0=2.589 sec	Ro= 120.000 Nm	Azo= 233.718 Deg	Zo= 5500 ft	Head= 233.718 Deg	
+1	VAR199	Flies		250.000	Nm/h
+2	VAR199	Flies		201.000	Seconds
+ 					
+FIX200	Transponder1	712	2C8	Set1	
+t0=2.722 sec	Ro= 121.000 Nm	Azo= 245.722 Deg	Zo= 6400 ft	Head= 245.722 Deg	
+1	FIX200	Flies		250.000	Nm/h
+2	FIX200	Flies		201.000	Seconds
+ 					
+VAR200	Transponder1	1224	4C8	Set2	
+t0=2.722 sec	Ro= 120.000 Nm	Azo= 245.000 Deg	Zo= 6500 ft	Head= 245.000 Deg	
+1	VAR200	Flies		250.000	Nm/h
+2	VAR200	Flies		201.000	Seconds
+ 					
+FIX201	Transponder1	713	2C9	Set1	
+t0=2.856 sec	Ro= 121.000 Nm	Azo= 257.000 Deg	Zo= 8600 ft	Head= 257.000 Deg	
+1	FIX201	Flies		250.000	Nm/h
+2	FIX201	Flies		201.000	Seconds
+ 					
+VAR201	Transponder1	1225	4C9	Set2	
+t0=2.856 sec	Ro= 120.000 Nm	Azo= 257.725 Deg	Zo= 8700 ft	Head= 257.725 Deg	
+1	VAR201	Flies		250.000	Nm/h
+2	VAR201	Flies		201.000	Seconds
+ 					
+FIX202	Transponder1	714	2CA	Set1	
+t0=2.989 sec	Ro= 121.000 Nm	Azo= 269.729 Deg	Zo= 3100 ft	Head= 269.729 Deg	
+1	FIX202	Flies		250.000	Nm/h
+2	FIX202	Flies		201.000	Seconds
+ 					
+VAR202	Transponder1	1226	4CA	Set2	
+t0=2.989 sec	Ro= 120.000 Nm	Azo= 269.000 Deg	Zo= 3200 ft	Head= 269.000 Deg	
+1	VAR202	Flies		250.000	Nm/h
+2	VAR202	Flies		201.000	Seconds
+ 					
+FIX203	Transponder1	715	2CB	Set1	
+t0=3.122 sec	Ro= 121.000 Nm	Azo= 281.000 Deg	Zo= 9500 ft	Head= 281.000 Deg	
+1	FIX203	Flies		250.000	Nm/h
+2	FIX203	Flies		201.000	Seconds
+ 					
+VAR203	Transponder1	1227	4CB	Set2	
+t0=3.122 sec	Ro= 120.000 Nm	Azo= 281.733 Deg	Zo= 9600 ft	Head= 281.733 Deg	
+1	VAR203	Flies		250.000	Nm/h
+2	VAR203	Flies		201.000	Seconds
+ 					
+FIX204	Transponder1	716	2CC	Set1	
+t0=3.256 sec	Ro= 121.000 Nm	Azo= 293.736 Deg	Zo= 1500 ft	Head= 293.736 Deg	
+1	FIX204	Flies		250.000	Nm/h
+2	FIX204	Flies		201.000	Seconds
+ 					
+VAR204	Transponder1	1228	4CC	Set2	
+t0=3.256 sec	Ro= 120.000 Nm	Azo= 293.000 Deg	Zo= 1600 ft	Head= 293.000 Deg	
+1	VAR204	Flies		250.000	Nm/h
+2	VAR204	Flies		201.000	Seconds
+ 					
+FIX205	Transponder1	717	2CD	Set1	
+t0=3.389 sec	Ro= 121.000 Nm	Azo= 305.000 Deg	Zo= 9800 ft	Head= 305.000 Deg	
+1	FIX205	Flies		250.000	Nm/h
+2	FIX205	Flies		201.000	Seconds
+ 					
+VAR205	Transponder1	1229	4CD	Set2	
+t0=3.389 sec	Ro= 120.000 Nm	Azo= 305.740 Deg	Zo= 9900 ft	Head= 305.740 Deg	
+1	VAR205	Flies		250.000	Nm/h
+2	VAR205	Flies		201.000	Seconds
+ 					
+FIX206	Transponder1	718	2CE	Set1	
+t0=3.522 sec	Ro= 121.000 Nm	Azo= 317.743 Deg	Zo= 9100 ft	Head= 317.743 Deg	
+1	FIX206	Flies		250.000	Nm/h
+2	FIX206	Flies		201.000	Seconds
+ 					
+VAR206	Transponder1	1230	4CE	Set2	
+t0=3.522 sec	Ro= 120.000 Nm	Azo= 317.000 Deg	Zo= 9200 ft	Head= 317.000 Deg	
+1	VAR206	Flies		250.000	Nm/h
+2	VAR206	Flies		201.000	Seconds
+ 					
+FIX207	Transponder1	719	2CF	Set1	
+t0=3.656 sec	Ro= 121.000 Nm	Azo= 329.000 Deg	Zo= 5100 ft	Head= 329.000 Deg	
+1	FIX207	Flies		250.000	Nm/h
+2	FIX207	Flies		201.000	Seconds
+ 					
+VAR207	Transponder1	1231	4CF	Set2	
+t0=3.656 sec	Ro= 120.000 Nm	Azo= 329.747 Deg	Zo= 5200 ft	Head= 329.747 Deg	
+1	VAR207	Flies		250.000	Nm/h
+2	VAR207	Flies		201.000	Seconds
+ 					
+FIX208	Transponder1	720	2D0	Set1	
+t0=3.789 sec	Ro= 121.000 Nm	Azo= 341.751 Deg	Zo= 7400 ft	Head= 341.751 Deg	
+1	FIX208	Flies		250.000	Nm/h
+2	FIX208	Flies		201.000	Seconds
+ 					
+VAR208	Transponder1	1232	4D0	Set2	
+t0=3.789 sec	Ro= 120.000 Nm	Azo= 341.000 Deg	Zo= 7500 ft	Head= 341.000 Deg	
+1	VAR208	Flies		250.000	Nm/h
+2	VAR208	Flies		201.000	Seconds
+ 					
+FIX209	Transponder1	721	2D1	Set1	
+t0=3.922 sec	Ro= 121.000 Nm	Azo= 353.000 Deg	Zo= 6700 ft	Head= 353.000 Deg	
+1	FIX209	Flies		250.000	Nm/h
+2	FIX209	Flies		201.000	Seconds
+ 					
+VAR209	Transponder1	1233	4D1	Set2	
+t0=3.922 sec	Ro= 120.000 Nm	Azo= 353.754 Deg	Zo= 6800 ft	Head= 353.754 Deg	
+1	VAR209	Flies		250.000	Nm/h
+2	VAR209	Flies		201.000	Seconds
+ 					
+FIX210	Transponder1	722	2D2	Set1	
+t0=0.056 sec	Ro= 136.000 Nm	Azo= 5.758 Deg	Zo= 9000 ft	Head= 5.758 Deg	
+1	FIX210	Flies		250.000	Nm/h
+2	FIX210	Flies		201.000	Seconds
+ 					
+VAR210	Transponder1	1234	4D2	Set2	
+t0=0.056 sec	Ro= 135.000 Nm	Azo= 5.000 Deg	Zo= 9100 ft	Head= 5.000 Deg	
+1	VAR210	Flies		250.000	Nm/h
+2	VAR210	Flies		201.000	Seconds
+ 					
+FIX211	Transponder1	723	2D3	Set1	
+t0=0.189 sec	Ro= 136.000 Nm	Azo= 17.000 Deg	Zo= 1000 ft	Head= 17.000 Deg	
+1	FIX211	Flies		250.000	Nm/h
+2	FIX211	Flies		201.000	Seconds
+ 					
+VAR211	Transponder1	1235	4D3	Set2	
+t0=0.189 sec	Ro= 135.000 Nm	Azo= 17.762 Deg	Zo= 1100 ft	Head= 17.762 Deg	
+1	VAR211	Flies		250.000	Nm/h
+2	VAR211	Flies		201.000	Seconds
+ 					
+FIX212	Transponder1	724	2D4	Set1	
+t0=0.322 sec	Ro= 136.000 Nm	Azo= 29.765 Deg	Zo= 1900 ft	Head= 29.765 Deg	
+1	FIX212	Flies		250.000	Nm/h
+2	FIX212	Flies		201.000	Seconds
+ 					
+VAR212	Transponder1	1236	4D4	Set2	
+t0=0.322 sec	Ro= 135.000 Nm	Azo= 29.000 Deg	Zo= 2000 ft	Head= 29.000 Deg	
+1	VAR212	Flies		250.000	Nm/h
+2	VAR212	Flies		201.000	Seconds
+ 					
+FIX213	Transponder1	725	2D5	Set1	
+t0=0.456 sec	Ro= 136.000 Nm	Azo= 41.000 Deg	Zo= 5400 ft	Head= 41.000 Deg	
+1	FIX213	Flies		250.000	Nm/h
+2	FIX213	Flies		201.000	Seconds
+ 					
+VAR213	Transponder1	1237	4D5	Set2	
+t0=0.456 sec	Ro= 135.000 Nm	Azo= 41.769 Deg	Zo= 5500 ft	Head= 41.769 Deg	
+1	VAR213	Flies		250.000	Nm/h
+2	VAR213	Flies		201.000	Seconds
+ 					
+FIX214	Transponder1	726	2D6	Set1	
+t0=0.589 sec	Ro= 136.000 Nm	Azo= 53.772 Deg	Zo= 5700 ft	Head= 53.772 Deg	
+1	FIX214	Flies		250.000	Nm/h
+2	FIX214	Flies		201.000	Seconds
+ 					
+VAR214	Transponder1	1238	4D6	Set2	
+t0=0.589 sec	Ro= 135.000 Nm	Azo= 53.000 Deg	Zo= 5800 ft	Head= 53.000 Deg	
+1	VAR214	Flies		250.000	Nm/h
+2	VAR214	Flies		201.000	Seconds
+ 					
+FIX215	Transponder1	727	2D7	Set1	
+t0=0.722 sec	Ro= 136.000 Nm	Azo= 65.000 Deg	Zo= 9300 ft	Head= 65.000 Deg	
+1	FIX215	Flies		250.000	Nm/h
+2	FIX215	Flies		201.000	Seconds
+ 					
+VAR215	Transponder1	1239	4D7	Set2	
+t0=0.722 sec	Ro= 135.000 Nm	Azo= 65.776 Deg	Zo= 9400 ft	Head= 65.776 Deg	
+1	VAR215	Flies		250.000	Nm/h
+2	VAR215	Flies		201.000	Seconds
+ 					
+FIX216	Transponder1	728	2D8	Set1	
+t0=0.856 sec	Ro= 136.000 Nm	Azo= 77.780 Deg	Zo= 1100 ft	Head= 77.780 Deg	
+1	FIX216	Flies		250.000	Nm/h
+2	FIX216	Flies		201.000	Seconds
+ 					
+VAR216	Transponder1	1240	4D8	Set2	
+t0=0.856 sec	Ro= 135.000 Nm	Azo= 77.000 Deg	Zo= 1200 ft	Head= 77.000 Deg	
+1	VAR216	Flies		250.000	Nm/h
+2	VAR216	Flies		201.000	Seconds
+ 					
+FIX217	Transponder1	729	2D9	Set1	
+t0=0.989 sec	Ro= 136.000 Nm	Azo= 89.000 Deg	Zo= 5200 ft	Head= 89.000 Deg	
+1	FIX217	Flies		250.000	Nm/h
+2	FIX217	Flies		201.000	Seconds
+ 					
+VAR217	Transponder1	1241	4D9	Set2	
+t0=0.989 sec	Ro= 135.000 Nm	Azo= 89.783 Deg	Zo= 5300 ft	Head= 89.783 Deg	
+1	VAR217	Flies		250.000	Nm/h
+2	VAR217	Flies		201.000	Seconds
+ 					
+FIX218	Transponder1	730	2DA	Set1	
+t0=1.122 sec	Ro= 136.000 Nm	Azo= 101.787 Deg	Zo= 5800 ft	Head= 101.787 Deg	
+1	FIX218	Flies		250.000	Nm/h
+2	FIX218	Flies		201.000	Seconds
+ 					
+VAR218	Transponder1	1242	4DA	Set2	
+t0=1.122 sec	Ro= 135.000 Nm	Azo= 101.000 Deg	Zo= 5900 ft	Head= 101.000 Deg	
+1	VAR218	Flies		250.000	Nm/h
+2	VAR218	Flies		201.000	Seconds
+ 					
+FIX219	Transponder1	731	2DB	Set1	
+t0=1.256 sec	Ro= 136.000 Nm	Azo= 113.000 Deg	Zo= 5700 ft	Head= 113.000 Deg	
+1	FIX219	Flies		250.000	Nm/h
+2	FIX219	Flies		201.000	Seconds
+ 					
+VAR219	Transponder1	1243	4DB	Set2	
+t0=1.256 sec	Ro= 135.000 Nm	Azo= 113.790 Deg	Zo= 5800 ft	Head= 113.790 Deg	
+1	VAR219	Flies		250.000	Nm/h
+2	VAR219	Flies		201.000	Seconds
+ 					
+FIX220	Transponder1	732	2DC	Set1	
+t0=1.389 sec	Ro= 136.000 Nm	Azo= 125.794 Deg	Zo= 6900 ft	Head= 125.794 Deg	
+1	FIX220	Flies		250.000	Nm/h
+2	FIX220	Flies		201.000	Seconds
+ 					
+VAR220	Transponder1	1244	4DC	Set2	
+t0=1.389 sec	Ro= 135.000 Nm	Azo= 125.000 Deg	Zo= 7000 ft	Head= 125.000 Deg	
+1	VAR220	Flies		250.000	Nm/h
+2	VAR220	Flies		201.000	Seconds
+ 					
+FIX221	Transponder1	733	2DD	Set1	
+t0=1.522 sec	Ro= 136.000 Nm	Azo= 137.000 Deg	Zo= 3500 ft	Head= 137.000 Deg	
+1	FIX221	Flies		250.000	Nm/h
+2	FIX221	Flies		201.000	Seconds
+ 					
+VAR221	Transponder1	1245	4DD	Set2	
+t0=1.522 sec	Ro= 135.000 Nm	Azo= 137.798 Deg	Zo= 3600 ft	Head= 137.798 Deg	
+1	VAR221	Flies		250.000	Nm/h
+2	VAR221	Flies		201.000	Seconds
+ 					
+FIX222	Transponder1	734	2DE	Set1	
+t0=1.656 sec	Ro= 136.000 Nm	Azo= 149.801 Deg	Zo= 1900 ft	Head= 149.801 Deg	
+1	FIX222	Flies		250.000	Nm/h
+2	FIX222	Flies		201.000	Seconds
+ 					
+VAR222	Transponder1	1246	4DE	Set2	
+t0=1.656 sec	Ro= 135.000 Nm	Azo= 149.000 Deg	Zo= 2000 ft	Head= 149.000 Deg	
+1	VAR222	Flies		250.000	Nm/h
+2	VAR222	Flies		201.000	Seconds
+ 					
+FIX223	Transponder1	735	2DF	Set1	
+t0=1.789 sec	Ro= 136.000 Nm	Azo= 161.000 Deg	Zo= 7500 ft	Head= 161.000 Deg	
+1	FIX223	Flies		250.000	Nm/h
+2	FIX223	Flies		201.000	Seconds
+ 					
+VAR223	Transponder1	1247	4DF	Set2	
+t0=1.789 sec	Ro= 135.000 Nm	Azo= 161.805 Deg	Zo= 7600 ft	Head= 161.805 Deg	
+1	VAR223	Flies		250.000	Nm/h
+2	VAR223	Flies		201.000	Seconds
+ 					
+FIX224	Transponder1	736	2E0	Set1	
+t0=1.922 sec	Ro= 136.000 Nm	Azo= 173.808 Deg	Zo= 1700 ft	Head= 173.808 Deg	
+1	FIX224	Flies		250.000	Nm/h
+2	FIX224	Flies		201.000	Seconds
+ 					
+VAR224	Transponder1	1248	4E0	Set2	
+t0=1.922 sec	Ro= 135.000 Nm	Azo= 173.000 Deg	Zo= 1800 ft	Head= 173.000 Deg	
+1	VAR224	Flies		250.000	Nm/h
+2	VAR224	Flies		201.000	Seconds
+ 					
+FIX225	Transponder1	737	2E1	Set1	
+t0=2.056 sec	Ro= 136.000 Nm	Azo= 185.000 Deg	Zo= 5200 ft	Head= 185.000 Deg	
+1	FIX225	Flies		250.000	Nm/h
+2	FIX225	Flies		201.000	Seconds
+ 					
+VAR225	Transponder1	1249	4E1	Set2	
+t0=2.056 sec	Ro= 135.000 Nm	Azo= 185.812 Deg	Zo= 5300 ft	Head= 185.812 Deg	
+1	VAR225	Flies		250.000	Nm/h
+2	VAR225	Flies		201.000	Seconds
+ 					
+FIX226	Transponder1	738	2E2	Set1	
+t0=2.189 sec	Ro= 136.000 Nm	Azo= 197.816 Deg	Zo= 4300 ft	Head= 197.816 Deg	
+1	FIX226	Flies		250.000	Nm/h
+2	FIX226	Flies		201.000	Seconds
+ 					
+VAR226	Transponder1	1250	4E2	Set2	
+t0=2.189 sec	Ro= 135.000 Nm	Azo= 197.000 Deg	Zo= 4400 ft	Head= 197.000 Deg	
+1	VAR226	Flies		250.000	Nm/h
+2	VAR226	Flies		201.000	Seconds
+ 					
+FIX227	Transponder1	739	2E3	Set1	
+t0=2.322 sec	Ro= 136.000 Nm	Azo= 209.000 Deg	Zo= 9400 ft	Head= 209.000 Deg	
+1	FIX227	Flies		250.000	Nm/h
+2	FIX227	Flies		201.000	Seconds
+ 					
+VAR227	Transponder1	1251	4E3	Set2	
+t0=2.322 sec	Ro= 135.000 Nm	Azo= 209.819 Deg	Zo= 9500 ft	Head= 209.819 Deg	
+1	VAR227	Flies		250.000	Nm/h
+2	VAR227	Flies		201.000	Seconds
+ 					
+FIX228	Transponder1	740	2E4	Set1	
+t0=2.456 sec	Ro= 136.000 Nm	Azo= 221.823 Deg	Zo= 8100 ft	Head= 221.823 Deg	
+1	FIX228	Flies		250.000	Nm/h
+2	FIX228	Flies		201.000	Seconds
+ 					
+VAR228	Transponder1	1252	4E4	Set2	
+t0=2.456 sec	Ro= 135.000 Nm	Azo= 221.000 Deg	Zo= 8200 ft	Head= 221.000 Deg	
+1	VAR228	Flies		250.000	Nm/h
+2	VAR228	Flies		201.000	Seconds
+ 					
+FIX229	Transponder1	741	2E5	Set1	
+t0=2.589 sec	Ro= 136.000 Nm	Azo= 233.000 Deg	Zo= 4000 ft	Head= 233.000 Deg	
+1	FIX229	Flies		250.000	Nm/h
+2	FIX229	Flies		201.000	Seconds
+ 					
+VAR229	Transponder1	1253	4E5	Set2	
+t0=2.589 sec	Ro= 135.000 Nm	Azo= 233.826 Deg	Zo= 4100 ft	Head= 233.826 Deg	
+1	VAR229	Flies		250.000	Nm/h
+2	VAR229	Flies		201.000	Seconds
+ 					
+FIX230	Transponder1	742	2E6	Set1	
+t0=2.722 sec	Ro= 136.000 Nm	Azo= 245.830 Deg	Zo= 7500 ft	Head= 245.830 Deg	
+1	FIX230	Flies		250.000	Nm/h
+2	FIX230	Flies		201.000	Seconds
+ 					
+VAR230	Transponder1	1254	4E6	Set2	
+t0=2.722 sec	Ro= 135.000 Nm	Azo= 245.000 Deg	Zo= 7600 ft	Head= 245.000 Deg	
+1	VAR230	Flies		250.000	Nm/h
+2	VAR230	Flies		201.000	Seconds
+ 					
+FIX231	Transponder1	743	2E7	Set1	
+t0=2.856 sec	Ro= 136.000 Nm	Azo= 257.000 Deg	Zo= 5100 ft	Head= 257.000 Deg	
+1	FIX231	Flies		250.000	Nm/h
+2	FIX231	Flies		201.000	Seconds
+ 					
+VAR231	Transponder1	1255	4E7	Set2	
+t0=2.856 sec	Ro= 135.000 Nm	Azo= 257.834 Deg	Zo= 5200 ft	Head= 257.834 Deg	
+1	VAR231	Flies		250.000	Nm/h
+2	VAR231	Flies		201.000	Seconds
+ 					
+FIX232	Transponder1	744	2E8	Set1	
+t0=2.989 sec	Ro= 136.000 Nm	Azo= 269.837 Deg	Zo= 1500 ft	Head= 269.837 Deg	
+1	FIX232	Flies		250.000	Nm/h
+2	FIX232	Flies		201.000	Seconds
+ 					
+VAR232	Transponder1	1256	4E8	Set2	
+t0=2.989 sec	Ro= 135.000 Nm	Azo= 269.000 Deg	Zo= 1600 ft	Head= 269.000 Deg	
+1	VAR232	Flies		250.000	Nm/h
+2	VAR232	Flies		201.000	Seconds
+ 					
+FIX233	Transponder1	745	2E9	Set1	
+t0=3.122 sec	Ro= 136.000 Nm	Azo= 281.000 Deg	Zo= 2100 ft	Head= 281.000 Deg	
+1	FIX233	Flies		250.000	Nm/h
+2	FIX233	Flies		201.000	Seconds
+ 					
+VAR233	Transponder1	1257	4E9	Set2	
+t0=3.122 sec	Ro= 135.000 Nm	Azo= 281.841 Deg	Zo= 2200 ft	Head= 281.841 Deg	
+1	VAR233	Flies		250.000	Nm/h
+2	VAR233	Flies		201.000	Seconds
+ 					
+FIX234	Transponder1	746	2EA	Set1	
+t0=3.256 sec	Ro= 136.000 Nm	Azo= 293.845 Deg	Zo= 2700 ft	Head= 293.845 Deg	
+1	FIX234	Flies		250.000	Nm/h
+2	FIX234	Flies		201.000	Seconds
+ 					
+VAR234	Transponder1	1258	4EA	Set2	
+t0=3.256 sec	Ro= 135.000 Nm	Azo= 293.000 Deg	Zo= 2800 ft	Head= 293.000 Deg	
+1	VAR234	Flies		250.000	Nm/h
+2	VAR234	Flies		201.000	Seconds
+ 					
+FIX235	Transponder1	747	2EB	Set1	
+t0=3.389 sec	Ro= 136.000 Nm	Azo= 305.000 Deg	Zo= 7800 ft	Head= 305.000 Deg	
+1	FIX235	Flies		250.000	Nm/h
+2	FIX235	Flies		201.000	Seconds
+ 					
+VAR235	Transponder1	1259	4EB	Set2	
+t0=3.389 sec	Ro= 135.000 Nm	Azo= 305.848 Deg	Zo= 7900 ft	Head= 305.848 Deg	
+1	VAR235	Flies		250.000	Nm/h
+2	VAR235	Flies		201.000	Seconds
+ 					
+FIX236	Transponder1	748	2EC	Set1	
+t0=3.522 sec	Ro= 136.000 Nm	Azo= 317.852 Deg	Zo= 3800 ft	Head= 317.852 Deg	
+1	FIX236	Flies		250.000	Nm/h
+2	FIX236	Flies		201.000	Seconds
+ 					
+VAR236	Transponder1	1260	4EC	Set2	
+t0=3.522 sec	Ro= 135.000 Nm	Azo= 317.000 Deg	Zo= 3900 ft	Head= 317.000 Deg	
+1	VAR236	Flies		250.000	Nm/h
+2	VAR236	Flies		201.000	Seconds
+ 					
+FIX237	Transponder1	749	2ED	Set1	
+t0=3.656 sec	Ro= 136.000 Nm	Azo= 329.000 Deg	Zo= 3700 ft	Head= 329.000 Deg	
+1	FIX237	Flies		250.000	Nm/h
+2	FIX237	Flies		201.000	Seconds
+ 					
+VAR237	Transponder1	1261	4ED	Set2	
+t0=3.656 sec	Ro= 135.000 Nm	Azo= 329.855 Deg	Zo= 3800 ft	Head= 329.855 Deg	
+1	VAR237	Flies		250.000	Nm/h
+2	VAR237	Flies		201.000	Seconds
+ 					
+FIX238	Transponder1	750	2EE	Set1	
+t0=3.789 sec	Ro= 136.000 Nm	Azo= 341.859 Deg	Zo= 6300 ft	Head= 341.859 Deg	
+1	FIX238	Flies		250.000	Nm/h
+2	FIX238	Flies		201.000	Seconds
+ 					
+VAR238	Transponder1	1262	4EE	Set2	
+t0=3.789 sec	Ro= 135.000 Nm	Azo= 341.000 Deg	Zo= 6400 ft	Head= 341.000 Deg	
+1	VAR238	Flies		250.000	Nm/h
+2	VAR238	Flies		201.000	Seconds
+ 					
+FIX239	Transponder1	751	2EF	Set1	
+t0=3.922 sec	Ro= 136.000 Nm	Azo= 353.000 Deg	Zo= 3100 ft	Head= 353.000 Deg	
+1	FIX239	Flies		250.000	Nm/h
+2	FIX239	Flies		201.000	Seconds
+ 					
+VAR239	Transponder1	1263	4EF	Set2	
+t0=3.922 sec	Ro= 135.000 Nm	Azo= 353.863 Deg	Zo= 3200 ft	Head= 353.863 Deg	
+1	VAR239	Flies		250.000	Nm/h
+2	VAR239	Flies		201.000	Seconds
+ 					
+FIX240	Transponder1	752	2F0	Set1	
+t0=0.056 sec	Ro= 151.000 Nm	Azo= 5.866 Deg	Zo= 6700 ft	Head= 5.866 Deg	
+1	FIX240	Flies		250.000	Nm/h
+2	FIX240	Flies		201.000	Seconds
+ 					
+VAR240	Transponder1	1264	4F0	Set2	
+t0=0.056 sec	Ro= 150.000 Nm	Azo= 5.000 Deg	Zo= 6800 ft	Head= 5.000 Deg	
+1	VAR240	Flies		250.000	Nm/h
+2	VAR240	Flies		201.000	Seconds
+ 					
+FIX241	Transponder1	753	2F1	Set1	
+t0=0.189 sec	Ro= 151.000 Nm	Azo= 17.000 Deg	Zo= 9300 ft	Head= 17.000 Deg	
+1	FIX241	Flies		250.000	Nm/h
+2	FIX241	Flies		201.000	Seconds
+ 					
+VAR241	Transponder1	1265	4F1	Set2	
+t0=0.189 sec	Ro= 150.000 Nm	Azo= 17.870 Deg	Zo= 9400 ft	Head= 17.870 Deg	
+1	VAR241	Flies		250.000	Nm/h
+2	VAR241	Flies		201.000	Seconds
+ 					
+FIX242	Transponder1	754	2F2	Set1	
+t0=0.322 sec	Ro= 151.000 Nm	Azo= 29.873 Deg	Zo= 7000 ft	Head= 29.873 Deg	
+1	FIX242	Flies		250.000	Nm/h
+2	FIX242	Flies		201.000	Seconds
+ 					
+VAR242	Transponder1	1266	4F2	Set2	
+t0=0.322 sec	Ro= 150.000 Nm	Azo= 29.000 Deg	Zo= 7100 ft	Head= 29.000 Deg	
+1	VAR242	Flies		250.000	Nm/h
+2	VAR242	Flies		201.000	Seconds
+ 					
+FIX243	Transponder1	755	2F3	Set1	
+t0=0.456 sec	Ro= 151.000 Nm	Azo= 41.000 Deg	Zo= 6600 ft	Head= 41.000 Deg	
+1	FIX243	Flies		250.000	Nm/h
+2	FIX243	Flies		201.000	Seconds
+ 					
+VAR243	Transponder1	1267	4F3	Set2	
+t0=0.456 sec	Ro= 150.000 Nm	Azo= 41.877 Deg	Zo= 6700 ft	Head= 41.877 Deg	
+1	VAR243	Flies		250.000	Nm/h
+2	VAR243	Flies		201.000	Seconds
+ 					
+FIX244	Transponder1	756	2F4	Set1	
+t0=0.589 sec	Ro= 151.000 Nm	Azo= 53.881 Deg	Zo= 7800 ft	Head= 53.881 Deg	
+1	FIX244	Flies		250.000	Nm/h
+2	FIX244	Flies		201.000	Seconds
+ 					
+VAR244	Transponder1	1268	4F4	Set2	
+t0=0.589 sec	Ro= 150.000 Nm	Azo= 53.000 Deg	Zo= 7900 ft	Head= 53.000 Deg	
+1	VAR244	Flies		250.000	Nm/h
+2	VAR244	Flies		201.000	Seconds
+ 					
+FIX245	Transponder1	757	2F5	Set1	
+t0=0.722 sec	Ro= 151.000 Nm	Azo= 65.000 Deg	Zo= 7400 ft	Head= 65.000 Deg	
+1	FIX245	Flies		250.000	Nm/h
+2	FIX245	Flies		201.000	Seconds
+ 					
+VAR245	Transponder1	1269	4F5	Set2	
+t0=0.722 sec	Ro= 150.000 Nm	Azo= 65.884 Deg	Zo= 7500 ft	Head= 65.884 Deg	
+1	VAR245	Flies		250.000	Nm/h
+2	VAR245	Flies		201.000	Seconds
+ 					
+FIX246	Transponder1	758	2F6	Set1	
+t0=0.856 sec	Ro= 151.000 Nm	Azo= 77.888 Deg	Zo= 9400 ft	Head= 77.888 Deg	
+1	FIX246	Flies		250.000	Nm/h
+2	FIX246	Flies		201.000	Seconds
+ 					
+VAR246	Transponder1	1270	4F6	Set2	
+t0=0.856 sec	Ro= 150.000 Nm	Azo= 77.000 Deg	Zo= 9500 ft	Head= 77.000 Deg	
+1	VAR246	Flies		250.000	Nm/h
+2	VAR246	Flies		201.000	Seconds
+ 					
+FIX247	Transponder1	759	2F7	Set1	
+t0=0.989 sec	Ro= 151.000 Nm	Azo= 89.000 Deg	Zo= 2400 ft	Head= 89.000 Deg	
+1	FIX247	Flies		250.000	Nm/h
+2	FIX247	Flies		201.000	Seconds
+ 					
+VAR247	Transponder1	1271	4F7	Set2	
+t0=0.989 sec	Ro= 150.000 Nm	Azo= 89.891 Deg	Zo= 2500 ft	Head= 89.891 Deg	
+1	VAR247	Flies		250.000	Nm/h
+2	VAR247	Flies		201.000	Seconds
+ 					
+FIX248	Transponder1	760	2F8	Set1	
+t0=1.122 sec	Ro= 151.000 Nm	Azo= 101.895 Deg	Zo= 8500 ft	Head= 101.895 Deg	
+1	FIX248	Flies		250.000	Nm/h
+2	FIX248	Flies		201.000	Seconds
+ 					
+VAR248	Transponder1	1272	4F8	Set2	
+t0=1.122 sec	Ro= 150.000 Nm	Azo= 101.000 Deg	Zo= 8600 ft	Head= 101.000 Deg	
+1	VAR248	Flies		250.000	Nm/h
+2	VAR248	Flies		201.000	Seconds
+ 					
+FIX249	Transponder1	761	2F9	Set1	
+t0=1.256 sec	Ro= 151.000 Nm	Azo= 113.000 Deg	Zo= 6500 ft	Head= 113.000 Deg	
+1	FIX249	Flies		250.000	Nm/h
+2	FIX249	Flies		201.000	Seconds
+ 					
+VAR249	Transponder1	1273	4F9	Set2	
+t0=1.256 sec	Ro= 150.000 Nm	Azo= 113.899 Deg	Zo= 6600 ft	Head= 113.899 Deg	
+1	VAR249	Flies		250.000	Nm/h
+2	VAR249	Flies		201.000	Seconds
+ 					
+FIX250	Transponder1	762	2FA	Set1	
+t0=1.389 sec	Ro= 151.000 Nm	Azo= 125.902 Deg	Zo= 3600 ft	Head= 125.902 Deg	
+1	FIX250	Flies		250.000	Nm/h
+2	FIX250	Flies		201.000	Seconds
+ 					
+VAR250	Transponder1	1274	4FA	Set2	
+t0=1.389 sec	Ro= 150.000 Nm	Azo= 125.000 Deg	Zo= 3700 ft	Head= 125.000 Deg	
+1	VAR250	Flies		250.000	Nm/h
+2	VAR250	Flies		201.000	Seconds
+ 					
+FIX251	Transponder1	763	2FB	Set1	
+t0=1.522 sec	Ro= 151.000 Nm	Azo= 137.000 Deg	Zo= 2300 ft	Head= 137.000 Deg	
+1	FIX251	Flies		250.000	Nm/h
+2	FIX251	Flies		201.000	Seconds
+ 					
+VAR251	Transponder1	1275	4FB	Set2	
+t0=1.522 sec	Ro= 150.000 Nm	Azo= 137.906 Deg	Zo= 2400 ft	Head= 137.906 Deg	
+1	VAR251	Flies		250.000	Nm/h
+2	VAR251	Flies		201.000	Seconds
+ 					
+FIX252	Transponder1	764	2FC	Set1	
+t0=1.656 sec	Ro= 151.000 Nm	Azo= 149.909 Deg	Zo= 5400 ft	Head= 149.909 Deg	
+1	FIX252	Flies		250.000	Nm/h
+2	FIX252	Flies		201.000	Seconds
+ 					
+VAR252	Transponder1	1276	4FC	Set2	
+t0=1.656 sec	Ro= 150.000 Nm	Azo= 149.000 Deg	Zo= 5500 ft	Head= 149.000 Deg	
+1	VAR252	Flies		250.000	Nm/h
+2	VAR252	Flies		201.000	Seconds
+ 					
+FIX253	Transponder1	765	2FD	Set1	
+t0=1.789 sec	Ro= 151.000 Nm	Azo= 161.000 Deg	Zo= 7500 ft	Head= 161.000 Deg	
+1	FIX253	Flies		250.000	Nm/h
+2	FIX253	Flies		201.000	Seconds
+ 					
+VAR253	Transponder1	1277	4FD	Set2	
+t0=1.789 sec	Ro= 150.000 Nm	Azo= 161.913 Deg	Zo= 7600 ft	Head= 161.913 Deg	
+1	VAR253	Flies		250.000	Nm/h
+2	VAR253	Flies		201.000	Seconds
+ 					
+FIX254	Transponder1	766	2FE	Set1	
+t0=1.922 sec	Ro= 151.000 Nm	Azo= 173.917 Deg	Zo= 1000 ft	Head= 173.917 Deg	
+1	FIX254	Flies		250.000	Nm/h
+2	FIX254	Flies		201.000	Seconds
+ 					
+VAR254	Transponder1	1278	4FE	Set2	
+t0=1.922 sec	Ro= 150.000 Nm	Azo= 173.000 Deg	Zo= 1100 ft	Head= 173.000 Deg	
+1	VAR254	Flies		250.000	Nm/h
+2	VAR254	Flies		201.000	Seconds
+ 					
+FIX255	Transponder1	767	2FF	Set1	
+t0=2.056 sec	Ro= 151.000 Nm	Azo= 185.000 Deg	Zo= 9700 ft	Head= 185.000 Deg	
+1	FIX255	Flies		250.000	Nm/h
+2	FIX255	Flies		201.000	Seconds
+ 					
+VAR255	Transponder1	1279	4FF	Set2	
+t0=2.056 sec	Ro= 150.000 Nm	Azo= 185.920 Deg	Zo= 9800 ft	Head= 185.920 Deg	
+1	VAR255	Flies		250.000	Nm/h
+2	VAR255	Flies		201.000	Seconds
+ 					
+FIX256	Transponder1	768	300	Set1	
+t0=2.189 sec	Ro= 151.000 Nm	Azo= 197.924 Deg	Zo= 7000 ft	Head= 197.924 Deg	
+1	FIX256	Flies		250.000	Nm/h
+2	FIX256	Flies		201.000	Seconds
+ 					
+VAR256	Transponder1	1280	500	Set2	
+t0=2.189 sec	Ro= 150.000 Nm	Azo= 197.000 Deg	Zo= 7100 ft	Head= 197.000 Deg	
+1	VAR256	Flies		250.000	Nm/h
+2	VAR256	Flies		201.000	Seconds
+ 					
+FIX257	Transponder1	769	301	Set1	
+t0=2.322 sec	Ro= 151.000 Nm	Azo= 209.000 Deg	Zo= 5700 ft	Head= 209.000 Deg	
+1	FIX257	Flies		250.000	Nm/h
+2	FIX257	Flies		201.000	Seconds
+ 					
+VAR257	Transponder1	1281	501	Set2	
+t0=2.322 sec	Ro= 150.000 Nm	Azo= 209.928 Deg	Zo= 5800 ft	Head= 209.928 Deg	
+1	VAR257	Flies		250.000	Nm/h
+2	VAR257	Flies		201.000	Seconds
+ 					
+FIX258	Transponder1	770	302	Set1	
+t0=2.456 sec	Ro= 151.000 Nm	Azo= 221.931 Deg	Zo= 8400 ft	Head= 221.931 Deg	
+1	FIX258	Flies		250.000	Nm/h
+2	FIX258	Flies		201.000	Seconds
+ 					
+VAR258	Transponder1	1282	502	Set2	
+t0=2.456 sec	Ro= 150.000 Nm	Azo= 221.000 Deg	Zo= 8500 ft	Head= 221.000 Deg	
+1	VAR258	Flies		250.000	Nm/h
+2	VAR258	Flies		201.000	Seconds
+ 					
+FIX259	Transponder1	771	303	Set1	
+t0=2.589 sec	Ro= 151.000 Nm	Azo= 233.000 Deg	Zo= 1000 ft	Head= 233.000 Deg	
+1	FIX259	Flies		250.000	Nm/h
+2	FIX259	Flies		201.000	Seconds
+ 					
+VAR259	Transponder1	1283	503	Set2	
+t0=2.589 sec	Ro= 150.000 Nm	Azo= 233.935 Deg	Zo= 1100 ft	Head= 233.935 Deg	
+1	VAR259	Flies		250.000	Nm/h
+2	VAR259	Flies		201.000	Seconds
+ 					
+FIX260	Transponder1	772	304	Set1	
+t0=2.722 sec	Ro= 151.000 Nm	Azo= 245.938 Deg	Zo= 2200 ft	Head= 245.938 Deg	
+1	FIX260	Flies		250.000	Nm/h
+2	FIX260	Flies		201.000	Seconds
+ 					
+VAR260	Transponder1	1284	504	Set2	
+t0=2.722 sec	Ro= 150.000 Nm	Azo= 245.000 Deg	Zo= 2300 ft	Head= 245.000 Deg	
+1	VAR260	Flies		250.000	Nm/h
+2	VAR260	Flies		201.000	Seconds
+ 					
+FIX261	Transponder1	773	305	Set1	
+t0=2.856 sec	Ro= 151.000 Nm	Azo= 257.000 Deg	Zo= 3700 ft	Head= 257.000 Deg	
+1	FIX261	Flies		250.000	Nm/h
+2	FIX261	Flies		201.000	Seconds
+ 					
+VAR261	Transponder1	1285	505	Set2	
+t0=2.856 sec	Ro= 150.000 Nm	Azo= 257.942 Deg	Zo= 3800 ft	Head= 257.942 Deg	
+1	VAR261	Flies		250.000	Nm/h
+2	VAR261	Flies		201.000	Seconds
+ 					
+FIX262	Transponder1	774	306	Set1	
+t0=2.989 sec	Ro= 151.000 Nm	Azo= 269.946 Deg	Zo= 4900 ft	Head= 269.946 Deg	
+1	FIX262	Flies		250.000	Nm/h
+2	FIX262	Flies		201.000	Seconds
+ 					
+VAR262	Transponder1	1286	506	Set2	
+t0=2.989 sec	Ro= 150.000 Nm	Azo= 269.000 Deg	Zo= 5000 ft	Head= 269.000 Deg	
+1	VAR262	Flies		250.000	Nm/h
+2	VAR262	Flies		201.000	Seconds
+ 					
+FIX263	Transponder1	775	307	Set1	
+t0=3.122 sec	Ro= 151.000 Nm	Azo= 281.000 Deg	Zo= 8000 ft	Head= 281.000 Deg	
+1	FIX263	Flies		250.000	Nm/h
+2	FIX263	Flies		201.000	Seconds
+ 					
+VAR263	Transponder1	1287	507	Set2	
+t0=3.122 sec	Ro= 150.000 Nm	Azo= 281.949 Deg	Zo= 8100 ft	Head= 281.949 Deg	
+1	VAR263	Flies		250.000	Nm/h
+2	VAR263	Flies		201.000	Seconds
+ 					
+FIX264	Transponder1	776	308	Set1	
+t0=3.256 sec	Ro= 151.000 Nm	Azo= 293.953 Deg	Zo= 3500 ft	Head= 293.953 Deg	
+1	FIX264	Flies		250.000	Nm/h
+2	FIX264	Flies		201.000	Seconds
+ 					
+VAR264	Transponder1	1288	508	Set2	
+t0=3.256 sec	Ro= 150.000 Nm	Azo= 293.000 Deg	Zo= 3600 ft	Head= 293.000 Deg	
+1	VAR264	Flies		250.000	Nm/h
+2	VAR264	Flies		201.000	Seconds
+ 					
+FIX265	Transponder1	777	309	Set1	
+t0=3.389 sec	Ro= 151.000 Nm	Azo= 305.000 Deg	Zo= 1000 ft	Head= 305.000 Deg	
+1	FIX265	Flies		250.000	Nm/h
+2	FIX265	Flies		201.000	Seconds
+ 					
+VAR265	Transponder1	1289	509	Set2	
+t0=3.389 sec	Ro= 150.000 Nm	Azo= 305.956 Deg	Zo= 1100 ft	Head= 305.956 Deg	
+1	VAR265	Flies		250.000	Nm/h
+2	VAR265	Flies		201.000	Seconds
+ 					
+FIX266	Transponder1	778	30A	Set1	
+t0=3.522 sec	Ro= 151.000 Nm	Azo= 317.960 Deg	Zo= 7300 ft	Head= 317.960 Deg	
+1	FIX266	Flies		250.000	Nm/h
+2	FIX266	Flies		201.000	Seconds
+ 					
+VAR266	Transponder1	1290	50A	Set2	
+t0=3.522 sec	Ro= 150.000 Nm	Azo= 317.000 Deg	Zo= 7400 ft	Head= 317.000 Deg	
+1	VAR266	Flies		250.000	Nm/h
+2	VAR266	Flies		201.000	Seconds
+ 					
+FIX267	Transponder1	779	30B	Set1	
+t0=3.656 sec	Ro= 151.000 Nm	Azo= 329.000 Deg	Zo= 9500 ft	Head= 329.000 Deg	
+1	FIX267	Flies		250.000	Nm/h
+2	FIX267	Flies		201.000	Seconds
+ 					
+VAR267	Transponder1	1291	50B	Set2	
+t0=3.656 sec	Ro= 150.000 Nm	Azo= 329.964 Deg	Zo= 9600 ft	Head= 329.964 Deg	
+1	VAR267	Flies		250.000	Nm/h
+2	VAR267	Flies		201.000	Seconds
+ 					
+FIX268	Transponder1	780	30C	Set1	
+t0=3.789 sec	Ro= 151.000 Nm	Azo= 341.967 Deg	Zo= 3000 ft	Head= 341.967 Deg	
+1	FIX268	Flies		250.000	Nm/h
+2	FIX268	Flies		201.000	Seconds
+ 					
+VAR268	Transponder1	1292	50C	Set2	
+t0=3.789 sec	Ro= 150.000 Nm	Azo= 341.000 Deg	Zo= 3100 ft	Head= 341.000 Deg	
+1	VAR268	Flies		250.000	Nm/h
+2	VAR268	Flies		201.000	Seconds
+ 					
+FIX269	Transponder1	781	30D	Set1	
+t0=3.922 sec	Ro= 151.000 Nm	Azo= 353.000 Deg	Zo= 1500 ft	Head= 353.000 Deg	
+1	FIX269	Flies		250.000	Nm/h
+2	FIX269	Flies		201.000	Seconds
+ 					
+VAR269	Transponder1	1293	50D	Set2	
+t0=3.922 sec	Ro= 150.000 Nm	Azo= 353.971 Deg	Zo= 1600 ft	Head= 353.971 Deg	
+1	VAR269	Flies		250.000	Nm/h
+2	VAR269	Flies		201.000	Seconds
+ 					
+FIX270	Transponder1	782	30E	Set1	
+t0=0.056 sec	Ro= 166.000 Nm	Azo= 5.974 Deg	Zo= 5300 ft	Head= 5.974 Deg	
+1	FIX270	Flies		250.000	Nm/h
+2	FIX270	Flies		201.000	Seconds
+ 					
+VAR270	Transponder1	1294	50E	Set2	
+t0=0.056 sec	Ro= 165.000 Nm	Azo= 5.000 Deg	Zo= 5400 ft	Head= 5.000 Deg	
+1	VAR270	Flies		250.000	Nm/h
+2	VAR270	Flies		201.000	Seconds
+ 					
+FIX271	Transponder1	783	30F	Set1	
+t0=0.189 sec	Ro= 166.000 Nm	Azo= 17.000 Deg	Zo= 4900 ft	Head= 17.000 Deg	
+1	FIX271	Flies		250.000	Nm/h
+2	FIX271	Flies		201.000	Seconds
+ 					
+VAR271	Transponder1	1295	50F	Set2	
+t0=0.189 sec	Ro= 165.000 Nm	Azo= 17.978 Deg	Zo= 5000 ft	Head= 17.978 Deg	
+1	VAR271	Flies		250.000	Nm/h
+2	VAR271	Flies		201.000	Seconds
+ 					
+FIX272	Transponder1	784	310	Set1	
+t0=0.322 sec	Ro= 166.000 Nm	Azo= 29.982 Deg	Zo= 3100 ft	Head= 29.982 Deg	
+1	FIX272	Flies		250.000	Nm/h
+2	FIX272	Flies		201.000	Seconds
+ 					
+VAR272	Transponder1	1296	510	Set2	
+t0=0.322 sec	Ro= 165.000 Nm	Azo= 29.000 Deg	Zo= 3200 ft	Head= 29.000 Deg	
+1	VAR272	Flies		250.000	Nm/h
+2	VAR272	Flies		201.000	Seconds
+ 					
+FIX273	Transponder1	785	311	Set1	
+t0=0.456 sec	Ro= 166.000 Nm	Azo= 41.000 Deg	Zo= 4300 ft	Head= 41.000 Deg	
+1	FIX273	Flies		250.000	Nm/h
+2	FIX273	Flies		201.000	Seconds
+ 					
+VAR273	Transponder1	1297	511	Set2	
+t0=0.456 sec	Ro= 165.000 Nm	Azo= 41.985 Deg	Zo= 4400 ft	Head= 41.985 Deg	
+1	VAR273	Flies		250.000	Nm/h
+2	VAR273	Flies		201.000	Seconds
+ 					
+FIX274	Transponder1	786	312	Set1	
+t0=0.589 sec	Ro= 166.000 Nm	Azo= 53.989 Deg	Zo= 7700 ft	Head= 53.989 Deg	
+1	FIX274	Flies		250.000	Nm/h
+2	FIX274	Flies		201.000	Seconds
+ 					
+VAR274	Transponder1	1298	512	Set2	
+t0=0.589 sec	Ro= 165.000 Nm	Azo= 53.000 Deg	Zo= 7800 ft	Head= 53.000 Deg	
+1	VAR274	Flies		250.000	Nm/h
+2	VAR274	Flies		201.000	Seconds
+ 					
+FIX275	Transponder1	787	313	Set1	
+t0=0.722 sec	Ro= 166.000 Nm	Azo= 65.000 Deg	Zo= 5700 ft	Head= 65.000 Deg	
+1	FIX275	Flies		250.000	Nm/h
+2	FIX275	Flies		201.000	Seconds
+ 					
+VAR275	Transponder1	1299	513	Set2	
+t0=0.722 sec	Ro= 165.000 Nm	Azo= 65.992 Deg	Zo= 5800 ft	Head= 65.992 Deg	
+1	VAR275	Flies		250.000	Nm/h
+2	VAR275	Flies		201.000	Seconds
+ 					
+FIX276	Transponder1	788	314	Set1	
+t0=0.856 sec	Ro= 166.000 Nm	Azo= 77.996 Deg	Zo= 6800 ft	Head= 77.996 Deg	
+1	FIX276	Flies		250.000	Nm/h
+2	FIX276	Flies		201.000	Seconds
+ 					
+VAR276	Transponder1	1300	514	Set2	
+t0=0.856 sec	Ro= 165.000 Nm	Azo= 77.000 Deg	Zo= 6900 ft	Head= 77.000 Deg	
+1	VAR276	Flies		250.000	Nm/h
+2	VAR276	Flies		201.000	Seconds
+ 					
+FIX277	Transponder1	789	315	Set1	
+t0=0.989 sec	Ro= 166.000 Nm	Azo= 89.000 Deg	Zo= 3900 ft	Head= 89.000 Deg	
+1	FIX277	Flies		250.000	Nm/h
+2	FIX277	Flies		201.000	Seconds
+ 					
+VAR277	Transponder1	1301	515	Set2	
+t0=0.989 sec	Ro= 165.000 Nm	Azo= 90.000 Deg	Zo= 4000 ft	Head= 90.000 Deg	
+1	VAR277	Flies		250.000	Nm/h
+2	VAR277	Flies		201.000	Seconds
+ 					
+FIX278	Transponder1	790	316	Set1	
+t0=1.122 sec	Ro= 166.000 Nm	Azo= 102.003 Deg	Zo= 2900 ft	Head= 102.003 Deg	
+1	FIX278	Flies		250.000	Nm/h
+2	FIX278	Flies		201.000	Seconds
+ 					
+VAR278	Transponder1	1302	516	Set2	
+t0=1.122 sec	Ro= 165.000 Nm	Azo= 101.000 Deg	Zo= 3000 ft	Head= 101.000 Deg	
+1	VAR278	Flies		250.000	Nm/h
+2	VAR278	Flies		201.000	Seconds
+ 					
+FIX279	Transponder1	791	317	Set1	
+t0=1.256 sec	Ro= 166.000 Nm	Azo= 113.000 Deg	Zo= 3900 ft	Head= 113.000 Deg	
+1	FIX279	Flies		250.000	Nm/h
+2	FIX279	Flies		201.000	Seconds
+ 					
+VAR279	Transponder1	1303	517	Set2	
+t0=1.256 sec	Ro= 165.000 Nm	Azo= 114.007 Deg	Zo= 4000 ft	Head= 114.007 Deg	
+1	VAR279	Flies		250.000	Nm/h
+2	VAR279	Flies		201.000	Seconds
+ 					
+FIX280	Transponder1	792	318	Set1	
+t0=1.389 sec	Ro= 166.000 Nm	Azo= 126.011 Deg	Zo= 5700 ft	Head= 126.011 Deg	
+1	FIX280	Flies		250.000	Nm/h
+2	FIX280	Flies		201.000	Seconds
+ 					
+VAR280	Transponder1	1304	518	Set2	
+t0=1.389 sec	Ro= 165.000 Nm	Azo= 125.000 Deg	Zo= 5800 ft	Head= 125.000 Deg	
+1	VAR280	Flies		250.000	Nm/h
+2	VAR280	Flies		201.000	Seconds
+ 					
+FIX281	Transponder1	793	319	Set1	
+t0=1.522 sec	Ro= 166.000 Nm	Azo= 137.000 Deg	Zo= 1800 ft	Head= 137.000 Deg	
+1	FIX281	Flies		250.000	Nm/h
+2	FIX281	Flies		201.000	Seconds
+ 					
+VAR281	Transponder1	1305	519	Set2	
+t0=1.522 sec	Ro= 165.000 Nm	Azo= 138.014 Deg	Zo= 1900 ft	Head= 138.014 Deg	
+1	VAR281	Flies		250.000	Nm/h
+2	VAR281	Flies		201.000	Seconds
+ 					
+FIX282	Transponder1	794	31A	Set1	
+t0=1.656 sec	Ro= 166.000 Nm	Azo= 150.018 Deg	Zo= 7600 ft	Head= 150.018 Deg	
+1	FIX282	Flies		250.000	Nm/h
+2	FIX282	Flies		201.000	Seconds
+ 					
+VAR282	Transponder1	1306	51A	Set2	
+t0=1.656 sec	Ro= 165.000 Nm	Azo= 149.000 Deg	Zo= 7700 ft	Head= 149.000 Deg	
+1	VAR282	Flies		250.000	Nm/h
+2	VAR282	Flies		201.000	Seconds
+ 					
+FIX283	Transponder1	795	31B	Set1	
+t0=1.789 sec	Ro= 166.000 Nm	Azo= 161.000 Deg	Zo= 9800 ft	Head= 161.000 Deg	
+1	FIX283	Flies		250.000	Nm/h
+2	FIX283	Flies		201.000	Seconds
+ 					
+VAR283	Transponder1	1307	51B	Set2	
+t0=1.789 sec	Ro= 165.000 Nm	Azo= 162.021 Deg	Zo= 9900 ft	Head= 162.021 Deg	
+1	VAR283	Flies		250.000	Nm/h
+2	VAR283	Flies		201.000	Seconds
+ 					
+FIX284	Transponder1	796	31C	Set1	
+t0=1.922 sec	Ro= 166.000 Nm	Azo= 174.025 Deg	Zo= 8600 ft	Head= 174.025 Deg	
+1	FIX284	Flies		250.000	Nm/h
+2	FIX284	Flies		201.000	Seconds
+ 					
+VAR284	Transponder1	1308	51C	Set2	
+t0=1.922 sec	Ro= 165.000 Nm	Azo= 173.000 Deg	Zo= 8700 ft	Head= 173.000 Deg	
+1	VAR284	Flies		250.000	Nm/h
+2	VAR284	Flies		201.000	Seconds
+ 					
+FIX285	Transponder1	797	31D	Set1	
+t0=2.056 sec	Ro= 166.000 Nm	Azo= 185.000 Deg	Zo= 2600 ft	Head= 185.000 Deg	
+1	FIX285	Flies		250.000	Nm/h
+2	FIX285	Flies		201.000	Seconds
+ 					
+VAR285	Transponder1	1309	51D	Set2	
+t0=2.056 sec	Ro= 165.000 Nm	Azo= 186.029 Deg	Zo= 2700 ft	Head= 186.029 Deg	
+1	VAR285	Flies		250.000	Nm/h
+2	VAR285	Flies		201.000	Seconds
+ 					
+FIX286	Transponder1	798	31E	Set1	
+t0=2.189 sec	Ro= 166.000 Nm	Azo= 198.032 Deg	Zo= 8800 ft	Head= 198.032 Deg	
+1	FIX286	Flies		250.000	Nm/h
+2	FIX286	Flies		201.000	Seconds
+ 					
+VAR286	Transponder1	1310	51E	Set2	
+t0=2.189 sec	Ro= 165.000 Nm	Azo= 197.000 Deg	Zo= 8900 ft	Head= 197.000 Deg	
+1	VAR286	Flies		250.000	Nm/h
+2	VAR286	Flies		201.000	Seconds
+ 					
+FIX287	Transponder1	799	31F	Set1	
+t0=2.322 sec	Ro= 166.000 Nm	Azo= 209.000 Deg	Zo= 8400 ft	Head= 209.000 Deg	
+1	FIX287	Flies		250.000	Nm/h
+2	FIX287	Flies		201.000	Seconds
+ 					
+VAR287	Transponder1	1311	51F	Set2	
+t0=2.322 sec	Ro= 165.000 Nm	Azo= 210.036 Deg	Zo= 8500 ft	Head= 210.036 Deg	
+1	VAR287	Flies		250.000	Nm/h
+2	VAR287	Flies		201.000	Seconds
+ 					
+FIX288	Transponder1	800	320	Set1	
+t0=2.456 sec	Ro= 166.000 Nm	Azo= 222.039 Deg	Zo= 3300 ft	Head= 222.039 Deg	
+1	FIX288	Flies		250.000	Nm/h
+2	FIX288	Flies		201.000	Seconds
+ 					
+VAR288	Transponder1	1312	520	Set2	
+t0=2.456 sec	Ro= 165.000 Nm	Azo= 221.000 Deg	Zo= 3400 ft	Head= 221.000 Deg	
+1	VAR288	Flies		250.000	Nm/h
+2	VAR288	Flies		201.000	Seconds
+ 					
+FIX289	Transponder1	801	321	Set1	
+t0=2.589 sec	Ro= 166.000 Nm	Azo= 233.000 Deg	Zo= 7400 ft	Head= 233.000 Deg	
+1	FIX289	Flies		250.000	Nm/h
+2	FIX289	Flies		201.000	Seconds
+ 					
+VAR289	Transponder1	1313	521	Set2	
+t0=2.589 sec	Ro= 165.000 Nm	Azo= 234.043 Deg	Zo= 7500 ft	Head= 234.043 Deg	
+1	VAR289	Flies		250.000	Nm/h
+2	VAR289	Flies		201.000	Seconds
+ 					
+FIX290	Transponder1	802	322	Set1	
+t0=2.722 sec	Ro= 166.000 Nm	Azo= 246.047 Deg	Zo= 5300 ft	Head= 246.047 Deg	
+1	FIX290	Flies		250.000	Nm/h
+2	FIX290	Flies		201.000	Seconds
+ 					
+VAR290	Transponder1	1314	522	Set2	
+t0=2.722 sec	Ro= 165.000 Nm	Azo= 245.000 Deg	Zo= 5400 ft	Head= 245.000 Deg	
+1	VAR290	Flies		250.000	Nm/h
+2	VAR290	Flies		201.000	Seconds
+ 					
+FIX291	Transponder1	803	323	Set1	
+t0=2.856 sec	Ro= 166.000 Nm	Azo= 257.000 Deg	Zo= 9800 ft	Head= 257.000 Deg	
+1	FIX291	Flies		250.000	Nm/h
+2	FIX291	Flies		201.000	Seconds
+ 					
+VAR291	Transponder1	1315	523	Set2	
+t0=2.856 sec	Ro= 165.000 Nm	Azo= 258.050 Deg	Zo= 9900 ft	Head= 258.050 Deg	
+1	VAR291	Flies		250.000	Nm/h
+2	VAR291	Flies		201.000	Seconds
+ 					
+FIX292	Transponder1	804	324	Set1	
+t0=2.989 sec	Ro= 166.000 Nm	Azo= 270.054 Deg	Zo= 4200 ft	Head= 270.054 Deg	
+1	FIX292	Flies		250.000	Nm/h
+2	FIX292	Flies		201.000	Seconds
+ 					
+VAR292	Transponder1	1316	524	Set2	
+t0=2.989 sec	Ro= 165.000 Nm	Azo= 269.000 Deg	Zo= 4300 ft	Head= 269.000 Deg	
+1	VAR292	Flies		250.000	Nm/h
+2	VAR292	Flies		201.000	Seconds
+ 					
+FIX293	Transponder1	805	325	Set1	
+t0=3.122 sec	Ro= 166.000 Nm	Azo= 281.000 Deg	Zo= 6000 ft	Head= 281.000 Deg	
+1	FIX293	Flies		250.000	Nm/h
+2	FIX293	Flies		201.000	Seconds
+ 					
+VAR293	Transponder1	1317	525	Set2	
+t0=3.122 sec	Ro= 165.000 Nm	Azo= 282.057 Deg	Zo= 6100 ft	Head= 282.057 Deg	
+1	VAR293	Flies		250.000	Nm/h
+2	VAR293	Flies		201.000	Seconds
+ 					
+FIX294	Transponder1	806	326	Set1	
+t0=3.256 sec	Ro= 166.000 Nm	Azo= 294.061 Deg	Zo= 1600 ft	Head= 294.061 Deg	
+1	FIX294	Flies		250.000	Nm/h
+2	FIX294	Flies		201.000	Seconds
+ 					
+VAR294	Transponder1	1318	526	Set2	
+t0=3.256 sec	Ro= 165.000 Nm	Azo= 293.000 Deg	Zo= 1700 ft	Head= 293.000 Deg	
+1	VAR294	Flies		250.000	Nm/h
+2	VAR294	Flies		201.000	Seconds
+ 					
+FIX295	Transponder1	807	327	Set1	
+t0=3.389 sec	Ro= 166.000 Nm	Azo= 305.000 Deg	Zo= 8400 ft	Head= 305.000 Deg	
+1	FIX295	Flies		250.000	Nm/h
+2	FIX295	Flies		201.000	Seconds
+ 					
+VAR295	Transponder1	1319	527	Set2	
+t0=3.389 sec	Ro= 165.000 Nm	Azo= 306.065 Deg	Zo= 8500 ft	Head= 306.065 Deg	
+1	VAR295	Flies		250.000	Nm/h
+2	VAR295	Flies		201.000	Seconds
+ 					
+FIX296	Transponder1	808	328	Set1	
+t0=3.522 sec	Ro= 166.000 Nm	Azo= 318.068 Deg	Zo= 4800 ft	Head= 318.068 Deg	
+1	FIX296	Flies		250.000	Nm/h
+2	FIX296	Flies		201.000	Seconds
+ 					
+VAR296	Transponder1	1320	528	Set2	
+t0=3.522 sec	Ro= 165.000 Nm	Azo= 317.000 Deg	Zo= 4900 ft	Head= 317.000 Deg	
+1	VAR296	Flies		250.000	Nm/h
+2	VAR296	Flies		201.000	Seconds
+ 					
+FIX297	Transponder1	809	329	Set1	
+t0=3.656 sec	Ro= 166.000 Nm	Azo= 329.000 Deg	Zo= 8300 ft	Head= 329.000 Deg	
+1	FIX297	Flies		250.000	Nm/h
+2	FIX297	Flies		201.000	Seconds
+ 					
+VAR297	Transponder1	1321	529	Set2	
+t0=3.656 sec	Ro= 165.000 Nm	Azo= 330.072 Deg	Zo= 8400 ft	Head= 330.072 Deg	
+1	VAR297	Flies		250.000	Nm/h
+2	VAR297	Flies		201.000	Seconds
+ 					
+FIX298	Transponder1	810	32A	Set1	
+t0=3.789 sec	Ro= 166.000 Nm	Azo= 342.075 Deg	Zo= 1700 ft	Head= 342.075 Deg	
+1	FIX298	Flies		250.000	Nm/h
+2	FIX298	Flies		201.000	Seconds
+ 					
+VAR298	Transponder1	1322	52A	Set2	
+t0=3.789 sec	Ro= 165.000 Nm	Azo= 341.000 Deg	Zo= 1800 ft	Head= 341.000 Deg	
+1	VAR298	Flies		250.000	Nm/h
+2	VAR298	Flies		201.000	Seconds
+ 					
+FIX299	Transponder1	811	32B	Set1	
+t0=3.922 sec	Ro= 166.000 Nm	Azo= 353.000 Deg	Zo= 1600 ft	Head= 353.000 Deg	
+1	FIX299	Flies		250.000	Nm/h
+2	FIX299	Flies		201.000	Seconds
+ 					
+VAR299	Transponder1	1323	52B	Set2	
+t0=3.922 sec	Ro= 165.000 Nm	Azo= 354.079 Deg	Zo= 1700 ft	Head= 354.079 Deg	
+1	VAR299	Flies		250.000	Nm/h
+2	VAR299	Flies		201.000	Seconds
+ 					
+FIX300	Transponder1	812	32C	Set1	
+t0=0.056 sec	Ro= 181.000 Nm	Azo= 6.083 Deg	Zo= 9200 ft	Head= 6.083 Deg	
+1	FIX300	Flies		250.000	Nm/h
+2	FIX300	Flies		201.000	Seconds
+ 					
+VAR300	Transponder1	1324	52C	Set2	
+t0=0.056 sec	Ro= 180.000 Nm	Azo= 5.000 Deg	Zo= 9300 ft	Head= 5.000 Deg	
+1	VAR300	Flies		250.000	Nm/h
+2	VAR300	Flies		201.000	Seconds
+ 					
+FIX301	Transponder1	813	32D	Set1	
+t0=0.189 sec	Ro= 181.000 Nm	Azo= 17.000 Deg	Zo= 4700 ft	Head= 17.000 Deg	
+1	FIX301	Flies		250.000	Nm/h
+2	FIX301	Flies		201.000	Seconds
+ 					
+VAR301	Transponder1	1325	52D	Set2	
+t0=0.189 sec	Ro= 180.000 Nm	Azo= 18.086 Deg	Zo= 4800 ft	Head= 18.086 Deg	
+1	VAR301	Flies		250.000	Nm/h
+2	VAR301	Flies		201.000	Seconds
+ 					
+FIX302	Transponder1	814	32E	Set1	
+t0=0.322 sec	Ro= 181.000 Nm	Azo= 30.090 Deg	Zo= 9900 ft	Head= 30.090 Deg	
+1	FIX302	Flies		250.000	Nm/h
+2	FIX302	Flies		201.000	Seconds
+ 					
+VAR302	Transponder1	1326	52E	Set2	
+t0=0.322 sec	Ro= 180.000 Nm	Azo= 29.000 Deg	Zo= 10000 ft	Head= 29.000 Deg	
+1	VAR302	Flies		250.000	Nm/h
+2	VAR302	Flies		201.000	Seconds
+ 					
+FIX303	Transponder1	815	32F	Set1	
+t0=0.456 sec	Ro= 181.000 Nm	Azo= 41.000 Deg	Zo= 4900 ft	Head= 41.000 Deg	
+1	FIX303	Flies		250.000	Nm/h
+2	FIX303	Flies		201.000	Seconds
+ 					
+VAR303	Transponder1	1327	52F	Set2	
+t0=0.456 sec	Ro= 180.000 Nm	Azo= 42.094 Deg	Zo= 5000 ft	Head= 42.094 Deg	
+1	VAR303	Flies		250.000	Nm/h
+2	VAR303	Flies		201.000	Seconds
+ 					
+FIX304	Transponder1	816	330	Set1	
+t0=0.589 sec	Ro= 181.000 Nm	Azo= 54.097 Deg	Zo= 1300 ft	Head= 54.097 Deg	
+1	FIX304	Flies		250.000	Nm/h
+2	FIX304	Flies		201.000	Seconds
+ 					
+VAR304	Transponder1	1328	530	Set2	
+t0=0.589 sec	Ro= 180.000 Nm	Azo= 53.000 Deg	Zo= 1400 ft	Head= 53.000 Deg	
+1	VAR304	Flies		250.000	Nm/h
+2	VAR304	Flies		201.000	Seconds
+ 					
+FIX305	Transponder1	817	331	Set1	
+t0=0.722 sec	Ro= 181.000 Nm	Azo= 65.000 Deg	Zo= 10000 ft	Head= 65.000 Deg	
+1	FIX305	Flies		250.000	Nm/h
+2	FIX305	Flies		201.000	Seconds
+ 					
+VAR305	Transponder1	1329	531	Set2	
+t0=0.722 sec	Ro= 180.000 Nm	Azo= 66.101 Deg	Zo= 10100 ft	Head= 66.101 Deg	
+1	VAR305	Flies		250.000	Nm/h
+2	VAR305	Flies		201.000	Seconds
+ 					
+FIX306	Transponder1	818	332	Set1	
+t0=0.856 sec	Ro= 181.000 Nm	Azo= 78.104 Deg	Zo= 7800 ft	Head= 78.104 Deg	
+1	FIX306	Flies		250.000	Nm/h
+2	FIX306	Flies		201.000	Seconds
+ 					
+VAR306	Transponder1	1330	532	Set2	
+t0=0.856 sec	Ro= 180.000 Nm	Azo= 77.000 Deg	Zo= 7900 ft	Head= 77.000 Deg	
+1	VAR306	Flies		250.000	Nm/h
+2	VAR306	Flies		201.000	Seconds
+ 					
+FIX307	Transponder1	819	333	Set1	
+t0=0.989 sec	Ro= 181.000 Nm	Azo= 89.000 Deg	Zo= 3100 ft	Head= 89.000 Deg	
+1	FIX307	Flies		250.000	Nm/h
+2	FIX307	Flies		201.000	Seconds
+ 					
+VAR307	Transponder1	1331	533	Set2	
+t0=0.989 sec	Ro= 180.000 Nm	Azo= 90.108 Deg	Zo= 3200 ft	Head= 90.108 Deg	
+1	VAR307	Flies		250.000	Nm/h
+2	VAR307	Flies		201.000	Seconds
+ 					
+FIX308	Transponder1	820	334	Set1	
+t0=1.122 sec	Ro= 181.000 Nm	Azo= 102.112 Deg	Zo= 1100 ft	Head= 102.112 Deg	
+1	FIX308	Flies		250.000	Nm/h
+2	FIX308	Flies		201.000	Seconds
+ 					
+VAR308	Transponder1	1332	534	Set2	
+t0=1.122 sec	Ro= 180.000 Nm	Azo= 101.000 Deg	Zo= 1200 ft	Head= 101.000 Deg	
+1	VAR308	Flies		250.000	Nm/h
+2	VAR308	Flies		201.000	Seconds
+ 					
+FIX309	Transponder1	821	335	Set1	
+t0=1.256 sec	Ro= 181.000 Nm	Azo= 113.000 Deg	Zo= 1100 ft	Head= 113.000 Deg	
+1	FIX309	Flies		250.000	Nm/h
+2	FIX309	Flies		201.000	Seconds
+ 					
+VAR309	Transponder1	1333	535	Set2	
+t0=1.256 sec	Ro= 180.000 Nm	Azo= 114.115 Deg	Zo= 1200 ft	Head= 114.115 Deg	
+1	VAR309	Flies		250.000	Nm/h
+2	VAR309	Flies		201.000	Seconds
+ 					
+FIX310	Transponder1	822	336	Set1	
+t0=1.389 sec	Ro= 181.000 Nm	Azo= 126.119 Deg	Zo= 2800 ft	Head= 126.119 Deg	
+1	FIX310	Flies		250.000	Nm/h
+2	FIX310	Flies		201.000	Seconds
+ 					
+VAR310	Transponder1	1334	536	Set2	
+t0=1.389 sec	Ro= 180.000 Nm	Azo= 125.000 Deg	Zo= 2900 ft	Head= 125.000 Deg	
+1	VAR310	Flies		250.000	Nm/h
+2	VAR310	Flies		201.000	Seconds
+ 					
+FIX311	Transponder1	823	337	Set1	
+t0=1.522 sec	Ro= 181.000 Nm	Azo= 137.000 Deg	Zo= 6000 ft	Head= 137.000 Deg	
+1	FIX311	Flies		250.000	Nm/h
+2	FIX311	Flies		201.000	Seconds
+ 					
+VAR311	Transponder1	1335	537	Set2	
+t0=1.522 sec	Ro= 180.000 Nm	Azo= 138.122 Deg	Zo= 6100 ft	Head= 138.122 Deg	
+1	VAR311	Flies		250.000	Nm/h
+2	VAR311	Flies		201.000	Seconds
+ 					
+FIX312	Transponder1	824	338	Set1	
+t0=1.656 sec	Ro= 181.000 Nm	Azo= 150.126 Deg	Zo= 6300 ft	Head= 150.126 Deg	
+1	FIX312	Flies		250.000	Nm/h
+2	FIX312	Flies		201.000	Seconds
+ 					
+VAR312	Transponder1	1336	538	Set2	
+t0=1.656 sec	Ro= 180.000 Nm	Azo= 149.000 Deg	Zo= 6400 ft	Head= 149.000 Deg	
+1	VAR312	Flies		250.000	Nm/h
+2	VAR312	Flies		201.000	Seconds
+ 					
+FIX313	Transponder1	825	339	Set1	
+t0=1.789 sec	Ro= 181.000 Nm	Azo= 161.000 Deg	Zo= 5300 ft	Head= 161.000 Deg	
+1	FIX313	Flies		250.000	Nm/h
+2	FIX313	Flies		201.000	Seconds
+ 					
+VAR313	Transponder1	1337	539	Set2	
+t0=1.789 sec	Ro= 180.000 Nm	Azo= 162.130 Deg	Zo= 5400 ft	Head= 162.130 Deg	
+1	VAR313	Flies		250.000	Nm/h
+2	VAR313	Flies		201.000	Seconds
+ 					
+FIX314	Transponder1	826	33A	Set1	
+t0=1.922 sec	Ro= 181.000 Nm	Azo= 174.133 Deg	Zo= 2000 ft	Head= 174.133 Deg	
+1	FIX314	Flies		250.000	Nm/h
+2	FIX314	Flies		201.000	Seconds
+ 					
+VAR314	Transponder1	1338	53A	Set2	
+t0=1.922 sec	Ro= 180.000 Nm	Azo= 173.000 Deg	Zo= 2100 ft	Head= 173.000 Deg	
+1	VAR314	Flies		250.000	Nm/h
+2	VAR314	Flies		201.000	Seconds
+ 					
+FIX315	Transponder1	827	33B	Set1	
+t0=2.056 sec	Ro= 181.000 Nm	Azo= 185.000 Deg	Zo= 3700 ft	Head= 185.000 Deg	
+1	FIX315	Flies		250.000	Nm/h
+2	FIX315	Flies		201.000	Seconds
+ 					
+VAR315	Transponder1	1339	53B	Set2	
+t0=2.056 sec	Ro= 180.000 Nm	Azo= 186.137 Deg	Zo= 3800 ft	Head= 186.137 Deg	
+1	VAR315	Flies		250.000	Nm/h
+2	VAR315	Flies		201.000	Seconds
+ 					
+FIX316	Transponder1	828	33C	Set1	
+t0=2.189 sec	Ro= 181.000 Nm	Azo= 198.140 Deg	Zo= 2600 ft	Head= 198.140 Deg	
+1	FIX316	Flies		250.000	Nm/h
+2	FIX316	Flies		201.000	Seconds
+ 					
+VAR316	Transponder1	1340	53C	Set2	
+t0=2.189 sec	Ro= 180.000 Nm	Azo= 197.000 Deg	Zo= 2700 ft	Head= 197.000 Deg	
+1	VAR316	Flies		250.000	Nm/h
+2	VAR316	Flies		201.000	Seconds
+ 					
+FIX317	Transponder1	829	33D	Set1	
+t0=2.322 sec	Ro= 181.000 Nm	Azo= 209.000 Deg	Zo= 2500 ft	Head= 209.000 Deg	
+1	FIX317	Flies		250.000	Nm/h
+2	FIX317	Flies		201.000	Seconds
+ 					
+VAR317	Transponder1	1341	53D	Set2	
+t0=2.322 sec	Ro= 180.000 Nm	Azo= 210.144 Deg	Zo= 2600 ft	Head= 210.144 Deg	
+1	VAR317	Flies		250.000	Nm/h
+2	VAR317	Flies		201.000	Seconds
+ 					
+FIX318	Transponder1	830	33E	Set1	
+t0=2.456 sec	Ro= 181.000 Nm	Azo= 222.148 Deg	Zo= 3800 ft	Head= 222.148 Deg	
+1	FIX318	Flies		250.000	Nm/h
+2	FIX318	Flies		201.000	Seconds
+ 					
+VAR318	Transponder1	1342	53E	Set2	
+t0=2.456 sec	Ro= 180.000 Nm	Azo= 221.000 Deg	Zo= 3900 ft	Head= 221.000 Deg	
+1	VAR318	Flies		250.000	Nm/h
+2	VAR318	Flies		201.000	Seconds
+ 					
+FIX319	Transponder1	831	33F	Set1	
+t0=2.589 sec	Ro= 181.000 Nm	Azo= 233.000 Deg	Zo= 3100 ft	Head= 233.000 Deg	
+1	FIX319	Flies		250.000	Nm/h
+2	FIX319	Flies		201.000	Seconds
+ 					
+VAR319	Transponder1	1343	53F	Set2	
+t0=2.589 sec	Ro= 180.000 Nm	Azo= 234.151 Deg	Zo= 3200 ft	Head= 234.151 Deg	
+1	VAR319	Flies		250.000	Nm/h
+2	VAR319	Flies		201.000	Seconds
+ 					
+FIX320	Transponder1	832	340	Set1	
+t0=2.722 sec	Ro= 181.000 Nm	Azo= 246.155 Deg	Zo= 2100 ft	Head= 246.155 Deg	
+1	FIX320	Flies		250.000	Nm/h
+2	FIX320	Flies		201.000	Seconds
+ 					
+VAR320	Transponder1	1344	540	Set2	
+t0=2.722 sec	Ro= 180.000 Nm	Azo= 245.000 Deg	Zo= 2200 ft	Head= 245.000 Deg	
+1	VAR320	Flies		250.000	Nm/h
+2	VAR320	Flies		201.000	Seconds
+ 					
+FIX321	Transponder1	833	341	Set1	
+t0=2.856 sec	Ro= 181.000 Nm	Azo= 257.000 Deg	Zo= 7900 ft	Head= 257.000 Deg	
+1	FIX321	Flies		250.000	Nm/h
+2	FIX321	Flies		201.000	Seconds
+ 					
+VAR321	Transponder1	1345	541	Set2	
+t0=2.856 sec	Ro= 180.000 Nm	Azo= 258.158 Deg	Zo= 8000 ft	Head= 258.158 Deg	
+1	VAR321	Flies		250.000	Nm/h
+2	VAR321	Flies		201.000	Seconds
+ 					
+FIX322	Transponder1	834	342	Set1	
+t0=2.989 sec	Ro= 181.000 Nm	Azo= 270.162 Deg	Zo= 1100 ft	Head= 270.162 Deg	
+1	FIX322	Flies		250.000	Nm/h
+2	FIX322	Flies		201.000	Seconds
+ 					
+VAR322	Transponder1	1346	542	Set2	
+t0=2.989 sec	Ro= 180.000 Nm	Azo= 269.000 Deg	Zo= 1200 ft	Head= 269.000 Deg	
+1	VAR322	Flies		250.000	Nm/h
+2	VAR322	Flies		201.000	Seconds
+ 					
+FIX323	Transponder1	835	343	Set1	
+t0=3.122 sec	Ro= 181.000 Nm	Azo= 281.000 Deg	Zo= 2700 ft	Head= 281.000 Deg	
+1	FIX323	Flies		250.000	Nm/h
+2	FIX323	Flies		201.000	Seconds
+ 					
+VAR323	Transponder1	1347	543	Set2	
+t0=3.122 sec	Ro= 180.000 Nm	Azo= 282.166 Deg	Zo= 2800 ft	Head= 282.166 Deg	
+1	VAR323	Flies		250.000	Nm/h
+2	VAR323	Flies		201.000	Seconds
+ 					
+FIX324	Transponder1	836	344	Set1	
+t0=3.256 sec	Ro= 181.000 Nm	Azo= 294.169 Deg	Zo= 9300 ft	Head= 294.169 Deg	
+1	FIX324	Flies		250.000	Nm/h
+2	FIX324	Flies		201.000	Seconds
+ 					
+VAR324	Transponder1	1348	544	Set2	
+t0=3.256 sec	Ro= 180.000 Nm	Azo= 293.000 Deg	Zo= 9400 ft	Head= 293.000 Deg	
+1	VAR324	Flies		250.000	Nm/h
+2	VAR324	Flies		201.000	Seconds
+ 					
+FIX325	Transponder1	837	345	Set1	
+t0=3.389 sec	Ro= 181.000 Nm	Azo= 305.000 Deg	Zo= 3300 ft	Head= 305.000 Deg	
+1	FIX325	Flies		250.000	Nm/h
+2	FIX325	Flies		201.000	Seconds
+ 					
+VAR325	Transponder1	1349	545	Set2	
+t0=3.389 sec	Ro= 180.000 Nm	Azo= 306.173 Deg	Zo= 3400 ft	Head= 306.173 Deg	
+1	VAR325	Flies		250.000	Nm/h
+2	VAR325	Flies		201.000	Seconds
+ 					
+FIX326	Transponder1	838	346	Set1	
+t0=3.522 sec	Ro= 181.000 Nm	Azo= 318.177 Deg	Zo= 8100 ft	Head= 318.177 Deg	
+1	FIX326	Flies		250.000	Nm/h
+2	FIX326	Flies		201.000	Seconds
+ 					
+VAR326	Transponder1	1350	546	Set2	
+t0=3.522 sec	Ro= 180.000 Nm	Azo= 317.000 Deg	Zo= 8200 ft	Head= 317.000 Deg	
+1	VAR326	Flies		250.000	Nm/h
+2	VAR326	Flies		201.000	Seconds
+ 					
+FIX327	Transponder1	839	347	Set1	
+t0=3.656 sec	Ro= 181.000 Nm	Azo= 329.000 Deg	Zo= 9200 ft	Head= 329.000 Deg	
+1	FIX327	Flies		250.000	Nm/h
+2	FIX327	Flies		201.000	Seconds
+ 					
+VAR327	Transponder1	1351	547	Set2	
+t0=3.656 sec	Ro= 180.000 Nm	Azo= 330.180 Deg	Zo= 9300 ft	Head= 330.180 Deg	
+1	VAR327	Flies		250.000	Nm/h
+2	VAR327	Flies		201.000	Seconds
+ 					
+FIX328	Transponder1	840	348	Set1	
+t0=3.789 sec	Ro= 181.000 Nm	Azo= 342.184 Deg	Zo= 6100 ft	Head= 342.184 Deg	
+1	FIX328	Flies		250.000	Nm/h
+2	FIX328	Flies		201.000	Seconds
+ 					
+VAR328	Transponder1	1352	548	Set2	
+t0=3.789 sec	Ro= 180.000 Nm	Azo= 341.000 Deg	Zo= 6200 ft	Head= 341.000 Deg	
+1	VAR328	Flies		250.000	Nm/h
+2	VAR328	Flies		201.000	Seconds
+ 					
+FIX329	Transponder1	841	349	Set1	
+t0=3.922 sec	Ro= 181.000 Nm	Azo= 353.000 Deg	Zo= 4200 ft	Head= 353.000 Deg	
+1	FIX329	Flies		250.000	Nm/h
+2	FIX329	Flies		201.000	Seconds
+ 					
+VAR329	Transponder1	1353	549	Set2	
+t0=3.922 sec	Ro= 180.000 Nm	Azo= 354.187 Deg	Zo= 4300 ft	Head= 354.187 Deg	
+1	VAR329	Flies		250.000	Nm/h
+2	VAR329	Flies		201.000	Seconds
+ 					
+FIX330	Transponder1	842	34A	Set1	
+t0=0.056 sec	Ro= 196.000 Nm	Azo= 6.191 Deg	Zo= 1000 ft	Head= 6.191 Deg	
+1	FIX330	Flies		250.000	Nm/h
+2	FIX330	Flies		201.000	Seconds
+ 					
+VAR330	Transponder1	1354	54A	Set2	
+t0=0.056 sec	Ro= 195.000 Nm	Azo= 5.000 Deg	Zo= 1100 ft	Head= 5.000 Deg	
+1	VAR330	Flies		250.000	Nm/h
+2	VAR330	Flies		201.000	Seconds
+ 					
+FIX331	Transponder1	843	34B	Set1	
+t0=0.189 sec	Ro= 196.000 Nm	Azo= 17.000 Deg	Zo= 7300 ft	Head= 17.000 Deg	
+1	FIX331	Flies		250.000	Nm/h
+2	FIX331	Flies		201.000	Seconds
+ 					
+VAR331	Transponder1	1355	54B	Set2	
+t0=0.189 sec	Ro= 195.000 Nm	Azo= 18.195 Deg	Zo= 7400 ft	Head= 18.195 Deg	
+1	VAR331	Flies		250.000	Nm/h
+2	VAR331	Flies		201.000	Seconds
+ 					
+FIX332	Transponder1	844	34C	Set1	
+t0=0.322 sec	Ro= 196.000 Nm	Azo= 30.198 Deg	Zo= 7400 ft	Head= 30.198 Deg	
+1	FIX332	Flies		250.000	Nm/h
+2	FIX332	Flies		201.000	Seconds
+ 					
+VAR332	Transponder1	1356	54C	Set2	
+t0=0.322 sec	Ro= 195.000 Nm	Azo= 29.000 Deg	Zo= 7500 ft	Head= 29.000 Deg	
+1	VAR332	Flies		250.000	Nm/h
+2	VAR332	Flies		201.000	Seconds
+ 					
+FIX333	Transponder1	845	34D	Set1	
+t0=0.456 sec	Ro= 196.000 Nm	Azo= 41.000 Deg	Zo= 9400 ft	Head= 41.000 Deg	
+1	FIX333	Flies		250.000	Nm/h
+2	FIX333	Flies		201.000	Seconds
+ 					
+VAR333	Transponder1	1357	54D	Set2	
+t0=0.456 sec	Ro= 195.000 Nm	Azo= 42.202 Deg	Zo= 9500 ft	Head= 42.202 Deg	
+1	VAR333	Flies		250.000	Nm/h
+2	VAR333	Flies		201.000	Seconds
+ 					
+FIX334	Transponder1	846	34E	Set1	
+t0=0.589 sec	Ro= 196.000 Nm	Azo= 54.205 Deg	Zo= 2700 ft	Head= 54.205 Deg	
+1	FIX334	Flies		250.000	Nm/h
+2	FIX334	Flies		201.000	Seconds
+ 					
+VAR334	Transponder1	1358	54E	Set2	
+t0=0.589 sec	Ro= 195.000 Nm	Azo= 53.000 Deg	Zo= 2800 ft	Head= 53.000 Deg	
+1	VAR334	Flies		250.000	Nm/h
+2	VAR334	Flies		201.000	Seconds
+ 					
+FIX335	Transponder1	847	34F	Set1	
+t0=0.722 sec	Ro= 196.000 Nm	Azo= 65.000 Deg	Zo= 7700 ft	Head= 65.000 Deg	
+1	FIX335	Flies		250.000	Nm/h
+2	FIX335	Flies		201.000	Seconds
+ 					
+VAR335	Transponder1	1359	54F	Set2	
+t0=0.722 sec	Ro= 195.000 Nm	Azo= 66.209 Deg	Zo= 7800 ft	Head= 66.209 Deg	
+1	VAR335	Flies		250.000	Nm/h
+2	VAR335	Flies		201.000	Seconds
+ 					
+FIX336	Transponder1	848	350	Set1	
+t0=0.856 sec	Ro= 196.000 Nm	Azo= 78.213 Deg	Zo= 9800 ft	Head= 78.213 Deg	
+1	FIX336	Flies		250.000	Nm/h
+2	FIX336	Flies		201.000	Seconds
+ 					
+VAR336	Transponder1	1360	550	Set2	
+t0=0.856 sec	Ro= 195.000 Nm	Azo= 77.000 Deg	Zo= 9900 ft	Head= 77.000 Deg	
+1	VAR336	Flies		250.000	Nm/h
+2	VAR336	Flies		201.000	Seconds
+ 					
+FIX337	Transponder1	849	351	Set1	
+t0=0.989 sec	Ro= 196.000 Nm	Azo= 89.000 Deg	Zo= 8600 ft	Head= 89.000 Deg	
+1	FIX337	Flies		250.000	Nm/h
+2	FIX337	Flies		201.000	Seconds
+ 					
+VAR337	Transponder1	1361	551	Set2	
+t0=0.989 sec	Ro= 195.000 Nm	Azo= 90.216 Deg	Zo= 8700 ft	Head= 90.216 Deg	
+1	VAR337	Flies		250.000	Nm/h
+2	VAR337	Flies		201.000	Seconds
+ 					
+FIX338	Transponder1	850	352	Set1	
+t0=1.122 sec	Ro= 196.000 Nm	Azo= 102.220 Deg	Zo= 9800 ft	Head= 102.220 Deg	
+1	FIX338	Flies		250.000	Nm/h
+2	FIX338	Flies		201.000	Seconds
+ 					
+VAR338	Transponder1	1362	552	Set2	
+t0=1.122 sec	Ro= 195.000 Nm	Azo= 101.000 Deg	Zo= 9900 ft	Head= 101.000 Deg	
+1	VAR338	Flies		250.000	Nm/h
+2	VAR338	Flies		201.000	Seconds
+ 					
+FIX339	Transponder1	851	353	Set1	
+t0=1.256 sec	Ro= 196.000 Nm	Azo= 113.000 Deg	Zo= 3000 ft	Head= 113.000 Deg	
+1	FIX339	Flies		250.000	Nm/h
+2	FIX339	Flies		201.000	Seconds
+ 					
+VAR339	Transponder1	1363	553	Set2	
+t0=1.256 sec	Ro= 195.000 Nm	Azo= 114.223 Deg	Zo= 3100 ft	Head= 114.223 Deg	
+1	VAR339	Flies		250.000	Nm/h
+2	VAR339	Flies		201.000	Seconds
+ 					
+FIX340	Transponder1	852	354	Set1	
+t0=1.389 sec	Ro= 196.000 Nm	Azo= 126.227 Deg	Zo= 4800 ft	Head= 126.227 Deg	
+1	FIX340	Flies		250.000	Nm/h
+2	FIX340	Flies		201.000	Seconds
+ 					
+VAR340	Transponder1	1364	554	Set2	
+t0=1.389 sec	Ro= 195.000 Nm	Azo= 125.000 Deg	Zo= 4900 ft	Head= 125.000 Deg	
+1	VAR340	Flies		250.000	Nm/h
+2	VAR340	Flies		201.000	Seconds
+ 					
+FIX341	Transponder1	853	355	Set1	
+t0=1.522 sec	Ro= 196.000 Nm	Azo= 137.000 Deg	Zo= 6700 ft	Head= 137.000 Deg	
+1	FIX341	Flies		250.000	Nm/h
+2	FIX341	Flies		201.000	Seconds
+ 					
+VAR341	Transponder1	1365	555	Set2	
+t0=1.522 sec	Ro= 195.000 Nm	Azo= 138.231 Deg	Zo= 6800 ft	Head= 138.231 Deg	
+1	VAR341	Flies		250.000	Nm/h
+2	VAR341	Flies		201.000	Seconds
+ 					
+FIX342	Transponder1	854	356	Set1	
+t0=1.656 sec	Ro= 196.000 Nm	Azo= 150.234 Deg	Zo= 3100 ft	Head= 150.234 Deg	
+1	FIX342	Flies		250.000	Nm/h
+2	FIX342	Flies		201.000	Seconds
+ 					
+VAR342	Transponder1	1366	556	Set2	
+t0=1.656 sec	Ro= 195.000 Nm	Azo= 149.000 Deg	Zo= 3200 ft	Head= 149.000 Deg	
+1	VAR342	Flies		250.000	Nm/h
+2	VAR342	Flies		201.000	Seconds
+ 					
+FIX343	Transponder1	855	357	Set1	
+t0=1.789 sec	Ro= 196.000 Nm	Azo= 161.000 Deg	Zo= 8600 ft	Head= 161.000 Deg	
+1	FIX343	Flies		250.000	Nm/h
+2	FIX343	Flies		201.000	Seconds
+ 					
+VAR343	Transponder1	1367	557	Set2	
+t0=1.789 sec	Ro= 195.000 Nm	Azo= 162.238 Deg	Zo= 8700 ft	Head= 162.238 Deg	
+1	VAR343	Flies		250.000	Nm/h
+2	VAR343	Flies		201.000	Seconds
+ 					
+FIX344	Transponder1	856	358	Set1	
+t0=1.922 sec	Ro= 196.000 Nm	Azo= 174.242 Deg	Zo= 7000 ft	Head= 174.242 Deg	
+1	FIX344	Flies		250.000	Nm/h
+2	FIX344	Flies		201.000	Seconds
+ 					
+VAR344	Transponder1	1368	558	Set2	
+t0=1.922 sec	Ro= 195.000 Nm	Azo= 173.000 Deg	Zo= 7100 ft	Head= 173.000 Deg	
+1	VAR344	Flies		250.000	Nm/h
+2	VAR344	Flies		201.000	Seconds
+ 					
+FIX345	Transponder1	857	359	Set1	
+t0=2.056 sec	Ro= 196.000 Nm	Azo= 185.000 Deg	Zo= 7500 ft	Head= 185.000 Deg	
+1	FIX345	Flies		250.000	Nm/h
+2	FIX345	Flies		201.000	Seconds
+ 					
+VAR345	Transponder1	1369	559	Set2	
+t0=2.056 sec	Ro= 195.000 Nm	Azo= 186.245 Deg	Zo= 7600 ft	Head= 186.245 Deg	
+1	VAR345	Flies		250.000	Nm/h
+2	VAR345	Flies		201.000	Seconds
+ 					
+FIX346	Transponder1	858	35A	Set1	
+t0=2.189 sec	Ro= 196.000 Nm	Azo= 198.249 Deg	Zo= 7100 ft	Head= 198.249 Deg	
+1	FIX346	Flies		250.000	Nm/h
+2	FIX346	Flies		201.000	Seconds
+ 					
+VAR346	Transponder1	1370	55A	Set2	
+t0=2.189 sec	Ro= 195.000 Nm	Azo= 197.000 Deg	Zo= 7200 ft	Head= 197.000 Deg	
+1	VAR346	Flies		250.000	Nm/h
+2	VAR346	Flies		201.000	Seconds
+ 					
+FIX347	Transponder1	859	35B	Set1	
+t0=2.322 sec	Ro= 196.000 Nm	Azo= 209.000 Deg	Zo= 8600 ft	Head= 209.000 Deg	
+1	FIX347	Flies		250.000	Nm/h
+2	FIX347	Flies		201.000	Seconds
+ 					
+VAR347	Transponder1	1371	55B	Set2	
+t0=2.322 sec	Ro= 195.000 Nm	Azo= 210.252 Deg	Zo= 8700 ft	Head= 210.252 Deg	
+1	VAR347	Flies		250.000	Nm/h
+2	VAR347	Flies		201.000	Seconds
+ 					
+FIX348	Transponder1	860	35C	Set1	
+t0=2.456 sec	Ro= 196.000 Nm	Azo= 222.256 Deg	Zo= 5100 ft	Head= 222.256 Deg	
+1	FIX348	Flies		250.000	Nm/h
+2	FIX348	Flies		201.000	Seconds
+ 					
+VAR348	Transponder1	1372	55C	Set2	
+t0=2.456 sec	Ro= 195.000 Nm	Azo= 221.000 Deg	Zo= 5200 ft	Head= 221.000 Deg	
+1	VAR348	Flies		250.000	Nm/h
+2	VAR348	Flies		201.000	Seconds
+ 					
+FIX349	Transponder1	861	35D	Set1	
+t0=2.589 sec	Ro= 196.000 Nm	Azo= 233.000 Deg	Zo= 6400 ft	Head= 233.000 Deg	
+1	FIX349	Flies		250.000	Nm/h
+2	FIX349	Flies		201.000	Seconds
+ 					
+VAR349	Transponder1	1373	55D	Set2	
+t0=2.589 sec	Ro= 195.000 Nm	Azo= 234.260 Deg	Zo= 6500 ft	Head= 234.260 Deg	
+1	VAR349	Flies		250.000	Nm/h
+2	VAR349	Flies		201.000	Seconds
+ 					
+FIX350	Transponder1	862	35E	Set1	
+t0=2.722 sec	Ro= 196.000 Nm	Azo= 246.263 Deg	Zo= 1100 ft	Head= 246.263 Deg	
+1	FIX350	Flies		250.000	Nm/h
+2	FIX350	Flies		201.000	Seconds
+ 					
+VAR350	Transponder1	1374	55E	Set2	
+t0=2.722 sec	Ro= 195.000 Nm	Azo= 245.000 Deg	Zo= 1200 ft	Head= 245.000 Deg	
+1	VAR350	Flies		250.000	Nm/h
+2	VAR350	Flies		201.000	Seconds
+ 					
+FIX351	Transponder1	863	35F	Set1	
+t0=2.856 sec	Ro= 196.000 Nm	Azo= 257.000 Deg	Zo= 2900 ft	Head= 257.000 Deg	
+1	FIX351	Flies		250.000	Nm/h
+2	FIX351	Flies		201.000	Seconds
+ 					
+VAR351	Transponder1	1375	55F	Set2	
+t0=2.856 sec	Ro= 195.000 Nm	Azo= 258.267 Deg	Zo= 3000 ft	Head= 258.267 Deg	
+1	VAR351	Flies		250.000	Nm/h
+2	VAR351	Flies		201.000	Seconds
+ 					
+FIX352	Transponder1	864	360	Set1	
+t0=2.989 sec	Ro= 196.000 Nm	Azo= 270.270 Deg	Zo= 4500 ft	Head= 270.270 Deg	
+1	FIX352	Flies		250.000	Nm/h
+2	FIX352	Flies		201.000	Seconds
+ 					
+VAR352	Transponder1	1376	560	Set2	
+t0=2.989 sec	Ro= 195.000 Nm	Azo= 269.000 Deg	Zo= 4600 ft	Head= 269.000 Deg	
+1	VAR352	Flies		250.000	Nm/h
+2	VAR352	Flies		201.000	Seconds
+ 					
+FIX353	Transponder1	865	361	Set1	
+t0=3.122 sec	Ro= 196.000 Nm	Azo= 281.000 Deg	Zo= 4800 ft	Head= 281.000 Deg	
+1	FIX353	Flies		250.000	Nm/h
+2	FIX353	Flies		201.000	Seconds
+ 					
+VAR353	Transponder1	1377	561	Set2	
+t0=3.122 sec	Ro= 195.000 Nm	Azo= 282.274 Deg	Zo= 4900 ft	Head= 282.274 Deg	
+1	VAR353	Flies		250.000	Nm/h
+2	VAR353	Flies		201.000	Seconds
+ 					
+FIX354	Transponder1	866	362	Set1	
+t0=3.256 sec	Ro= 196.000 Nm	Azo= 294.278 Deg	Zo= 8000 ft	Head= 294.278 Deg	
+1	FIX354	Flies		250.000	Nm/h
+2	FIX354	Flies		201.000	Seconds
+ 					
+VAR354	Transponder1	1378	562	Set2	
+t0=3.256 sec	Ro= 195.000 Nm	Azo= 293.000 Deg	Zo= 8100 ft	Head= 293.000 Deg	
+1	VAR354	Flies		250.000	Nm/h
+2	VAR354	Flies		201.000	Seconds
+ 					
+FIX355	Transponder1	867	363	Set1	
+t0=3.389 sec	Ro= 196.000 Nm	Azo= 305.000 Deg	Zo= 8900 ft	Head= 305.000 Deg	
+1	FIX355	Flies		250.000	Nm/h
+2	FIX355	Flies		201.000	Seconds
+ 					
+VAR355	Transponder1	1379	563	Set2	
+t0=3.389 sec	Ro= 195.000 Nm	Azo= 306.281 Deg	Zo= 9000 ft	Head= 306.281 Deg	
+1	VAR355	Flies		250.000	Nm/h
+2	VAR355	Flies		201.000	Seconds
+ 					
+FIX356	Transponder1	868	364	Set1	
+t0=3.522 sec	Ro= 196.000 Nm	Azo= 318.285 Deg	Zo= 4100 ft	Head= 318.285 Deg	
+1	FIX356	Flies		250.000	Nm/h
+2	FIX356	Flies		201.000	Seconds
+ 					
+VAR356	Transponder1	1380	564	Set2	
+t0=3.522 sec	Ro= 195.000 Nm	Azo= 317.000 Deg	Zo= 4200 ft	Head= 317.000 Deg	
+1	VAR356	Flies		250.000	Nm/h
+2	VAR356	Flies		201.000	Seconds
+ 					
+FIX357	Transponder1	869	365	Set1	
+t0=3.656 sec	Ro= 196.000 Nm	Azo= 329.000 Deg	Zo= 1200 ft	Head= 329.000 Deg	
+1	FIX357	Flies		250.000	Nm/h
+2	FIX357	Flies		201.000	Seconds
+ 					
+VAR357	Transponder1	1381	565	Set2	
+t0=3.656 sec	Ro= 195.000 Nm	Azo= 330.288 Deg	Zo= 1300 ft	Head= 330.288 Deg	
+1	VAR357	Flies		250.000	Nm/h
+2	VAR357	Flies		201.000	Seconds
+ 					
+FIX358	Transponder1	870	366	Set1	
+t0=3.789 sec	Ro= 196.000 Nm	Azo= 342.292 Deg	Zo= 8400 ft	Head= 342.292 Deg	
+1	FIX358	Flies		250.000	Nm/h
+2	FIX358	Flies		201.000	Seconds
+ 					
+VAR358	Transponder1	1382	566	Set2	
+t0=3.789 sec	Ro= 195.000 Nm	Azo= 341.000 Deg	Zo= 8500 ft	Head= 341.000 Deg	
+1	VAR358	Flies		250.000	Nm/h
+2	VAR358	Flies		201.000	Seconds
+ 					
+FIX359	Transponder1	871	367	Set1	
+t0=3.922 sec	Ro= 196.000 Nm	Azo= 353.000 Deg	Zo= 2900 ft	Head= 353.000 Deg	
+1	FIX359	Flies		250.000	Nm/h
+2	FIX359	Flies		201.000	Seconds
+ 					
+VAR359	Transponder1	1383	567	Set2	
+t0=3.922 sec	Ro= 195.000 Nm	Azo= 354.296 Deg	Zo= 3000 ft	Head= 354.296 Deg	
+1	VAR359	Flies		250.000	Nm/h
+2	VAR359	Flies		201.000	Seconds
+ 					
+FIX360	Transponder1	872	368	Set1	
+t0=0.056 sec	Ro= 211.000 Nm	Azo= 6.299 Deg	Zo= 2300 ft	Head= 6.299 Deg	
+1	FIX360	Flies		250.000	Nm/h
+2	FIX360	Flies		201.000	Seconds
+ 					
+VAR360	Transponder1	1384	568	Set2	
+t0=0.056 sec	Ro= 210.000 Nm	Azo= 5.000 Deg	Zo= 2400 ft	Head= 5.000 Deg	
+1	VAR360	Flies		250.000	Nm/h
+2	VAR360	Flies		201.000	Seconds
+ 					
+FIX361	Transponder1	873	369	Set1	
+t0=0.189 sec	Ro= 211.000 Nm	Azo= 17.000 Deg	Zo= 3900 ft	Head= 17.000 Deg	
+1	FIX361	Flies		250.000	Nm/h
+2	FIX361	Flies		201.000	Seconds
+ 					
+VAR361	Transponder1	1385	569	Set2	
+t0=0.189 sec	Ro= 210.000 Nm	Azo= 18.303 Deg	Zo= 4000 ft	Head= 18.303 Deg	
+1	VAR361	Flies		250.000	Nm/h
+2	VAR361	Flies		201.000	Seconds
+ 					
+FIX362	Transponder1	874	36A	Set1	
+t0=0.322 sec	Ro= 211.000 Nm	Azo= 30.306 Deg	Zo= 9800 ft	Head= 30.306 Deg	
+1	FIX362	Flies		250.000	Nm/h
+2	FIX362	Flies		201.000	Seconds
+ 					
+VAR362	Transponder1	1386	56A	Set2	
+t0=0.322 sec	Ro= 210.000 Nm	Azo= 29.000 Deg	Zo= 9900 ft	Head= 29.000 Deg	
+1	VAR362	Flies		250.000	Nm/h
+2	VAR362	Flies		201.000	Seconds
+ 					
+FIX363	Transponder1	875	36B	Set1	
+t0=0.456 sec	Ro= 211.000 Nm	Azo= 41.000 Deg	Zo= 9700 ft	Head= 41.000 Deg	
+1	FIX363	Flies		250.000	Nm/h
+2	FIX363	Flies		201.000	Seconds
+ 					
+VAR363	Transponder1	1387	56B	Set2	
+t0=0.456 sec	Ro= 210.000 Nm	Azo= 42.310 Deg	Zo= 9800 ft	Head= 42.310 Deg	
+1	VAR363	Flies		250.000	Nm/h
+2	VAR363	Flies		201.000	Seconds
+ 					
+FIX364	Transponder1	876	36C	Set1	
+t0=0.589 sec	Ro= 211.000 Nm	Azo= 54.314 Deg	Zo= 8300 ft	Head= 54.314 Deg	
+1	FIX364	Flies		250.000	Nm/h
+2	FIX364	Flies		201.000	Seconds
+ 					
+VAR364	Transponder1	1388	56C	Set2	
+t0=0.589 sec	Ro= 210.000 Nm	Azo= 53.000 Deg	Zo= 8400 ft	Head= 53.000 Deg	
+1	VAR364	Flies		250.000	Nm/h
+2	VAR364	Flies		201.000	Seconds
+ 					
+FIX365	Transponder1	877	36D	Set1	
+t0=0.722 sec	Ro= 211.000 Nm	Azo= 65.000 Deg	Zo= 3400 ft	Head= 65.000 Deg	
+1	FIX365	Flies		250.000	Nm/h
+2	FIX365	Flies		201.000	Seconds
+ 					
+VAR365	Transponder1	1389	56D	Set2	
+t0=0.722 sec	Ro= 210.000 Nm	Azo= 66.317 Deg	Zo= 3500 ft	Head= 66.317 Deg	
+1	VAR365	Flies		250.000	Nm/h
+2	VAR365	Flies		201.000	Seconds
+ 					
+FIX366	Transponder1	878	36E	Set1	
+t0=0.856 sec	Ro= 211.000 Nm	Azo= 78.321 Deg	Zo= 1300 ft	Head= 78.321 Deg	
+1	FIX366	Flies		250.000	Nm/h
+2	FIX366	Flies		201.000	Seconds
+ 					
+VAR366	Transponder1	1390	56E	Set2	
+t0=0.856 sec	Ro= 210.000 Nm	Azo= 77.000 Deg	Zo= 1400 ft	Head= 77.000 Deg	
+1	VAR366	Flies		250.000	Nm/h
+2	VAR366	Flies		201.000	Seconds
+ 					
+FIX367	Transponder1	879	36F	Set1	
+t0=0.989 sec	Ro= 211.000 Nm	Azo= 89.000 Deg	Zo= 7200 ft	Head= 89.000 Deg	
+1	FIX367	Flies		250.000	Nm/h
+2	FIX367	Flies		201.000	Seconds
+ 					
+VAR367	Transponder1	1391	56F	Set2	
+t0=0.989 sec	Ro= 210.000 Nm	Azo= 90.325 Deg	Zo= 7300 ft	Head= 90.325 Deg	
+1	VAR367	Flies		250.000	Nm/h
+2	VAR367	Flies		201.000	Seconds
+ 					
+FIX368	Transponder1	880	370	Set1	
+t0=1.122 sec	Ro= 211.000 Nm	Azo= 102.328 Deg	Zo= 8100 ft	Head= 102.328 Deg	
+1	FIX368	Flies		250.000	Nm/h
+2	FIX368	Flies		201.000	Seconds
+ 					
+VAR368	Transponder1	1392	570	Set2	
+t0=1.122 sec	Ro= 210.000 Nm	Azo= 101.000 Deg	Zo= 8200 ft	Head= 101.000 Deg	
+1	VAR368	Flies		250.000	Nm/h
+2	VAR368	Flies		201.000	Seconds
+ 					
+FIX369	Transponder1	881	371	Set1	
+t0=1.256 sec	Ro= 211.000 Nm	Azo= 113.000 Deg	Zo= 2200 ft	Head= 113.000 Deg	
+1	FIX369	Flies		250.000	Nm/h
+2	FIX369	Flies		201.000	Seconds
+ 					
+VAR369	Transponder1	1393	571	Set2	
+t0=1.256 sec	Ro= 210.000 Nm	Azo= 114.332 Deg	Zo= 2300 ft	Head= 114.332 Deg	
+1	VAR369	Flies		250.000	Nm/h
+2	VAR369	Flies		201.000	Seconds
+ 					
+FIX370	Transponder1	882	372	Set1	
+t0=1.389 sec	Ro= 211.000 Nm	Azo= 126.335 Deg	Zo= 4000 ft	Head= 126.335 Deg	
+1	FIX370	Flies		250.000	Nm/h
+2	FIX370	Flies		201.000	Seconds
+ 					
+VAR370	Transponder1	1394	572	Set2	
+t0=1.389 sec	Ro= 210.000 Nm	Azo= 125.000 Deg	Zo= 4100 ft	Head= 125.000 Deg	
+1	VAR370	Flies		250.000	Nm/h
+2	VAR370	Flies		201.000	Seconds
+ 					
+FIX371	Transponder1	883	373	Set1	
+t0=1.522 sec	Ro= 211.000 Nm	Azo= 137.000 Deg	Zo= 3800 ft	Head= 137.000 Deg	
+1	FIX371	Flies		250.000	Nm/h
+2	FIX371	Flies		201.000	Seconds
+ 					
+VAR371	Transponder1	1395	573	Set2	
+t0=1.522 sec	Ro= 210.000 Nm	Azo= 138.339 Deg	Zo= 3900 ft	Head= 138.339 Deg	
+1	VAR371	Flies		250.000	Nm/h
+2	VAR371	Flies		201.000	Seconds
+ 					
+FIX372	Transponder1	884	374	Set1	
+t0=1.656 sec	Ro= 211.000 Nm	Azo= 150.343 Deg	Zo= 7100 ft	Head= 150.343 Deg	
+1	FIX372	Flies		250.000	Nm/h
+2	FIX372	Flies		201.000	Seconds
+ 					
+VAR372	Transponder1	1396	574	Set2	
+t0=1.656 sec	Ro= 210.000 Nm	Azo= 149.000 Deg	Zo= 7200 ft	Head= 149.000 Deg	
+1	VAR372	Flies		250.000	Nm/h
+2	VAR372	Flies		201.000	Seconds
+ 					
+FIX373	Transponder1	885	375	Set1	
+t0=1.789 sec	Ro= 211.000 Nm	Azo= 161.000 Deg	Zo= 6500 ft	Head= 161.000 Deg	
+1	FIX373	Flies		250.000	Nm/h
+2	FIX373	Flies		201.000	Seconds
+ 					
+VAR373	Transponder1	1397	575	Set2	
+t0=1.789 sec	Ro= 210.000 Nm	Azo= 162.346 Deg	Zo= 6600 ft	Head= 162.346 Deg	
+1	VAR373	Flies		250.000	Nm/h
+2	VAR373	Flies		201.000	Seconds
+ 					
+FIX374	Transponder1	886	376	Set1	
+t0=1.922 sec	Ro= 211.000 Nm	Azo= 174.350 Deg	Zo= 6000 ft	Head= 174.350 Deg	
+1	FIX374	Flies		250.000	Nm/h
+2	FIX374	Flies		201.000	Seconds
+ 					
+VAR374	Transponder1	1398	576	Set2	
+t0=1.922 sec	Ro= 210.000 Nm	Azo= 173.000 Deg	Zo= 6100 ft	Head= 173.000 Deg	
+1	VAR374	Flies		250.000	Nm/h
+2	VAR374	Flies		201.000	Seconds
+ 					
+FIX375	Transponder1	887	377	Set1	
+t0=2.056 sec	Ro= 211.000 Nm	Azo= 185.000 Deg	Zo= 4000 ft	Head= 185.000 Deg	
+1	FIX375	Flies		250.000	Nm/h
+2	FIX375	Flies		201.000	Seconds
+ 					
+VAR375	Transponder1	1399	577	Set2	
+t0=2.056 sec	Ro= 210.000 Nm	Azo= 186.353 Deg	Zo= 4100 ft	Head= 186.353 Deg	
+1	VAR375	Flies		250.000	Nm/h
+2	VAR375	Flies		201.000	Seconds
+ 					
+FIX376	Transponder1	888	378	Set1	
+t0=2.189 sec	Ro= 211.000 Nm	Azo= 198.357 Deg	Zo= 4700 ft	Head= 198.357 Deg	
+1	FIX376	Flies		250.000	Nm/h
+2	FIX376	Flies		201.000	Seconds
+ 					
+VAR376	Transponder1	1400	578	Set2	
+t0=2.189 sec	Ro= 210.000 Nm	Azo= 197.000 Deg	Zo= 4800 ft	Head= 197.000 Deg	
+1	VAR376	Flies		250.000	Nm/h
+2	VAR376	Flies		201.000	Seconds
+ 					
+FIX377	Transponder1	889	379	Set1	
+t0=2.322 sec	Ro= 211.000 Nm	Azo= 209.000 Deg	Zo= 7100 ft	Head= 209.000 Deg	
+1	FIX377	Flies		250.000	Nm/h
+2	FIX377	Flies		201.000	Seconds
+ 					
+VAR377	Transponder1	1401	579	Set2	
+t0=2.322 sec	Ro= 210.000 Nm	Azo= 210.361 Deg	Zo= 7200 ft	Head= 210.361 Deg	
+1	VAR377	Flies		250.000	Nm/h
+2	VAR377	Flies		201.000	Seconds
+ 					
+FIX378	Transponder1	890	37A	Set1	
+t0=2.456 sec	Ro= 211.000 Nm	Azo= 222.364 Deg	Zo= 2600 ft	Head= 222.364 Deg	
+1	FIX378	Flies		250.000	Nm/h
+2	FIX378	Flies		201.000	Seconds
+ 					
+VAR378	Transponder1	1402	57A	Set2	
+t0=2.456 sec	Ro= 210.000 Nm	Azo= 221.000 Deg	Zo= 2700 ft	Head= 221.000 Deg	
+1	VAR378	Flies		250.000	Nm/h
+2	VAR378	Flies		201.000	Seconds
+ 					
+FIX379	Transponder1	891	37B	Set1	
+t0=2.589 sec	Ro= 211.000 Nm	Azo= 233.000 Deg	Zo= 1600 ft	Head= 233.000 Deg	
+1	FIX379	Flies		250.000	Nm/h
+2	FIX379	Flies		201.000	Seconds
+ 					
+VAR379	Transponder1	1403	57B	Set2	
+t0=2.589 sec	Ro= 210.000 Nm	Azo= 234.368 Deg	Zo= 1700 ft	Head= 234.368 Deg	
+1	VAR379	Flies		250.000	Nm/h
+2	VAR379	Flies		201.000	Seconds
+ 					
+FIX380	Transponder1	892	37C	Set1	
+t0=2.722 sec	Ro= 211.000 Nm	Azo= 246.371 Deg	Zo= 3600 ft	Head= 246.371 Deg	
+1	FIX380	Flies		250.000	Nm/h
+2	FIX380	Flies		201.000	Seconds
+ 					
+VAR380	Transponder1	1404	57C	Set2	
+t0=2.722 sec	Ro= 210.000 Nm	Azo= 245.000 Deg	Zo= 3700 ft	Head= 245.000 Deg	
+1	VAR380	Flies		250.000	Nm/h
+2	VAR380	Flies		201.000	Seconds
+ 					
+FIX381	Transponder1	893	37D	Set1	
+t0=2.856 sec	Ro= 211.000 Nm	Azo= 257.000 Deg	Zo= 5800 ft	Head= 257.000 Deg	
+1	FIX381	Flies		250.000	Nm/h
+2	FIX381	Flies		201.000	Seconds
+ 					
+VAR381	Transponder1	1405	57D	Set2	
+t0=2.856 sec	Ro= 210.000 Nm	Azo= 258.375 Deg	Zo= 5900 ft	Head= 258.375 Deg	
+1	VAR381	Flies		250.000	Nm/h
+2	VAR381	Flies		201.000	Seconds
+ 					
+FIX382	Transponder1	894	37E	Set1	
+t0=2.989 sec	Ro= 211.000 Nm	Azo= 270.379 Deg	Zo= 2200 ft	Head= 270.379 Deg	
+1	FIX382	Flies		250.000	Nm/h
+2	FIX382	Flies		201.000	Seconds
+ 					
+VAR382	Transponder1	1406	57E	Set2	
+t0=2.989 sec	Ro= 210.000 Nm	Azo= 269.000 Deg	Zo= 2300 ft	Head= 269.000 Deg	
+1	VAR382	Flies		250.000	Nm/h
+2	VAR382	Flies		201.000	Seconds
+ 					
+FIX383	Transponder1	895	37F	Set1	
+t0=3.122 sec	Ro= 211.000 Nm	Azo= 281.000 Deg	Zo= 1000 ft	Head= 281.000 Deg	
+1	FIX383	Flies		250.000	Nm/h
+2	FIX383	Flies		201.000	Seconds
+ 					
+VAR383	Transponder1	1407	57F	Set2	
+t0=3.122 sec	Ro= 210.000 Nm	Azo= 282.382 Deg	Zo= 1100 ft	Head= 282.382 Deg	
+1	VAR383	Flies		250.000	Nm/h
+2	VAR383	Flies		201.000	Seconds
+ 					
+FIX384	Transponder1	896	380	Set1	
+t0=3.256 sec	Ro= 211.000 Nm	Azo= 294.386 Deg	Zo= 4400 ft	Head= 294.386 Deg	
+1	FIX384	Flies		250.000	Nm/h
+2	FIX384	Flies		201.000	Seconds
+ 					
+VAR384	Transponder1	1408	580	Set2	
+t0=3.256 sec	Ro= 210.000 Nm	Azo= 293.000 Deg	Zo= 4500 ft	Head= 293.000 Deg	
+1	VAR384	Flies		250.000	Nm/h
+2	VAR384	Flies		201.000	Seconds
+ 					
+FIX385	Transponder1	897	381	Set1	
+t0=3.389 sec	Ro= 211.000 Nm	Azo= 305.000 Deg	Zo= 4300 ft	Head= 305.000 Deg	
+1	FIX385	Flies		250.000	Nm/h
+2	FIX385	Flies		201.000	Seconds
+ 					
+VAR385	Transponder1	1409	581	Set2	
+t0=3.389 sec	Ro= 210.000 Nm	Azo= 306.389 Deg	Zo= 4400 ft	Head= 306.389 Deg	
+1	VAR385	Flies		250.000	Nm/h
+2	VAR385	Flies		201.000	Seconds
+ 					
+FIX386	Transponder1	898	382	Set1	
+t0=3.522 sec	Ro= 211.000 Nm	Azo= 318.393 Deg	Zo= 7500 ft	Head= 318.393 Deg	
+1	FIX386	Flies		250.000	Nm/h
+2	FIX386	Flies		201.000	Seconds
+ 					
+VAR386	Transponder1	1410	582	Set2	
+t0=3.522 sec	Ro= 210.000 Nm	Azo= 317.000 Deg	Zo= 7600 ft	Head= 317.000 Deg	
+1	VAR386	Flies		250.000	Nm/h
+2	VAR386	Flies		201.000	Seconds
+ 					
+FIX387	Transponder1	899	383	Set1	
+t0=3.656 sec	Ro= 211.000 Nm	Azo= 329.000 Deg	Zo= 8600 ft	Head= 329.000 Deg	
+1	FIX387	Flies		250.000	Nm/h
+2	FIX387	Flies		201.000	Seconds
+ 					
+VAR387	Transponder1	1411	583	Set2	
+t0=3.656 sec	Ro= 210.000 Nm	Azo= 330.397 Deg	Zo= 8700 ft	Head= 330.397 Deg	
+1	VAR387	Flies		250.000	Nm/h
+2	VAR387	Flies		201.000	Seconds
+ 					
+FIX388	Transponder1	900	384	Set1	
+t0=3.789 sec	Ro= 211.000 Nm	Azo= 342.400 Deg	Zo= 1900 ft	Head= 342.400 Deg	
+1	FIX388	Flies		250.000	Nm/h
+2	FIX388	Flies		201.000	Seconds
+ 					
+VAR388	Transponder1	1412	584	Set2	
+t0=3.789 sec	Ro= 210.000 Nm	Azo= 341.000 Deg	Zo= 2000 ft	Head= 341.000 Deg	
+1	VAR388	Flies		250.000	Nm/h
+2	VAR388	Flies		201.000	Seconds
+ 					
+FIX389	Transponder1	901	385	Set1	
+t0=3.922 sec	Ro= 211.000 Nm	Azo= 353.000 Deg	Zo= 2800 ft	Head= 353.000 Deg	
+1	FIX389	Flies		250.000	Nm/h
+2	FIX389	Flies		201.000	Seconds
+ 					
+VAR389	Transponder1	1413	585	Set2	
+t0=3.922 sec	Ro= 210.000 Nm	Azo= 354.404 Deg	Zo= 2900 ft	Head= 354.404 Deg	
+1	VAR389	Flies		250.000	Nm/h
+2	VAR389	Flies		201.000	Seconds
+ 					
+FIX390	Transponder1	902	386	Set1	
+t0=0.056 sec	Ro= 226.000 Nm	Azo= 6.408 Deg	Zo= 4700 ft	Head= 6.408 Deg	
+1	FIX390	Flies		250.000	Nm/h
+2	FIX390	Flies		201.000	Seconds
+ 					
+VAR390	Transponder1	1414	586	Set2	
+t0=0.056 sec	Ro= 225.000 Nm	Azo= 5.000 Deg	Zo= 4800 ft	Head= 5.000 Deg	
+1	VAR390	Flies		250.000	Nm/h
+2	VAR390	Flies		201.000	Seconds
+ 					
+FIX391	Transponder1	903	387	Set1	
+t0=0.189 sec	Ro= 226.000 Nm	Azo= 17.000 Deg	Zo= 8400 ft	Head= 17.000 Deg	
+1	FIX391	Flies		250.000	Nm/h
+2	FIX391	Flies		201.000	Seconds
+ 					
+VAR391	Transponder1	1415	587	Set2	
+t0=0.189 sec	Ro= 225.000 Nm	Azo= 18.411 Deg	Zo= 8500 ft	Head= 18.411 Deg	
+1	VAR391	Flies		250.000	Nm/h
+2	VAR391	Flies		201.000	Seconds
+ 					
+FIX392	Transponder1	904	388	Set1	
+t0=0.322 sec	Ro= 226.000 Nm	Azo= 30.415 Deg	Zo= 4100 ft	Head= 30.415 Deg	
+1	FIX392	Flies		250.000	Nm/h
+2	FIX392	Flies		201.000	Seconds
+ 					
+VAR392	Transponder1	1416	588	Set2	
+t0=0.322 sec	Ro= 225.000 Nm	Azo= 29.000 Deg	Zo= 4200 ft	Head= 29.000 Deg	
+1	VAR392	Flies		250.000	Nm/h
+2	VAR392	Flies		201.000	Seconds
+ 					
+FIX393	Transponder1	905	389	Set1	
+t0=0.456 sec	Ro= 226.000 Nm	Azo= 41.000 Deg	Zo= 4100 ft	Head= 41.000 Deg	
+1	FIX393	Flies		250.000	Nm/h
+2	FIX393	Flies		201.000	Seconds
+ 					
+VAR393	Transponder1	1417	589	Set2	
+t0=0.456 sec	Ro= 225.000 Nm	Azo= 42.418 Deg	Zo= 4200 ft	Head= 42.418 Deg	
+1	VAR393	Flies		250.000	Nm/h
+2	VAR393	Flies		201.000	Seconds
+ 					
+FIX394	Transponder1	906	38A	Set1	
+t0=0.589 sec	Ro= 226.000 Nm	Azo= 54.422 Deg	Zo= 8000 ft	Head= 54.422 Deg	
+1	FIX394	Flies		250.000	Nm/h
+2	FIX394	Flies		201.000	Seconds
+ 					
+VAR394	Transponder1	1418	58A	Set2	
+t0=0.589 sec	Ro= 225.000 Nm	Azo= 53.000 Deg	Zo= 8100 ft	Head= 53.000 Deg	
+1	VAR394	Flies		250.000	Nm/h
+2	VAR394	Flies		201.000	Seconds
+ 					
+FIX395	Transponder1	907	38B	Set1	
+t0=0.722 sec	Ro= 226.000 Nm	Azo= 65.000 Deg	Zo= 9600 ft	Head= 65.000 Deg	
+1	FIX395	Flies		250.000	Nm/h
+2	FIX395	Flies		201.000	Seconds
+ 					
+VAR395	Transponder1	1419	58B	Set2	
+t0=0.722 sec	Ro= 225.000 Nm	Azo= 66.426 Deg	Zo= 9700 ft	Head= 66.426 Deg	
+1	VAR395	Flies		250.000	Nm/h
+2	VAR395	Flies		201.000	Seconds
+ 					
+FIX396	Transponder1	908	38C	Set1	
+t0=0.856 sec	Ro= 226.000 Nm	Azo= 78.429 Deg	Zo= 3500 ft	Head= 78.429 Deg	
+1	FIX396	Flies		250.000	Nm/h
+2	FIX396	Flies		201.000	Seconds
+ 					
+VAR396	Transponder1	1420	58C	Set2	
+t0=0.856 sec	Ro= 225.000 Nm	Azo= 77.000 Deg	Zo= 3600 ft	Head= 77.000 Deg	
+1	VAR396	Flies		250.000	Nm/h
+2	VAR396	Flies		201.000	Seconds
+ 					
+FIX397	Transponder1	909	38D	Set1	
+t0=0.989 sec	Ro= 226.000 Nm	Azo= 89.000 Deg	Zo= 2900 ft	Head= 89.000 Deg	
+1	FIX397	Flies		250.000	Nm/h
+2	FIX397	Flies		201.000	Seconds
+ 					
+VAR397	Transponder1	1421	58D	Set2	
+t0=0.989 sec	Ro= 225.000 Nm	Azo= 90.433 Deg	Zo= 3000 ft	Head= 90.433 Deg	
+1	VAR397	Flies		250.000	Nm/h
+2	VAR397	Flies		201.000	Seconds
+ 					
+FIX398	Transponder1	910	38E	Set1	
+t0=1.122 sec	Ro= 226.000 Nm	Azo= 102.436 Deg	Zo= 4900 ft	Head= 102.436 Deg	
+1	FIX398	Flies		250.000	Nm/h
+2	FIX398	Flies		201.000	Seconds
+ 					
+VAR398	Transponder1	1422	58E	Set2	
+t0=1.122 sec	Ro= 225.000 Nm	Azo= 101.000 Deg	Zo= 5000 ft	Head= 101.000 Deg	
+1	VAR398	Flies		250.000	Nm/h
+2	VAR398	Flies		201.000	Seconds
+ 					
+FIX399	Transponder1	911	38F	Set1	
+t0=1.256 sec	Ro= 226.000 Nm	Azo= 113.000 Deg	Zo= 4000 ft	Head= 113.000 Deg	
+1	FIX399	Flies		250.000	Nm/h
+2	FIX399	Flies		201.000	Seconds
+ 					
+VAR399	Transponder1	1423	58F	Set2	
+t0=1.256 sec	Ro= 225.000 Nm	Azo= 114.440 Deg	Zo= 4100 ft	Head= 114.440 Deg	
+1	VAR399	Flies		250.000	Nm/h
+2	VAR399	Flies		201.000	Seconds
+ 					

@@ -13,6 +13,7 @@ TEMPLATE = app
 SOURCES += main.cpp\
     ampfiltertask.cpp \
     acresolutiontask.cpp \
+    scenarioresolutiontask.cpp \
     ampscatterdlg.cpp \
     ampscattertask.cpp \
 		appwindow.cpp \
@@ -32,6 +33,7 @@ SOURCES += main.cpp\
 HEADERS  += appwindow.h \
 	ampfiltertask.h \
 	acresolutiontask.h \
+	scenarioresolutiontask.h \
 	ampscatterdlg.h \
 	ampscattertask.h \
 	datasourcedlg.h \

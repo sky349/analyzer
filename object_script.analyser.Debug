@@ -1,6 +1,7 @@
 debug/main.o
 debug/ampfiltertask.o
 debug/acresolutiontask.o
+debug/scenarioresolutiontask.o
 debug/ampscatterdlg.o
 debug/ampscattertask.o
 debug/appwindow.o

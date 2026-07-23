@@ -1,6 +1,7 @@
 release/main.o
 release/ampfiltertask.o
 release/acresolutiontask.o
+release/scenarioresolutiontask.o
 release/ampscatterdlg.o
 release/ampscattertask.o
 release/appwindow.o

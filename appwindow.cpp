@@ -30,6 +30,7 @@
 #include "duplicatetask.h"
 #include "ampfiltertask.h"
 #include "acresolutiontask.h"
+#include "scenarioresolutiontask.h"
 #include "plotlabel.h"
 
 namespace
@@ -477,6 +478,7 @@ AppWindow::AppWindow():QMainWindow(0),
     tasks<<new DuplicateTask(this);
     tasks<<new AmpFilterTask(this);
     tasks<<new ACResolutionTask(this);
+    tasks<<new ScenarioResolutionTask(this);
 
 	initGUI();
 	initActions();
