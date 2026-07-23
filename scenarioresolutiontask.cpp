@@ -34,7 +34,7 @@ const double NauticalMileMeters=1852.0;
 const double ScenarioRangeGateMeters=2.0*NauticalMileMeters;
 const double ScenarioAzimuthGateDegrees=2.0;
 const double ScenarioStartToleranceSeconds=0.010;
-const uint ScenarioDiagnosticModeA=02522;
+const uint ScenarioDiagnosticModeA=2522;
 const bool ScenarioDiagnosticLogging=false;
 const int ScenarioEpochDetectionTargetCount=96;
 const int ScenarioEpochDetectionScanCount=4;
@@ -65,8 +65,9 @@ struct TargetStatistics
 {
     int expected;
     int detected;
+    int correctADetected;
 
-    TargetStatistics():expected(0),detected(0) {}
+    TargetStatistics():expected(0),detected(0),correctADetected(0) {}
 };
 
 struct MatchCandidate
@@ -225,6 +226,20 @@ double azimuthDifference(double first,double second)
     return qMin(difference,360.0-difference);
 }
 
+bool parseScenarioModeA(const QString& rawText,uint& modeA)
+{
+    bool ok=false;
+    const uint rawValue=rawText.toUInt(&ok,10);
+    if(!ok || rawValue>0x0fff)
+        return false;
+
+    // Scenario printouts write the 12 Mode A bits as a decimal integer
+    // (for example, 512).  NRadarPlot stores the four displayed octal
+    // digits as a decimal number (the same example is stored as 1000).
+    modeA=QString::number(rawValue,8).toUInt(&ok,10);
+    return ok;
+}
+
 QPointF targetPosition(const ScenarioTarget& target,double elapsedSeconds)
 {
     return target.initialPosition+
@@ -362,7 +377,11 @@ bool parseScenarioFile(const QString& path,const NRadarMap *map,
 
         ScenarioTarget target;
         target.id=targetMatch.captured(1).toUpper();
-        target.modeA=targetMatch.captured(2).toUInt();
+        if(!parseScenarioModeA(targetMatch.captured(2),target.modeA))
+        {
+            malformedTargets++;
+            continue;
+        }
         target.address=targetMatch.captured(3).toUpper();
         target.startSeconds=positionMatch.captured(1).toDouble();
         target.altitudeFeet=positionMatch.captured(4).toDouble();
@@ -732,7 +751,7 @@ ScenarioEpochDetection detectScenarioEpoch(
 
 QString modeAText(uint modeA)
 {
-    return QString("%1").arg(modeA,4,8,QChar('0'));
+    return QString("%1").arg(modeA,4,10,QChar('0'));
 }
 
 QString plotSourceText(NRadarPlot::NPlotSourceType source)
@@ -821,8 +840,7 @@ QString writeScenarioAssociationDiagnostics(
     out.setCodec("UTF-8");
     out << "A/C resolution w/ scenario - association diagnostic\n";
     out << "Scenario file: " << scenarioPath << '\n';
-    out << "Requested Mode A: " << modeAText(diagnosticModeA)
-        << " (raw decimal value " << diagnosticModeA << ")\n";
+    out << "Requested Mode A: " << modeAText(diagnosticModeA) << '\n';
     out << "Automatically detected scenario epoch / radar 51 North marker: "
         << utcText(scenarioEpoch) << " UTC\n";
     out << "Current association criteria: same radar-51 North-marker scan, "
@@ -1123,11 +1141,11 @@ void showResults(const QString& path,const QString& scenarioName,
             .arg(scenarioEpoch.toUTC().toString("yyyy-MM-dd HH:mm:ss.zzz")),
             widget));
 
-    QTableWidget *table=new QTableWidget(targets.size()+1,5,widget);
+    QTableWidget *table=new QTableWidget(targets.size()+1,6,widget);
     table->setHorizontalHeaderLabels(QStringList()
             << QObject::tr("Target") << QObject::tr("Mode A")
             << QObject::tr("Exp. plots") << QObject::tr("Det. plots")
-            << QObject::tr("Pd, %"));
+            << QObject::tr("Pd, %") << QObject::tr("Correct-A Pd, %"));
     table->verticalHeader()->setVisible(false);
     table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     table->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -1136,15 +1154,18 @@ void showResults(const QString& path,const QString& scenarioName,
     table->horizontalHeader()->setSectionResizeMode(2,QHeaderView::ResizeToContents);
     table->horizontalHeader()->setSectionResizeMode(3,QHeaderView::ResizeToContents);
     table->horizontalHeader()->setSectionResizeMode(4,QHeaderView::ResizeToContents);
+    table->horizontalHeader()->setSectionResizeMode(5,QHeaderView::ResizeToContents);
     layout->addWidget(table);
 
     int totalExpected=0;
     int totalDetected=0;
+    int totalCorrectADetected=0;
     for(int row=0;row<targets.size();row++)
     {
         const TargetStatistics& targetStatistics=statistics.at(row);
         totalExpected+=targetStatistics.expected;
         totalDetected+=targetStatistics.detected;
+        totalCorrectADetected+=targetStatistics.correctADetected;
 
         QTableWidgetItem *targetItem=
                 new QTableWidgetItem(targets.at(row).id);
@@ -1155,19 +1176,25 @@ void showResults(const QString& path,const QString& scenarioName,
         QTableWidgetItem *detectedItem=
                 new QTableWidgetItem(QString::number(targetStatistics.detected));
         QTableWidgetItem *probabilityItem=new QTableWidgetItem;
+        QTableWidgetItem *correctAProbabilityItem=new QTableWidgetItem;
         modeAItem->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
         expectedItem->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
         detectedItem->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
         const double probability=targetStatistics.expected ?
                     100.0*targetStatistics.detected/targetStatistics.expected :
                     0.0;
+        const double correctAProbability=targetStatistics.expected ?
+                    100.0*targetStatistics.correctADetected/
+                    targetStatistics.expected : 0.0;
         setProbabilityItem(probabilityItem,probability);
+        setProbabilityItem(correctAProbabilityItem,correctAProbability);
 
         table->setItem(row,0,targetItem);
         table->setItem(row,1,modeAItem);
         table->setItem(row,2,expectedItem);
         table->setItem(row,3,detectedItem);
         table->setItem(row,4,probabilityItem);
+        table->setItem(row,5,correctAProbabilityItem);
     }
 
     const int totalRow=targets.size();
@@ -1177,23 +1204,30 @@ void showResults(const QString& path,const QString& scenarioName,
     QTableWidgetItem *totalDetectedItem=
             new QTableWidgetItem(QString::number(totalDetected));
     QTableWidgetItem *totalProbabilityItem=new QTableWidgetItem;
+    QTableWidgetItem *totalCorrectAProbabilityItem=new QTableWidgetItem;
     QFont totalFont=totalItem->font();
     totalFont.setBold(true);
     totalItem->setFont(totalFont);
     totalExpectedItem->setFont(totalFont);
     totalDetectedItem->setFont(totalFont);
     totalProbabilityItem->setFont(totalFont);
+    totalCorrectAProbabilityItem->setFont(totalFont);
     totalExpectedItem->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
     totalDetectedItem->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
     if(totalExpected)
+    {
         setProbabilityItem(totalProbabilityItem,
                 100.0*totalDetected/totalExpected);
+        setProbabilityItem(totalCorrectAProbabilityItem,
+                100.0*totalCorrectADetected/totalExpected);
+    }
     table->setItem(totalRow,0,totalItem);
     table->setItem(totalRow,2,totalExpectedItem);
     table->setItem(totalRow,3,totalDetectedItem);
     table->setItem(totalRow,4,totalProbabilityItem);
+    table->setItem(totalRow,5,totalCorrectAProbabilityItem);
 
-    widget->resize(800,650);
+    widget->resize(920,650);
     widget->show();
 }
 
@@ -1342,9 +1376,14 @@ bool ScenarioResolutionTask::execute(bool firstStage)
             if(matchedPlotIndex<0)
                 continue;
 
+            const NRadarPlot *matchedPlot=scanPlots.at(matchedPlotIndex);
             statistics[opportunity.targetIndex].detected++;
+            if(matchedPlot->hasBoardNumber() &&
+                    matchedPlot->getBoardNumber()==
+                    targets.at(opportunity.targetIndex).modeA)
+                statistics[opportunity.targetIndex].correctADetected++;
             matchLines.append(QLineF(opportunity.position,
-                    scanPlots.at(matchedPlotIndex)->getXYCoord()));
+                    matchedPlot->getXYCoord()));
         }
 
         if(scanIndex%2==0)
