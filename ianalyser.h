@@ -18,6 +18,21 @@
 class IAnalyser
 {
 public:
+    enum SourceSelection
+    {
+        SourceAny,
+        SourcePSR,
+        SourceSSR,
+        SourceADSB
+    };
+
+    enum ModeSSelection
+    {
+        ModeSAny,
+        ModeSDisabled,
+        ModeSEnabled
+    };
+
     IAnalyser() {}
 
     //set progress bar value in case the task is takes a long time
@@ -28,6 +43,9 @@ public:
     virtual const NRadarMap* getActiveMap() const =0;
     //the scene
     virtual NRadarScene* getRadarScene() const =0;
+    //current source and Mode-S selections used by analysis tasks
+    virtual SourceSelection getSelectedSource() const =0;
+    virtual ModeSSelection getSelectedModeS() const =0;
     //if the plot is visible with current active filters
     bool isPlotVisible(const NRadarAbstractPlot* plot) const
     { return plot->getUserData()!=0; }

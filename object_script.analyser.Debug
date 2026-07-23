@@ -1,5 +1,6 @@
 debug/main.o
 debug/ampfiltertask.o
+debug/acresolutiontask.o
 debug/ampscatterdlg.o
 debug/ampscattertask.o
 debug/appwindow.o
@@ -24,4 +25,3 @@ debug/moc_podtask.o
 debug/moc_ianalyser.o
 debug/moc_reflectorstask.o
 debug/moc_amplitudedlg.o
-debug/moc_plotlabel.o

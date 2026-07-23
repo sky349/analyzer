@@ -4,10 +4,13 @@
 #include <radarview/nradardecoration.h>
 #include <radarview/nradaritem.h>
 
+#include <QGraphicsItem>
 #include <QGraphicsLineItem>
 #include <QGraphicsProxyWidget>
 #include <QHeaderView>
 #include <QMouseEvent>
+
+#include <algorithm>
 
 #include "commondefs.h"
 
@@ -26,7 +29,331 @@
 #include "ampscattertask.h"
 #include "duplicatetask.h"
 #include "ampfiltertask.h"
+#include "acresolutiontask.h"
 #include "plotlabel.h"
+
+namespace
+{
+
+const qint64 TrackPathMaximumGapMs = 30000;
+const double TrackPathPositionToleranceMeters = 5000.0;
+const double TrackPathMinimumPlausibleSpeedMps = 350.0;
+const double TrackPathMaximumPlausibleSpeedMps = 1200.0;
+const double TrackPathSpatialCellSize = 50000.0;
+const int TrackPathChunkSegmentCount = 32;
+
+QPointF displayPosition(const NRadarPlot *plot,int altitudeMultiplier)
+{
+    if(altitudeMultiplier<=0)
+        return plot->getXYCoord();
+
+    return QPointF(plot->getADCoord().y(),
+                   altitudeMultiplier*(plot->hasHeight() ? plot->getHeight() : -100.0));
+}
+
+bool hasConflictingAircraftAddress(const NRadarTrackPlot *previous,
+                                   const NRadarTrackPlot *current)
+{
+    const QVariant previousValue=previous->getOption(NRadarPlot::AircraftAddress);
+    const QVariant currentValue=current->getOption(NRadarPlot::AircraftAddress);
+    if(previousValue.isNull() || currentValue.isNull())
+        return false;
+
+    const uint previousAddress=previousValue.toUInt();
+    const uint currentAddress=currentValue.toUInt();
+    return previousAddress && currentAddress && previousAddress!=currentAddress;
+}
+
+bool isContinuousTrack(const NRadarTrackPlot *previous,
+                       const NRadarTrackPlot *current)
+{
+    const qint64 gapMs=previous->getTime().msecsTo(current->getTime());
+    if(gapMs<0 || gapMs>TrackPathMaximumGapMs)
+        return false;
+
+    if((previous->getSource()==NRadarPlot::ADSB)!=(current->getSource()==NRadarPlot::ADSB))
+        return false;
+
+    if(hasConflictingAircraftAddress(previous,current))
+        return false;
+
+    const double reportedSpeedMps=qMax(previous->getSpeed(),current->getSpeed())/3.6;
+    const double plausibleSpeedMps=qBound(TrackPathMinimumPlausibleSpeedMps,
+                                          reportedSpeedMps*3.0,
+                                          TrackPathMaximumPlausibleSpeedMps);
+    const double allowedDistance=TrackPathPositionToleranceMeters+
+            plausibleSpeedMps*(gapMs/1000.0);
+    return QLineF(previous->getXYCoord(),current->getXYCoord()).length()<=allowedDistance;
+}
+
+quint32 trackStyleHash(quint8 radarId,uint trackId)
+{
+    quint32 value=trackId^(quint32(radarId)*0x9e3779b9u);
+    value^=value>>16;
+    value*=0x7feb352du;
+    value^=value>>15;
+    value*=0x846ca68bu;
+    return value^(value>>16);
+}
+
+QColor trackColor(quint8 radarId,uint trackId,quint64 trackInstance)
+{
+    static const QRgb palette[]={
+        0xFFE69F00, 0xFF56B4E9, 0xFF009E73, 0xFFF0E442,
+        0xFF0072B2, 0xFFD55E00, 0xFFCC79A7, 0xFF00C2FF,
+        0xFF8BE04E, 0xFFFF6F91, 0xFFB388FF, 0xFFFFB74D
+    };
+    const int colorCount=sizeof(palette)/sizeof(palette[0]);
+    const int colorIndex=(trackStyleHash(radarId,trackId)+trackInstance)%colorCount;
+    return QColor::fromRgba(palette[colorIndex]);
+}
+
+Qt::PenStyle monochromeTrackStyle(quint8 radarId,uint trackId,quint64 trackInstance)
+{
+    static const Qt::PenStyle styles[]={
+        Qt::SolidLine, Qt::DashLine, Qt::DotLine,
+        Qt::DashDotLine, Qt::DashDotDotLine
+    };
+    const int styleCount=sizeof(styles)/sizeof(styles[0]);
+    const int styleIndex=(trackStyleHash(radarId,trackId)+trackInstance)%styleCount;
+    return styles[styleIndex];
+}
+
+quint64 trackPathCellKey(int x,int y)
+{
+    return (quint64(quint32(x))<<32)|quint32(y);
+}
+
+QColor colorWithOpacity(QColor color,double opacity)
+{
+    color.setAlpha(qRound(color.alpha()*opacity));
+    return color;
+}
+
+}
+
+class TrackPathsOverlayItem:public QGraphicsItem
+{
+public:
+    TrackPathsOverlayItem(const QRectF& bounds,QGraphicsItem *parent):
+        QGraphicsItem(parent),
+        m_bounds(bounds),
+        m_blackWhiteMode(false),
+        m_highlightActive(false),
+        m_highlightedTrackInstance(0),
+        m_paintGeneration(0)
+    {
+        setAcceptedMouseButtons(Qt::NoButton);
+        setAcceptHoverEvents(false);
+        setFlag(QGraphicsItem::ItemIsSelectable,false);
+        setFlag(QGraphicsItem::ItemStacksBehindParent,true);
+        setFlag(QGraphicsItem::ItemUsesExtendedStyleOption,true);
+    }
+
+    QRectF boundingRect() const
+    {
+        return m_bounds;
+    }
+
+    void setBounds(const QRectF& bounds)
+    {
+        if(m_bounds==bounds) return;
+        prepareGeometryChange();
+        m_bounds=bounds;
+    }
+
+    void clearPaths()
+    {
+        m_chunks.clear();
+        m_grid.clear();
+        m_instances.clear();
+        m_chunkPaintGeneration.clear();
+        m_paintGeneration=0;
+        update();
+    }
+
+    void addPolyline(const QPolygonF& polyline,
+                     quint8 radarId,
+                     uint trackId,
+                     quint64 trackInstance)
+    {
+        if(polyline.size()<2) return;
+
+        const QColor color=trackColor(radarId,trackId,trackInstance);
+        const Qt::PenStyle monochromeStyle=
+                monochromeTrackStyle(radarId,trackId,trackInstance);
+
+        int first=0;
+        while(first<polyline.size()-1)
+        {
+            const int last=qMin(first+TrackPathChunkSegmentCount,polyline.size()-1);
+
+            Chunk chunk;
+            chunk.points.reserve(last-first+1);
+            for(int i=first;i<=last;i++)
+                chunk.points<<polyline.at(i);
+            chunk.bounds=chunk.points.boundingRect();
+            // A horizontal or vertical polyline has an empty QRectF and would
+            // otherwise be rejected by QRectF::intersects during culling.
+            chunk.bounds.adjust(-0.5,-0.5,0.5,0.5);
+            chunk.trackInstance=trackInstance;
+            chunk.color=color;
+            chunk.monochromeStyle=monochromeStyle;
+
+            const int chunkIndex=m_chunks.size();
+            m_chunks<<chunk;
+            m_chunkPaintGeneration<<0;
+            indexChunk(chunkIndex);
+
+            first=last;
+        }
+
+        m_instances.insert(trackInstance);
+    }
+
+    bool containsTrackInstance(quint64 trackInstance) const
+    {
+        return m_instances.contains(trackInstance);
+    }
+
+    void setDisplayStyle(bool blackWhiteMode,
+                         bool highlightActive,
+                         quint64 highlightedTrackInstance)
+    {
+        if(m_blackWhiteMode==blackWhiteMode &&
+                m_highlightActive==highlightActive &&
+                m_highlightedTrackInstance==highlightedTrackInstance)
+            return;
+
+        m_blackWhiteMode=blackWhiteMode;
+        m_highlightActive=highlightActive;
+        m_highlightedTrackInstance=highlightedTrackInstance;
+        update();
+    }
+
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *)
+    {
+        if(m_chunks.isEmpty()) return;
+
+        QRectF exposed=option ? option->exposedRect : painter->clipBoundingRect();
+        if(exposed.isEmpty())
+            exposed=painter->clipBoundingRect();
+
+        const double levelOfDetail=
+                QStyleOptionGraphicsItem::levelOfDetailFromTransform(painter->worldTransform());
+        const double margin=levelOfDetail>0.0 ? 6.0/levelOfDetail : 0.0;
+        exposed.adjust(-margin,-margin,margin,margin);
+
+        QVector<int> visibleChunks;
+        findChunks(exposed,visibleChunks);
+        if(visibleChunks.isEmpty()) return;
+
+        std::sort(visibleChunks.begin(),visibleChunks.end());
+        painter->setRenderHint(QPainter::Antialiasing,true);
+        painter->setBrush(Qt::NoBrush);
+
+        for(int pass=0;pass<2;pass++)
+        {
+            foreach(int chunkIndex,visibleChunks)
+            {
+                const Chunk& chunk=m_chunks.at(chunkIndex);
+                const bool highlighted=m_highlightActive &&
+                        chunk.trackInstance==m_highlightedTrackInstance;
+                const bool dimmed=m_highlightActive && !highlighted;
+                const double opacity=dimmed ? 0.22 : 1.0;
+
+                QPen pen;
+                if(pass==0)
+                {
+                    const QColor outline=m_blackWhiteMode ? QColor(Qt::white) : QColor(0,0,0,150);
+                    pen=QPen(colorWithOpacity(outline,opacity),
+                             highlighted ? 5.0 : 3.5,
+                             Qt::SolidLine,Qt::RoundCap,Qt::RoundJoin);
+                }
+                else
+                {
+                    const QColor line=m_blackWhiteMode ? QColor(Qt::black) : chunk.color;
+                    pen=QPen(colorWithOpacity(line,opacity),
+                             highlighted ? 3.0 : 1.5,
+                             m_blackWhiteMode ? chunk.monochromeStyle : Qt::SolidLine,
+                             Qt::RoundCap,Qt::RoundJoin);
+                }
+                pen.setCosmetic(true);
+                painter->setPen(pen);
+                painter->drawPolyline(chunk.points);
+            }
+        }
+    }
+
+private:
+    struct Chunk
+    {
+        QPolygonF points;
+        QRectF bounds;
+        quint64 trackInstance;
+        QColor color;
+        Qt::PenStyle monochromeStyle;
+    };
+
+    void indexChunk(int chunkIndex)
+    {
+        const QRectF& bounds=m_chunks.at(chunkIndex).bounds;
+        const int left=qFloor(bounds.left()/TrackPathSpatialCellSize);
+        const int right=qFloor(bounds.right()/TrackPathSpatialCellSize);
+        const int top=qFloor(bounds.top()/TrackPathSpatialCellSize);
+        const int bottom=qFloor(bounds.bottom()/TrackPathSpatialCellSize);
+
+        for(int x=left;x<=right;x++)
+            for(int y=top;y<=bottom;y++)
+                m_grid[trackPathCellKey(x,y)]<<chunkIndex;
+    }
+
+    void findChunks(const QRectF& exposed,QVector<int>& result)
+    {
+        m_paintGeneration++;
+        if(!m_paintGeneration)
+        {
+            m_chunkPaintGeneration.fill(0);
+            m_paintGeneration=1;
+        }
+
+        const int left=qFloor(exposed.left()/TrackPathSpatialCellSize);
+        const int right=qFloor(exposed.right()/TrackPathSpatialCellSize);
+        const int top=qFloor(exposed.top()/TrackPathSpatialCellSize);
+        const int bottom=qFloor(exposed.bottom()/TrackPathSpatialCellSize);
+
+        for(int x=left;x<=right;x++)
+            for(int y=top;y<=bottom;y++)
+            {
+                QHash<quint64,QVector<int> >::const_iterator it=
+                        m_grid.constFind(trackPathCellKey(x,y));
+                if(it==m_grid.constEnd()) continue;
+
+                foreach(int chunkIndex,it.value())
+                {
+                    if(m_chunkPaintGeneration[chunkIndex]==m_paintGeneration)
+                        continue;
+                    m_chunkPaintGeneration[chunkIndex]=m_paintGeneration;
+
+                    if(m_chunks.at(chunkIndex).bounds.intersects(exposed))
+                        result<<chunkIndex;
+                }
+            }
+    }
+
+private:
+    QRectF m_bounds;
+    QVector<Chunk> m_chunks;
+    QHash<quint64,QVector<int> > m_grid;
+    QSet<quint64> m_instances;
+    QVector<quint32> m_chunkPaintGeneration;
+    bool m_blackWhiteMode;
+    bool m_highlightActive;
+    quint64 m_highlightedTrackInstance;
+    quint32 m_paintGeneration;
+};
 
 class PlotItem:public NRadarItem
 {
@@ -104,10 +431,7 @@ public:
 
 	void switchToGeoPos(int alt_mul=0)
 	{
-		QPointF pt;
-		if(alt_mul<=0) pt = posGeo;
-		else pt = QPointF(plot->getADCoord().y(), alt_mul*(plot->hasHeight() ? plot->getHeight() : -100.0));
-		setPos(pt);
+		setPos(alt_mul<=0 ? posGeo : displayPosition(plot,alt_mul));
 	}
 
 //protected:
@@ -122,7 +446,12 @@ public:
 AppWindow::AppWindow():QMainWindow(0),
     m_notAssociated(Qt::gray),
     m_blackWhiteMode(false),
-    m_draggingPopupIndex(-1)
+    m_trackOverlay(0),
+    m_adsbTrackOverlay(0),
+    m_draggingPopupIndex(-1),
+    m_altitudeMultiplier(0),
+    m_hasHighlightedTrack(false),
+    m_highlightedTrackInstance(0)
 {
 	setupUi(this);
 
@@ -147,6 +476,7 @@ AppWindow::AppWindow():QMainWindow(0),
     tasks<<new ampScatterTask(this);
     tasks<<new DuplicateTask(this);
     tasks<<new AmpFilterTask(this);
+    tasks<<new ACResolutionTask(this);
 
 	initGUI();
 	initActions();
@@ -171,8 +501,25 @@ AppWindow::AppWindow():QMainWindow(0),
             tilesAct->activate(QAction::Trigger);
         }
 
+        updateTrackPathStyles();
         radarView->resetCachedContent();
         radarView->viewport()->update();
+    });
+
+    connect(connectTracks_chk,&QCheckBox::toggled,this,[this](bool checked){
+        setTrackPathsVisible(checked && cmbType->currentIndex()!=1);
+        radarView->viewport()->update();
+    });
+
+    shortTracksLimit_edit->setValidator(new QIntValidator(0,999999999,
+                                                           shortTracksLimit_edit));
+    connect(shortTracks_chk,&QCheckBox::toggled,this,[this](bool checked){
+        shortTracksLimit_edit->setEnabled(checked);
+        applyFilter();
+    });
+    connect(shortTracksLimit_edit,&QLineEdit::editingFinished,this,[this](){
+        if(shortTracks_chk->isChecked())
+            applyFilter();
     });
 
 	dataPack=new DataPack();
@@ -185,6 +532,7 @@ AppWindow::AppWindow():QMainWindow(0),
 AppWindow::~AppWindow()
 {
     closeAllPlotPopups();
+	clearTrackPaths();
 	delete dataPack;
 
 	qDeleteAll(tasks);
@@ -257,7 +605,10 @@ bool AppWindow::importData(bool confirm)
 
 	setProperty("valid",false);
 
+	clearTrackPaths();
+	m_hasHighlightedTrack=false;
 	radarScene->clear();
+	layers.clear();
 	dataPack->clear();
 
 	layers[1]=radarScene->addLayer("psr",1);
@@ -303,6 +654,7 @@ void AppWindow::updateViewMode(int m)
 		radarScene->getMap()->setTiles(property("tiles-on").toBool());
 
 	int alt_mul = m==0 ? 0 : (m==1 ? 1:10);
+	m_altitudeMultiplier=alt_mul;
 	double r=650000.0;
 	if(m==0)
 		radarScene->setSceneRect(-r,-r,r*2,r*2);
@@ -324,6 +676,8 @@ void AppWindow::updateViewMode(int m)
 		pl->switchToGeoPos(alt_mul);
 	}
 
+	rebuildTrackPaths();
+
 	radarView->showFullMap();
 }
 
@@ -331,6 +685,7 @@ void AppWindow::initFilters(const DataPack *data)
 {
 	QMap<QString,bool> modeAList,addressList,idList,trackList;
 	QMap<uint,bool> tmp1,tmp2,tmp3;
+	bool hasPlotsWithoutModeA=false;
 
 	foreach(NRadarAbstractPlot* ap,data->getData())
 	{
@@ -340,8 +695,10 @@ void AppWindow::initFilters(const DataPack *data)
 		NRadarPlot* plot=static_cast<NRadarPlot*>(ap);
 		if(plot->getSource()==NRadarPlot::PSR) continue;
 
-		uint modeA=plot->getBoardNumber();
-		if(modeA) tmp1[modeA]=true;
+		if(plot->hasBoardNumber())
+			tmp1[plot->getBoardNumber()]=true;
+		else
+			hasPlotsWithoutModeA=true;
 
 		uint address=plot->getOption(NRadarPlot::AircraftAddress).toUInt();
 		if(address) tmp2[address]=true;
@@ -356,7 +713,8 @@ void AppWindow::initFilters(const DataPack *data)
 		if(id.length()) idList[id]=true;
 	}
 
-	modeAList["N/A"]=true;
+	if(hasPlotsWithoutModeA)
+		modeAList[tr("N/A")]=true;
 	foreach(uint u,tmp1.keys())
 		modeAList[QString("%1").arg(u,4,10,QChar('0'))]=true;
 
@@ -367,6 +725,13 @@ void AppWindow::initFilters(const DataPack *data)
 		trackList[QString::number(u)]=true;
 
 	fillComboBox(cmbModeA,modeAList);
+	for(int i=1;i<cmbModeA->count();i++)
+	{
+		bool ok=false;
+		const uint modeA=cmbModeA->itemText(i).toUInt(&ok);
+		if(ok)
+			cmbModeA->setItemData(i,modeA);
+	}
 	fillComboBox(cmbAircraftID,idList);
 	fillComboBox(cmbAddress,addressList);
 	fillComboBox(cmbTrackNo,trackList);
@@ -400,23 +765,111 @@ void AppWindow::applyFilter(bool fullFilter)
 
 	int src=cmbSource->currentIndex();
 	int type=cmbType->currentIndex();
+	const bool limitTrackPoints=shortTracks_chk->isChecked();
 
-	uint modeA=(cmbModeA->currentIndex()==0 ? 9999 : cmbModeA->currentText().toUInt());
+	if(limitTrackPoints)
+	{
+		// This mode explicitly shows tracks only. Source and type selections
+		// still decide which track layers can be displayed.
+		layers[1]->setVisible(false);
+		layers[2]->setVisible(false);
+		layers[3]->setVisible((src==0 || src==3) && type!=1);
+		layers[11]->setVisible(src!=3 && type!=1);
+	}
+	else
+	{
+		layers[1]->setVisible(src<=1 && type<=1);
+		layers[2]->setVisible((src==0 || src==2) && type<=1);
+		layers[3]->setVisible(src==0 || src==3);
+		layers[11]->setVisible(src!=3 && type!=1);
+	}
+	setTrackPathsVisible(connectTracks_chk->isChecked() && type!=1);
+
+	if(!fullFilter) return;
+
+	const bool filterModeA=cmbModeA->currentIndex()!=0;
+	const QVariant selectedModeA=cmbModeA->itemData(cmbModeA->currentIndex());
+	const bool filterMissingModeA=filterModeA && !selectedModeA.isValid();
+	const uint modeA=selectedModeA.toUInt();
 	uint address=(cmbAddress->currentIndex()==0 ? 0 : cmbAddress->currentText().toUInt(0,16));
 	QString aircraftId=(cmbAircraftID->currentIndex() ? cmbAircraftID->currentText() : "");
 	uint trackNo=(cmbTrackNo->currentIndex()==0 ? 0 : cmbTrackNo->currentText().toUInt());
-
-	const QDateTime begin = dateBegin->dateTime();
-	const QDateTime end = dateEnd->dateTime();
-
 	uint modeS=cmbModeS->currentIndex();
+	const uint maximumTrackPoints=shortTracksLimit_edit->text().toUInt();
+	const QDateTime begin=dateBegin->dateTime();
+	const QDateTime end=dateEnd->dateTime();
+	const QPolygon& area=qobject_cast<PolygonFilter*>(areaFilter)->getPolygon();
 
-	layers[1]->setVisible(src<=1 && type<=1);
-	layers[2]->setVisible((src==0 || src==2) && type<=1);
-	layers[3]->setVisible(src==0 || src==3);
-	layers[11]->setVisible(src!=3 && type!=1);
+	rebuildTrackInstances();
 
-	if(!fullFilter) return;
+	auto isFilteredOut=[&](NRadarAbstractPlot *data)->bool
+	{
+		NRadarPlot *plot=static_cast<NRadarPlot*>(data);
+
+		if(data->getType()==NRadarAbstractPlot::TypeTrack &&
+				(type!=1 || limitTrackPoints) && src)
+		{
+			const NRadarPlot::NPlotSourceType source=plot->getSource();
+			bool sourceMatches=false;
+			if(src==1)
+				sourceMatches=source==NRadarPlot::PSR || source==NRadarPlot::Combined;
+			else if(src==2)
+				sourceMatches=source==NRadarPlot::SSR || source==NRadarPlot::Combined;
+			else if(src==3)
+				sourceMatches=source==NRadarPlot::ADSB;
+			if(!sourceMatches) return true;
+		}
+
+		if(modeS && ((modeS==1 && plot->getSSRType()==NRadarPlot::ModeS) ||
+				(modeS==2 && plot->getSSRType()!=NRadarPlot::ModeS)))
+			return true;
+
+		if(filterModeA)
+		{
+			if(filterMissingModeA)
+			{
+				if(plot->hasBoardNumber()) return true;
+			}
+			else if(!plot->hasBoardNumber() || plot->getBoardNumber()!=modeA)
+				return true;
+		}
+
+		if(trackNo)
+		{
+			if(data->getType()==NRadarAbstractPlot::TypePlot)
+			{
+				if(!plot->getAssociatedTrackIds().contains(trackNo)) return true;
+			}
+			else if(static_cast<NRadarTrackPlot*>(data)->getTrackId()!=trackNo)
+				return true;
+		}
+
+		if(address && plot->getOption(NRadarPlot::AircraftAddress).toUInt()!=address)
+			return true;
+
+		if(aircraftId.length() &&
+				plot->getOption(NRadarPlot::AircraftId).toString()!=aircraftId)
+			return true;
+
+		const QDateTime time=plot->getTime();
+		if(time<begin || time>end)
+			return true;
+
+		return !area.isEmpty() && !area.containsPoint(plot->getXYCoord(),Qt::OddEvenFill);
+	};
+
+	QHash<quint64,uint> visibleTrackPointCounts;
+	if(limitTrackPoints)
+	{
+		foreach(NRadarAbstractPlot *data,dataPack->getData())
+		{
+			if(data->getType()!=NRadarAbstractPlot::TypeTrack || isFilteredOut(data))
+				continue;
+
+			const NRadarTrackPlot *track=static_cast<const NRadarTrackPlot*>(data);
+			visibleTrackPointCounts[m_trackInstances.value(track)]++;
+		}
+	}
 
 	barWorking->setValue(0);
 	barWorking->setVisible(true);
@@ -424,8 +877,6 @@ void AppWindow::applyFilter(bool fullFilter)
 	qApp->processEvents();
 
 	radarView->setUpdatesEnabled(false);
-
-	const QPolygon& area=qobject_cast<PolygonFilter*>(areaFilter)->getPolygon();
 
 //    QTime bench;
 //    bench.start();
@@ -446,48 +897,20 @@ void AppWindow::applyFilter(bool fullFilter)
 			continue;
 
 		NRadarPlot* plot=static_cast<NRadarPlot*>(data);
-		NRadarTrackPlot* tplot=static_cast<NRadarTrackPlot*>(data);
 		PlotItem *pi=static_cast<PlotItem*>(data->getUserData());
 
-		bool filterOut=false;
-
-		if(!filterOut && type!=1 && (src==1 || src==2) && data->getType()==NRadarAbstractPlot::TypeTrack)
+		bool filterOut=isFilteredOut(data);
+		if(!filterOut && limitTrackPoints)
 		{
-			NRadarPlot::NPlotSourceType s=plot->getSource();
-			bool ok=false;
-			if(src==1 && (s==NRadarPlot::PSR || s==NRadarPlot::Combined)) ok=true;
-			if(src==2 && (s==NRadarPlot::SSR || s==NRadarPlot::Combined)) ok=true;
-			if(!ok) filterOut=true;
-		}
-
-		if(!filterOut && modeS)
-			filterOut = (modeS==1 && plot->getSSRType()==NRadarPlot::ModeS) || (modeS==2 && plot->getSSRType()!=NRadarPlot::ModeS);
-
-		if(!filterOut && modeA!=9999)
-			filterOut = (plot->getBoardNumber()!=modeA);
-
-		if(!filterOut && trackNo)
-		{
-			if(data->getType()==NRadarAbstractPlot::TypePlot)
-				filterOut = !plot->getAssociatedTrackIds().contains(trackNo);
+			if(data->getType()!=NRadarAbstractPlot::TypeTrack)
+				filterOut=true;
 			else
-				filterOut = (tplot->getTrackId()!=trackNo);
+			{
+				const NRadarTrackPlot *track=static_cast<const NRadarTrackPlot*>(data);
+				const quint64 trackInstance=m_trackInstances.value(track);
+				filterOut=visibleTrackPointCounts.value(trackInstance)>maximumTrackPoints;
+			}
 		}
-
-		if(!filterOut && address)
-			filterOut = (plot->getOption(NRadarPlot::AircraftAddress).toUInt() != address);
-
-		if(!filterOut && aircraftId.length())
-			filterOut = (plot->getOption(NRadarPlot::AircraftId).toString() != aircraftId);
-
-		if(!filterOut)
-		{
-			const QDateTime t = plot->getTime();
-			filterOut = (t < begin || t > end);
-		}
-
-		if(!filterOut && !area.isEmpty() && !area.containsPoint(plot->getXYCoord(),Qt::OddEvenFill))
-			filterOut=true;
 
 		if(filterOut && pi)
 		{
@@ -522,6 +945,8 @@ void AppWindow::applyFilter(bool fullFilter)
 		plot->setUserData(pi);
 	}
 
+	rebuildTrackPaths();
+
 //    qDebug()<<bench.elapsed()<<"ms for"<<dataPack->getData().size()<<"items";
 //    if(bench.elapsed())
 //        qDebug()<<"==="<<((qint64)dataPack->getData().size()*1000 / bench.elapsed())<<"items/s";
@@ -529,6 +954,218 @@ void AppWindow::applyFilter(bool fullFilter)
 //    qDebug()<<"SPI"<<spi;
 	barWorking->setVisible(false);
 	radarView->setUpdatesEnabled(true);
+}
+
+void AppWindow::clearTrackPaths()
+{
+    delete m_trackOverlay;
+    delete m_adsbTrackOverlay;
+    m_trackOverlay=0;
+    m_adsbTrackOverlay=0;
+    m_trackInstances.clear();
+}
+
+void AppWindow::rebuildTrackInstances()
+{
+    m_trackInstances.clear();
+
+    QMap<quint64,QList<const NRadarTrackPlot*> > tracks;
+    foreach(NRadarAbstractPlot *data,dataPack->getData())
+    {
+        if(data->getType()!=NRadarAbstractPlot::TypeTrack)
+            continue;
+
+        const NRadarTrackPlot *track=static_cast<const NRadarTrackPlot*>(data);
+        const quint64 key=(quint64(track->getRadarId())<<32)|quint64(track->getTrackId());
+        tracks[key]<<track;
+    }
+
+    quint64 nextTrackInstance=1;
+    QMapIterator<quint64,QList<const NRadarTrackPlot*> > trackIt(tracks);
+    while(trackIt.hasNext())
+    {
+        trackIt.next();
+        QList<const NRadarTrackPlot*> samples=trackIt.value();
+        std::stable_sort(samples.begin(),samples.end(),
+                         [](const NRadarTrackPlot *left,const NRadarTrackPlot *right)
+        {
+            return left->getTime()<right->getTime();
+        });
+
+        const NRadarTrackPlot *previousTrack=0;
+        quint64 trackInstance=0;
+        foreach(const NRadarTrackPlot *track,samples)
+        {
+            if(!trackInstance ||
+                    (previousTrack && !isContinuousTrack(previousTrack,track)))
+                trackInstance=nextTrackInstance++;
+
+            m_trackInstances.insert(track,trackInstance);
+            previousTrack=track;
+
+            if(track->getTrackPlotType()==NRadarTrackPlot::EndPoint)
+            {
+                trackInstance=0;
+                previousTrack=0;
+            }
+        }
+    }
+}
+
+void AppWindow::ensureTrackPathOverlays()
+{
+    const QRectF bounds=radarScene->sceneRect();
+    if(!m_trackOverlay)
+    {
+        NRadarSceneLayer *layer=layers.value(11,0);
+        QGraphicsItem *parent=layer ? layer->associatedGraphicsItem() : 0;
+        if(parent)
+            m_trackOverlay=new TrackPathsOverlayItem(bounds,parent);
+    }
+    else
+        m_trackOverlay->setBounds(bounds);
+
+    if(!m_adsbTrackOverlay)
+    {
+        NRadarSceneLayer *layer=layers.value(3,0);
+        QGraphicsItem *parent=layer ? layer->associatedGraphicsItem() : 0;
+        if(parent)
+            m_adsbTrackOverlay=new TrackPathsOverlayItem(bounds,parent);
+    }
+    else
+        m_adsbTrackOverlay->setBounds(bounds);
+}
+
+void AppWindow::addTrackPolyline(const QPolygonF& polyline,
+                                 quint8 radarId,
+                                 uint trackId,
+                                 quint64 trackInstance,
+                                 bool adsb)
+{
+    TrackPathsOverlayItem *overlay=adsb ? m_adsbTrackOverlay : m_trackOverlay;
+    if(overlay)
+        overlay->addPolyline(polyline,radarId,trackId,trackInstance);
+}
+
+void AppWindow::setTrackPathsVisible(bool visible)
+{
+    if(m_trackOverlay)
+        m_trackOverlay->setVisible(visible);
+    if(m_adsbTrackOverlay)
+        m_adsbTrackOverlay->setVisible(visible);
+}
+
+void AppWindow::rebuildTrackPaths()
+{
+    if(!property("valid").toBool()) return;
+
+    ensureTrackPathOverlays();
+    if(m_trackOverlay)
+        m_trackOverlay->clearPaths();
+    if(m_adsbTrackOverlay)
+        m_adsbTrackOverlay->clearPaths();
+
+    if(m_trackInstances.isEmpty())
+        rebuildTrackInstances();
+
+    QMap<quint64,QList<const NRadarTrackPlot*> > tracks;
+    foreach(NRadarAbstractPlot *data,dataPack->getData())
+    {
+        if(data->getType()!=NRadarAbstractPlot::TypeTrack)
+            continue;
+
+        const NRadarTrackPlot *track=static_cast<const NRadarTrackPlot*>(data);
+        const quint64 key=(quint64(track->getRadarId())<<32)|quint64(track->getTrackId());
+        tracks[key]<<track;
+    }
+
+    QMapIterator<quint64,QList<const NRadarTrackPlot*> > trackIt(tracks);
+    while(trackIt.hasNext())
+    {
+        trackIt.next();
+        QList<const NRadarTrackPlot*> samples=trackIt.value();
+        std::stable_sort(samples.begin(),samples.end(),
+                         [](const NRadarTrackPlot *left,const NRadarTrackPlot *right)
+        {
+            return left->getTime()<right->getTime();
+        });
+
+        QPolygonF polyline;
+        bool pathIsAdsb=false;
+        quint64 trackInstance=0;
+
+        foreach(const NRadarTrackPlot *track,samples)
+        {
+            const bool adsb=track->getSource()==NRadarPlot::ADSB;
+            const quint64 sampleTrackInstance=m_trackInstances.value(track);
+
+            if(sampleTrackInstance!=trackInstance)
+            {
+                addTrackPolyline(polyline,track->getRadarId(),track->getTrackId(),
+                                 trackInstance,pathIsAdsb);
+                polyline.clear();
+                trackInstance=sampleTrackInstance;
+                pathIsAdsb=adsb;
+            }
+
+            PlotItem *point=static_cast<PlotItem*>(track->getUserData());
+            const bool visible=point && point->isVisible();
+            if(visible)
+                polyline<<displayPosition(track,m_altitudeMultiplier);
+            else
+            {
+                addTrackPolyline(polyline,track->getRadarId(),track->getTrackId(),
+                                 trackInstance,pathIsAdsb);
+                polyline.clear();
+            }
+
+            if(track->getTrackPlotType()==NRadarTrackPlot::EndPoint)
+            {
+                addTrackPolyline(polyline,track->getRadarId(),track->getTrackId(),
+                                 trackInstance,pathIsAdsb);
+                polyline.clear();
+                trackInstance=0;
+            }
+        }
+
+        if(polyline.size()>1)
+        {
+            const NRadarTrackPlot *track=samples.last();
+            addTrackPolyline(polyline,track->getRadarId(),track->getTrackId(),
+                             trackInstance,pathIsAdsb);
+        }
+    }
+
+    setTrackPathsVisible(connectTracks_chk->isChecked() && cmbType->currentIndex()!=1);
+    updateTrackPathStyles();
+}
+
+void AppWindow::updateTrackPathStyles()
+{
+    const bool highlightedTrackIsVisible=m_hasHighlightedTrack &&
+            ((m_trackOverlay && m_trackOverlay->containsTrackInstance(m_highlightedTrackInstance)) ||
+             (m_adsbTrackOverlay && m_adsbTrackOverlay->containsTrackInstance(m_highlightedTrackInstance)));
+
+    if(m_trackOverlay)
+        m_trackOverlay->setDisplayStyle(m_blackWhiteMode,highlightedTrackIsVisible,
+                                        m_highlightedTrackInstance);
+    if(m_adsbTrackOverlay)
+        m_adsbTrackOverlay->setDisplayStyle(m_blackWhiteMode,highlightedTrackIsVisible,
+                                            m_highlightedTrackInstance);
+}
+
+void AppWindow::setHighlightedTrack(const NRadarTrackPlot *track)
+{
+    const quint64 trackInstance=track ? m_trackInstances.value(track,0) : 0;
+    const bool hasTrack=trackInstance!=0;
+
+    if(m_hasHighlightedTrack==hasTrack &&
+            (!hasTrack || m_highlightedTrackInstance==trackInstance))
+        return;
+
+    m_hasHighlightedTrack=hasTrack;
+    m_highlightedTrackInstance=trackInstance;
+    updateTrackPathStyles();
 }
 
 QTreeWidgetItem* AppWindow::addItemToDetails(QTreeWidgetItem *parent,const QString& name,const QString& value)
@@ -546,7 +1183,10 @@ QTreeWidgetItem* AppWindow::addItemToDetails(QTreeWidgetItem *parent,const QStri
 void AppWindow::onPlotSelected(NRadarItem* radarItem)
 {
     if(!radarItem || !radarItem->getLayer())
+    {
+        setHighlightedTrack(0);
         return;
+    }
 
     if (QGuiApplication::mouseButtons() & Qt::RightButton)
     {
@@ -562,6 +1202,8 @@ void AppWindow::onPlotSelected(NRadarItem* radarItem)
 	const NRadarTrackPlot *tplot=0;
 	if(plot->getType()==NRadarAbstractPlot::TypeTrack)
 		tplot=static_cast<const NRadarTrackPlot*>(plot);
+
+    setHighlightedTrack(tplot);
 
 	QTreeWidgetItem *root=tree->invisibleRootItem(),*item;
 
@@ -879,6 +1521,16 @@ NRadarScene* AppWindow::getRadarScene() const
 	return radarScene;
 }
 
+IAnalyser::SourceSelection AppWindow::getSelectedSource() const
+{
+    return static_cast<IAnalyser::SourceSelection>(cmbSource->currentIndex());
+}
+
+IAnalyser::ModeSSelection AppWindow::getSelectedModeS() const
+{
+    return static_cast<IAnalyser::ModeSSelection>(cmbModeS->currentIndex());
+}
+
 bool AppWindow::eventFilter(QObject *obj,QEvent *event)
 {
     if(obj==radarView->viewport())
@@ -1043,6 +1695,8 @@ void AppWindow::populatePlotPopup(PlotLabel *label, NRadarItem *radarItem)
     if (!squawk.isEmpty())
         entries << squawk;
     entries << NUnitsConverter::angleStr(pt.x(), 1) + " / " + NUnitsConverter::length1kStr(pt.y() / 1000.0, 3);
+    if (plot->hasHeight())
+        entries << tr("Alt: %1").arg(NUnitsConverter::lengthStr(plot->getHeight()));
 
     label->setEntries(entries);
 }
@@ -1110,6 +1764,7 @@ void AppWindow::executeTask(QAction *act)
 	if(id>=tasks.size()) return;
 
 	tasks[id]->execute(act->isChecked());
+	rebuildTrackPaths();
 	if(tasks[id]->getType()==AnalyserTask::TwoStages)
 		act->setText(tasks[id]->getName(!act->isChecked()));
 }

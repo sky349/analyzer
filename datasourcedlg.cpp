@@ -241,6 +241,14 @@ bool DataSourceDlg::processAsterix(const QByteArray& data)
 bool DataSourceDlg::dataIn(qint64 msecs,const QByteArray& data)
 {
     progressImport->setValue((msecs-msecsStart)*100/(msecsEnd-msecsStart));
+    if(progressImportUpdate.elapsed()>100)
+    {
+        qApp->processEvents();
+        progressImportUpdate.restart();
+
+        if(abortRead)
+            return false;
+    }
 
     QDateTime dt=QDateTime::fromMSecsSinceEpoch(msecs).toUTC();
 

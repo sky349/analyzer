@@ -19,6 +19,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -88,6 +89,10 @@ public:
     QVBoxLayout *verticalLayout_6;
     QTreeWidget *treeDetails;
     QCheckBox *blackWhite_chk;
+    QCheckBox *connectTracks_chk;
+    QHBoxLayout *horizontalLayout_trackPointLimit;
+    QCheckBox *shortTracks_chk;
+    QLineEdit *shortTracksLimit_edit;
     QDockWidget *dockView;
     QWidget *dockWidgetContents;
     QHBoxLayout *horizontalLayout_2;
@@ -415,6 +420,32 @@ public:
 
         verticalLayout_6->addWidget(blackWhite_chk);
 
+        connectTracks_chk = new QCheckBox(dockWidgetContents_3);
+        connectTracks_chk->setObjectName(QString::fromUtf8("connectTracks_chk"));
+        connectTracks_chk->setChecked(false);
+
+        verticalLayout_6->addWidget(connectTracks_chk);
+
+        horizontalLayout_trackPointLimit = new QHBoxLayout();
+        horizontalLayout_trackPointLimit->setSpacing(6);
+        horizontalLayout_trackPointLimit->setObjectName(QString::fromUtf8("horizontalLayout_trackPointLimit"));
+        shortTracks_chk = new QCheckBox(dockWidgetContents_3);
+        shortTracks_chk->setObjectName(QString::fromUtf8("shortTracks_chk"));
+
+        horizontalLayout_trackPointLimit->addWidget(shortTracks_chk);
+
+        shortTracksLimit_edit = new QLineEdit(dockWidgetContents_3);
+        shortTracksLimit_edit->setObjectName(QString::fromUtf8("shortTracksLimit_edit"));
+        shortTracksLimit_edit->setEnabled(false);
+        shortTracksLimit_edit->setMaximumSize(QSize(55, 16777215));
+        shortTracksLimit_edit->setMaxLength(9);
+        shortTracksLimit_edit->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        horizontalLayout_trackPointLimit->addWidget(shortTracksLimit_edit);
+
+
+        verticalLayout_6->addLayout(horizontalLayout_trackPointLimit);
+
         dockDetails->setWidget(dockWidgetContents_3);
         AppWindow->addDockWidget(Qt::RightDockWidgetArea, dockDetails);
         dockView = new QDockWidget(AppWindow);
@@ -513,6 +544,9 @@ public:
         btnTrackNoClear->setText(QCoreApplication::translate("AppWindow", "X", nullptr));
         dockDetails->setWindowTitle(QCoreApplication::translate("AppWindow", "Selection details", nullptr));
         blackWhite_chk->setText(QCoreApplication::translate("AppWindow", "Black and white mode", nullptr));
+        connectTracks_chk->setText(QCoreApplication::translate("AppWindow", "Connect track points", nullptr));
+        shortTracks_chk->setText(QCoreApplication::translate("AppWindow", "Show only tracks with points <=", nullptr));
+        shortTracksLimit_edit->setText(QCoreApplication::translate("AppWindow", "10", nullptr));
         dockView->setWindowTitle(QCoreApplication::translate("AppWindow", "View mode", nullptr));
         radioViewNormal->setText(QCoreApplication::translate("AppWindow", "Geo", nullptr));
         radioViewRA->setText(QCoreApplication::translate("AppWindow", "Range / Alt", nullptr));

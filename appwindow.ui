@@ -535,6 +535,49 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QCheckBox" name="connectTracks_chk">
+       <property name="text">
+        <string>Connect track points</string>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_trackPointLimit">
+       <item>
+        <widget class="QCheckBox" name="shortTracks_chk">
+         <property name="text">
+          <string>Show only tracks with points &lt;=</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="shortTracksLimit_edit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>55</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="maxLength">
+          <number>9</number>
+         </property>
+         <property name="text">
+          <string>10</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
     </layout>
    </widget>
   </widget>

@@ -1,5 +1,6 @@
 release/main.o
 release/ampfiltertask.o
+release/acresolutiontask.o
 release/ampscatterdlg.o
 release/ampscattertask.o
 release/appwindow.o
@@ -24,4 +25,3 @@ release/moc_podtask.o
 release/moc_ianalyser.o
 release/moc_reflectorstask.o
 release/moc_amplitudedlg.o
-release/moc_plotlabel.o

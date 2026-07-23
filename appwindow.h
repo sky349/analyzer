@@ -15,7 +15,9 @@ class DataPack;
 class GuiFilter;
 class QGraphicsLineItem;
 class QGraphicsProxyWidget;
+class NRadarTrackPlot;
 class PlotLabel;
+class TrackPathsOverlayItem;
 
 struct PlotPopupData
 {
@@ -37,6 +39,8 @@ public:
     const QList<NRadarAbstractPlot*>& getAllData() const;
     const NRadarMap* getActiveMap() const;
     NRadarScene* getRadarScene() const;
+    SourceSelection getSelectedSource() const;
+    ModeSSelection getSelectedModeS() const;
 
     //set plot color
     void setPlotColor(const NRadarAbstractPlot* plot,const QColor& color);
@@ -87,10 +91,26 @@ private:
     void populatePlotPopup(PlotLabel *label, NRadarItem *radarItem);
     int findPopupAtPos(const QPoint& viewPos);
 
+    void clearTrackPaths();
+    void rebuildTrackInstances();
+    void rebuildTrackPaths();
+    void ensureTrackPathOverlays();
+    void addTrackPolyline(const QPolygonF& polyline,quint8 radarId,uint trackId,
+                          quint64 trackInstance,bool adsb);
+    void setTrackPathsVisible(bool visible);
+    void updateTrackPathStyles();
+    void setHighlightedTrack(const NRadarTrackPlot *track);
+
     QList<PlotPopupData> m_plotPopups;
+    TrackPathsOverlayItem *m_trackOverlay;
+    TrackPathsOverlayItem *m_adsbTrackOverlay;
+    QHash<const NRadarTrackPlot*,quint64> m_trackInstances;
 
     int m_draggingPopupIndex;
     QPointF m_popupDragOffset;
+    int m_altitudeMultiplier;
+    bool m_hasHighlightedTrack;
+    quint64 m_highlightedTrackInstance;
 };
 
 #endif // APPWINDOW_H
