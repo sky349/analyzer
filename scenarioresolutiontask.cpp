@@ -12,6 +12,7 @@
 #include <QFileInfo>
 #include <QGraphicsObject>
 #include <QHeaderView>
+#include <QInputDialog>
 #include <QLabel>
 #include <QMessageBox>
 #include <QPainter>
@@ -23,6 +24,7 @@
 #include <QWidget>
 
 #include <algorithm>
+#include <limits>
 
 #include "scenarioresolutiontask.h"
 
@@ -31,7 +33,7 @@ namespace
 
 const quint8 ScenarioRadarId=50;
 const double NauticalMileMeters=1852.0;
-const double ScenarioRangeGateMeters=2.0*NauticalMileMeters;
+const double ScenarioRangeGateMeters=0.25*NauticalMileMeters;
 const double ScenarioAzimuthGateDegrees=2.0;
 const double ScenarioStartToleranceSeconds=0.010;
 const uint ScenarioDiagnosticModeA=2522;
@@ -40,6 +42,13 @@ const int ScenarioEpochDetectionTargetCount=96;
 const int ScenarioEpochDetectionScanCount=4;
 const double ScenarioEpochMissingMatchPenalty=4.0;
 const double ScenarioEpochMinimumCoverage=0.50;
+const qint64 ScenarioAssociationCostScale=1000000;
+
+enum ScenarioAssociationMethod
+{
+    CurrentMaximumCardinalityAssociation,
+    MinimumCostMaximumCardinalityAssociation
+};
 
 struct ScenarioTarget
 {
@@ -74,6 +83,31 @@ struct MatchCandidate
 {
     int plotIndex;
     double cost;
+};
+
+struct MatchComponent
+{
+    QVector<int> opportunityIndices;
+    QVector<int> plotIndices;
+};
+
+struct AssociationPair
+{
+    int opportunityIndex;
+    int plotIndex;
+    double rangeResidualMeters;
+    double azimuthResidualDegrees;
+    double cost;
+};
+
+struct AssociationResult
+{
+    QVector<int> plotForOpportunity;
+    QVector<int> unassignedPlots;
+    QVector<AssociationPair> selectedPairs;
+    double totalCost;
+
+    AssociationResult():totalCost(0.0) {}
 };
 
 struct ScenarioDiagnosticBasePlot
@@ -485,7 +519,9 @@ QVector<const NRadarPlot*> measuredPlots(
         if(isEligibleScenarioPlot(plot))
             plots.append(plot);
     }
-    std::sort(plots.begin(),plots.end(),
+    // Preserve the recording's source order when timestamps are equal so
+    // plot indices provide a stable tie-break for the weighted solver.
+    std::stable_sort(plots.begin(),plots.end(),
               [](const NRadarPlot *first,const NRadarPlot *second)
     {
         return first->getTime()<second->getTime();
@@ -519,7 +555,7 @@ bool findAugmentingMatch(
     return false;
 }
 
-QVector<int> matchScan(
+QVector<QVector<MatchCandidate> > buildMatchCandidates(
         const QVector<ScenarioOpportunity>& opportunities,
         const QVector<const NRadarPlot*>& plots)
 {
@@ -531,11 +567,16 @@ QVector<int> matchScan(
                 opportunities.at(opportunityIndex);
         QVector<MatchCandidate>& opportunityCandidates=
                 candidates[opportunityIndex];
+        if(!qIsFinite(opportunity.polarPosition.x()) ||
+                !qIsFinite(opportunity.polarPosition.y()))
+            continue;
 
         for(int plotIndex=0;plotIndex<plots.size();plotIndex++)
         {
             const NRadarPlot *plot=plots.at(plotIndex);
             const QPointF plotPolar=plot->getADCoord();
+            if(!qIsFinite(plotPolar.x()) || !qIsFinite(plotPolar.y()))
+                continue;
             const double rangeDifference=
                     qAbs(plotPolar.y()-opportunity.polarPosition.y());
             if(rangeDifference>ScenarioRangeGateMeters)
@@ -553,6 +594,21 @@ QVector<int> matchScan(
                     qPow(angleDifference/ScenarioAzimuthGateDegrees,2.0);
             opportunityCandidates.append(candidate);
         }
+    }
+    return candidates;
+}
+
+QVector<int> matchScan(
+        const QVector<ScenarioOpportunity>& opportunities,
+        const QVector<const NRadarPlot*>& plots)
+{
+    QVector<QVector<MatchCandidate> > candidates=
+            buildMatchCandidates(opportunities,plots);
+    for(int opportunityIndex=0;
+            opportunityIndex<candidates.size();opportunityIndex++)
+    {
+        QVector<MatchCandidate>& opportunityCandidates=
+                candidates[opportunityIndex];
 
         std::sort(opportunityCandidates.begin(),opportunityCandidates.end(),
                   [](const MatchCandidate& first,const MatchCandidate& second)
@@ -585,6 +641,309 @@ QVector<int> matchScan(
                             opportunityPlots,visitedPlots);
     }
     return opportunityPlots;
+}
+
+QVector<MatchComponent> matchComponents(
+        const QVector<QVector<MatchCandidate> >& candidates,int plotCount)
+{
+    QVector<QVector<int> > opportunitiesByPlot(plotCount);
+    for(int opportunityIndex=0;
+            opportunityIndex<candidates.size();opportunityIndex++)
+    {
+        foreach(const MatchCandidate& candidate,
+                candidates.at(opportunityIndex))
+            opportunitiesByPlot[candidate.plotIndex].append(opportunityIndex);
+    }
+
+    QVector<char> visitedOpportunities(candidates.size(),0);
+    QVector<char> visitedPlots(plotCount,0);
+    QVector<MatchComponent> components;
+    for(int startOpportunity=0;
+            startOpportunity<candidates.size();startOpportunity++)
+    {
+        if(visitedOpportunities.at(startOpportunity) ||
+                candidates.at(startOpportunity).isEmpty())
+            continue;
+
+        MatchComponent component;
+        component.opportunityIndices.append(startOpportunity);
+        visitedOpportunities[startOpportunity]=1;
+        int opportunityCursor=0;
+        int plotCursor=0;
+        while(opportunityCursor<component.opportunityIndices.size() ||
+              plotCursor<component.plotIndices.size())
+        {
+            while(opportunityCursor<component.opportunityIndices.size())
+            {
+                const int opportunityIndex=
+                        component.opportunityIndices.at(opportunityCursor++);
+                foreach(const MatchCandidate& candidate,
+                        candidates.at(opportunityIndex))
+                {
+                    if(visitedPlots.at(candidate.plotIndex))
+                        continue;
+                    visitedPlots[candidate.plotIndex]=1;
+                    component.plotIndices.append(candidate.plotIndex);
+                }
+            }
+            while(plotCursor<component.plotIndices.size())
+            {
+                const int plotIndex=
+                        component.plotIndices.at(plotCursor++);
+                foreach(int opportunityIndex,
+                        opportunitiesByPlot.at(plotIndex))
+                {
+                    if(visitedOpportunities.at(opportunityIndex))
+                        continue;
+                    visitedOpportunities[opportunityIndex]=1;
+                    component.opportunityIndices.append(opportunityIndex);
+                }
+            }
+        }
+
+        std::sort(component.opportunityIndices.begin(),
+                  component.opportunityIndices.end());
+        std::sort(component.plotIndices.begin(),
+                  component.plotIndices.end());
+        components.append(component);
+    }
+    return components;
+}
+
+QVector<int> solveRectangularAssignment(
+        const QVector<QVector<qint64> >& costs)
+{
+    const int rowCount=costs.size();
+    if(!rowCount)
+        return QVector<int>();
+    const int columnCount=costs.first().size();
+    const qint64 infinity=std::numeric_limits<qint64>::max()/4;
+
+    // Shortest-augmenting-path form of the rectangular Hungarian algorithm.
+    // Strict comparisons and ascending row/column traversal make quantised
+    // exact ties deterministic.
+    QVector<qint64> rowPotentials(rowCount+1,0);
+    QVector<qint64> columnPotentials(columnCount+1,0);
+    QVector<int> columnOwners(columnCount+1,0);
+    QVector<int> previousColumns(columnCount+1,0);
+    for(int row=1;row<=rowCount;row++)
+    {
+        columnOwners[0]=row;
+        int currentColumn=0;
+        QVector<qint64> minimumReducedCosts(columnCount+1,infinity);
+        QVector<char> usedColumns(columnCount+1,0);
+        do
+        {
+            usedColumns[currentColumn]=1;
+            const int currentRow=columnOwners.at(currentColumn);
+            qint64 delta=infinity;
+            int nextColumn=0;
+            for(int column=1;column<=columnCount;column++)
+            {
+                if(usedColumns.at(column))
+                    continue;
+                const qint64 reducedCost=
+                        costs.at(currentRow-1).at(column-1)-
+                        rowPotentials.at(currentRow)-
+                        columnPotentials.at(column);
+                if(reducedCost<minimumReducedCosts.at(column))
+                {
+                    minimumReducedCosts[column]=reducedCost;
+                    previousColumns[column]=currentColumn;
+                }
+                if(minimumReducedCosts.at(column)<delta)
+                {
+                    delta=minimumReducedCosts.at(column);
+                    nextColumn=column;
+                }
+            }
+
+            Q_ASSERT(nextColumn);
+            for(int column=0;column<=columnCount;column++)
+            {
+                if(usedColumns.at(column))
+                {
+                    rowPotentials[columnOwners.at(column)]+=delta;
+                    columnPotentials[column]-=delta;
+                }
+                else if(minimumReducedCosts.at(column)<infinity)
+                    minimumReducedCosts[column]-=delta;
+            }
+            currentColumn=nextColumn;
+        }
+        while(columnOwners.at(currentColumn));
+
+        do
+        {
+            const int previousColumn=previousColumns.at(currentColumn);
+            columnOwners[currentColumn]=
+                    columnOwners.at(previousColumn);
+            currentColumn=previousColumn;
+        }
+        while(currentColumn);
+    }
+
+    QVector<int> columnsByRow(rowCount,-1);
+    for(int column=1;column<=columnCount;column++)
+    {
+        if(columnOwners.at(column)>0)
+            columnsByRow[columnOwners.at(column)-1]=column-1;
+    }
+    return columnsByRow;
+}
+
+qint64 quantizedMatchCost(double cost)
+{
+    const double boundedCost=qBound(0.0,cost,2.0);
+    return qRound64(boundedCost*ScenarioAssociationCostScale);
+}
+
+QVector<int> minimumCostMaximumMatches(
+        const QVector<QVector<MatchCandidate> >& candidates,int plotCount)
+{
+    const QVector<MatchComponent> components=
+            matchComponents(candidates,plotCount);
+    QVector<int> opportunityPlots(candidates.size(),-1);
+    QVector<int> localColumnByPlot(plotCount,-1);
+
+    foreach(const MatchComponent& component,components)
+    {
+        const int rowCount=component.opportunityIndices.size();
+        const int realColumnCount=component.plotIndices.size();
+        const int maximumAssociations=qMin(rowCount,realColumnCount);
+        const int columnCount=realColumnCount+rowCount;
+
+        // Candidate costs are at most 2 * scale.  One missed-detection
+        // penalty is therefore larger than every possible improvement in
+        // all real edges of this component, preserving maximum cardinality
+        // as the primary objective.
+        const qint64 missedDetectionPenalty=
+                (2*qint64(maximumAssociations)+1)*
+                ScenarioAssociationCostScale;
+        const qint64 forbiddenCost=
+                (qint64(rowCount)+1)*missedDetectionPenalty;
+        QVector<QVector<qint64> > costs(
+                    rowCount,QVector<qint64>(columnCount,forbiddenCost));
+
+        for(int localPlotIndex=0;
+                localPlotIndex<component.plotIndices.size();
+                localPlotIndex++)
+        {
+            localColumnByPlot[
+                    component.plotIndices.at(localPlotIndex)]=localPlotIndex;
+        }
+
+        for(int localRow=0;localRow<rowCount;localRow++)
+        {
+            const int opportunityIndex=
+                    component.opportunityIndices.at(localRow);
+            foreach(const MatchCandidate& candidate,
+                    candidates.at(opportunityIndex))
+            {
+                const int localColumn=
+                        localColumnByPlot.at(candidate.plotIndex);
+                Q_ASSERT(localColumn>=0);
+                costs[localRow][localColumn]=
+                        quantizedMatchCost(candidate.cost);
+            }
+            // Each base point has one private missed-detection column.
+            costs[localRow][realColumnCount+localRow]=
+                    missedDetectionPenalty;
+        }
+
+        const QVector<int> assignedColumns=
+                solveRectangularAssignment(costs);
+        Q_ASSERT(assignedColumns.size()==rowCount);
+        for(int localRow=0;localRow<rowCount;localRow++)
+        {
+            const int assignedColumn=assignedColumns.at(localRow);
+            if(assignedColumn>=0 && assignedColumn<realColumnCount)
+            {
+                const int opportunityIndex=
+                        component.opportunityIndices.at(localRow);
+                opportunityPlots[opportunityIndex]=
+                        component.plotIndices.at(assignedColumn);
+            }
+        }
+
+        foreach(int plotIndex,component.plotIndices)
+            localColumnByPlot[plotIndex]=-1;
+    }
+    return opportunityPlots;
+}
+
+QVector<int> matchScanMinimumCostMaximum(
+        const QVector<ScenarioOpportunity>& opportunities,
+        const QVector<const NRadarPlot*>& plots)
+{
+    return minimumCostMaximumMatches(
+                buildMatchCandidates(opportunities,plots),plots.size());
+}
+
+AssociationResult associationResult(
+        const QVector<int>& matches,
+        const QVector<ScenarioOpportunity>& opportunities,
+        const QVector<const NRadarPlot*>& plots)
+{
+    AssociationResult result;
+    result.plotForOpportunity=matches;
+    QVector<char> assignedPlots(plots.size(),0);
+    for(int opportunityIndex=0;
+            opportunityIndex<matches.size();opportunityIndex++)
+    {
+        const int plotIndex=matches.at(opportunityIndex);
+        if(plotIndex<0)
+            continue;
+
+        Q_ASSERT(plotIndex<plots.size());
+        Q_ASSERT(!assignedPlots.at(plotIndex));
+        assignedPlots[plotIndex]=1;
+        const QPointF measuredPolar=plots.at(plotIndex)->getADCoord();
+        const QPointF expectedPolar=
+                opportunities.at(opportunityIndex).polarPosition;
+
+        AssociationPair pair;
+        pair.opportunityIndex=opportunityIndex;
+        pair.plotIndex=plotIndex;
+        pair.rangeResidualMeters=
+                qAbs(measuredPolar.y()-expectedPolar.y());
+        pair.azimuthResidualDegrees=azimuthDifference(
+                    measuredPolar.x(),expectedPolar.x());
+        pair.cost=
+                qPow(pair.rangeResidualMeters/
+                     ScenarioRangeGateMeters,2.0)+
+                qPow(pair.azimuthResidualDegrees/
+                     ScenarioAzimuthGateDegrees,2.0);
+        result.selectedPairs.append(pair);
+        result.totalCost+=pair.cost;
+    }
+
+    for(int plotIndex=0;plotIndex<plots.size();plotIndex++)
+    {
+        if(!assignedPlots.at(plotIndex))
+            result.unassignedPlots.append(plotIndex);
+    }
+    return result;
+}
+
+AssociationResult associateScan(
+        const QVector<ScenarioOpportunity>& opportunities,
+        const QVector<const NRadarPlot*>& plots,
+        ScenarioAssociationMethod method)
+{
+    QVector<int> matches;
+    if(method==MinimumCostMaximumCardinalityAssociation)
+        matches=matchScanMinimumCostMaximum(opportunities,plots);
+    else
+        matches=matchScan(opportunities,plots);
+    return associationResult(matches,opportunities,plots);
+}
+
+QString associationMethodText(ScenarioAssociationMethod method)
+{
+    if(method==MinimumCostMaximumCardinalityAssociation)
+        return QObject::tr("Global minimum-cost maximum matching");
+    return QObject::tr("Current maximum-cardinality matching");
 }
 
 QVector<QVector<const NRadarPlot*> > groupPlotsByNorthScan(
@@ -638,6 +997,7 @@ ScenarioEpochDetection detectScenarioEpoch(
         const QVector<ScenarioTarget>& targets,const NRadarMap *map,
         const QVector<const NRadarMarker*>& markers,
         const QVector<QVector<const NRadarPlot*> >& plotsByScan,
+        ScenarioAssociationMethod associationMethod,
         IAnalyser *analyser)
 {
     ScenarioEpochDetection result;
@@ -683,36 +1043,15 @@ ScenarioEpochDetection detectScenarioEpoch(
                     scenarioOpportunitiesForScan(
                         targets,map,scanStartElapsed,scanDuration,
                         sampleTargets);
-            const QVector<int> matches=matchScan(
-                        opportunities,plotsByScan.at(scanIndex));
+            const AssociationResult association=associateScan(
+                        opportunities,plotsByScan.at(scanIndex),
+                        associationMethod);
             expectedCount+=opportunities.size();
-
-            for(int opportunityIndex=0;
-                    opportunityIndex<opportunities.size();
-                    opportunityIndex++)
-            {
-                const int plotIndex=matches.at(opportunityIndex);
-                if(plotIndex<0)
-                {
-                    totalPenalty+=ScenarioEpochMissingMatchPenalty;
-                    continue;
-                }
-
-                matchedCount++;
-                const QPointF measuredPolar=
-                        plotsByScan.at(scanIndex).at(plotIndex)->getADCoord();
-                const QPointF expectedPolar=
-                        opportunities.at(opportunityIndex).polarPosition;
-                const double rangeDifference=
-                        qAbs(measuredPolar.y()-expectedPolar.y());
-                const double angleDifference=azimuthDifference(
-                            measuredPolar.x(),expectedPolar.x());
-                totalPenalty+=
-                        qPow(rangeDifference/
-                             ScenarioRangeGateMeters,2.0)+
-                        qPow(angleDifference/
-                             ScenarioAzimuthGateDegrees,2.0);
-            }
+            matchedCount+=association.selectedPairs.size();
+            totalPenalty+=association.totalCost+
+                    (opportunities.size()-
+                     association.selectedPairs.size())*
+                    ScenarioEpochMissingMatchPenalty;
         }
 
         const double coverage=expectedCount ?
@@ -1119,7 +1458,8 @@ void showResults(const QString& path,const QString& scenarioName,
                  const QDateTime& scenarioEpoch,
                  const QVector<ScenarioTarget>& targets,
                  const QVector<TargetStatistics>& statistics,
-                 const ScenarioEpochDetection& epochDetection)
+                 const ScenarioEpochDetection& epochDetection,
+                 ScenarioAssociationMethod associationMethod)
 {
     QWidget *widget=new QWidget;
     widget->setAttribute(Qt::WA_DeleteOnClose);
@@ -1134,6 +1474,9 @@ void showResults(const QString& path,const QString& scenarioName,
                 QObject::tr("Scenario file: %1").arg(path),widget);
     fileLabel->setWordWrap(true);
     layout->addWidget(fileLabel);
+    layout->addWidget(new QLabel(
+            QObject::tr("Association: %1")
+            .arg(associationMethodText(associationMethod)),widget));
     layout->addWidget(new QLabel(
             QObject::tr("Scenario time zero: automatically detected North "
                         "marker %1 at %2 UTC")
@@ -1259,6 +1602,23 @@ bool ScenarioResolutionTask::execute(bool firstStage)
     if(path.isEmpty())
         return false;
 
+    const QString recommendedMethodText=
+            tr("Global minimum-cost maximum matching (recommended)");
+    const QString currentMethodText=
+            tr("Current maximum-cardinality matching");
+    bool methodSelected=false;
+    const QString selectedMethod=QInputDialog::getItem(
+                0,tr("A/C resolution w/ scenario"),
+                tr("Association method:"),
+                QStringList()<<recommendedMethodText<<currentMethodText,
+                0,false,&methodSelected);
+    if(!methodSelected)
+        return false;
+    const ScenarioAssociationMethod associationMethod=
+            selectedMethod==currentMethodText ?
+                CurrentMaximumCardinalityAssociation :
+                MinimumCostMaximumCardinalityAssociation;
+
     QVector<ScenarioTarget> targets;
     QString scenarioName;
     QString parseMessage;
@@ -1288,7 +1648,7 @@ bool ScenarioResolutionTask::execute(bool firstStage)
     analyser->setTaskProgress(0);
     const ScenarioEpochDetection epochDetection=detectScenarioEpoch(
                 targets,analyser->getActiveMap(),markers,plotsByScan,
-                analyser);
+                associationMethod,analyser);
     if(epochDetection.markerIndex<0)
     {
         analyser->setTaskProgress(0,false);
@@ -1315,6 +1675,8 @@ bool ScenarioResolutionTask::execute(bool firstStage)
             "within the same antenna scan")
             .arg(ScenarioRangeGateMeters/NauticalMileMeters,0,'f',2)
             .arg(ScenarioAzimuthGateDegrees,0,'f',2);
+    qDebug().noquote() << tr("Association method: %1")
+            .arg(associationMethodText(associationMethod));
     QVector<TargetStatistics> statistics(targets.size());
     QVector<QPointF> basePoints;
     QVector<QLineF> matchLines;
@@ -1352,7 +1714,9 @@ bool ScenarioResolutionTask::execute(bool firstStage)
 
         const QVector<const NRadarPlot*>& scanPlots=
                 plotsByScan.at(scanIndex);
-        const QVector<int> matches=matchScan(opportunities,scanPlots);
+        const AssociationResult association=associateScan(
+                    opportunities,scanPlots,associationMethod);
+        const QVector<int>& matches=association.plotForOpportunity;
         for(int opportunityIndex=0;
                 opportunityIndex<matches.size();opportunityIndex++)
         {
@@ -1411,7 +1775,7 @@ bool ScenarioResolutionTask::execute(bool firstStage)
                     .arg(diagnosticPath);
     }
     showResults(path,scenarioName,scenarioEpoch,targets,statistics,
-                epochDetection);
+                epochDetection,associationMethod);
     emit finished(true);
     return true;
 }
