@@ -1442,9 +1442,26 @@ QString writeScenarioAssociationDiagnostics(
     return logPath;
 }
 
+QString probabilityText(double probability)
+{
+    int precision=2;
+    QString text=QString::number(probability,'f',precision);
+
+    // A displayed 100% should mean that every expected plot was detected.
+    // Keep enough fractional digits to expose any real shortfall instead.
+    while(probability<100.0 &&
+          text==QString::number(100.0,'f',precision) &&
+          precision<std::numeric_limits<double>::digits10)
+    {
+        precision++;
+        text=QString::number(probability,'f',precision);
+    }
+    return text;
+}
+
 void setProbabilityItem(QTableWidgetItem *item,double probability)
 {
-    item->setText(QString::number(probability,'f',2));
+    item->setText(probabilityText(probability));
     item->setTextAlignment(Qt::AlignRight|Qt::AlignVCenter);
     if(probability<30.0)
         item->setBackground(QBrush(Qt::red));
