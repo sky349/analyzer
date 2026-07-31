@@ -9,45 +9,85 @@
 #include <qwt_plot_panner.h>
 #include <qwt_symbol.h>
 
+#include <QComboBox>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QWidget>
+
 #include "falsepsrtask.h"
 
 namespace
 {
 
-void showFalseTracksChart(const QVector<double>& scanNumbers,
-                          const QVector<double>& falseTrackCounts,
-                          const QString& title)
+QVector<double> countsForTimePeriod(const QVector<double>& scanFalseTrackCounts,
+                                    const QVector<QDateTime>& scanBeginTimes,
+                                    const QDateTime& begin,
+                                    const QDateTime& end,
+                                    qint64 periodMs)
 {
-    QwtPlot *plot=new QwtPlot;
-    plot->setAttribute(Qt::WA_DeleteOnClose);
-    plot->setWindowTitle(title);
+    const qint64 durationMs=begin.msecsTo(end);
+    const int periodCount=qMax(1,int((durationMs+periodMs-1)/periodMs));
+    QVector<double> counts(periodCount,0.0);
+
+    const int scanCount=qMin(scanFalseTrackCounts.size(),scanBeginTimes.size());
+    for(int scanIndex=0;scanIndex<scanCount;scanIndex++)
+    {
+        const qint64 elapsedMs=begin.msecsTo(scanBeginTimes.at(scanIndex));
+        const int periodIndex=qBound(0,int(elapsedMs/periodMs),periodCount-1);
+        counts[periodIndex]+=scanFalseTrackCounts.at(scanIndex);
+    }
+    return counts;
+}
+
+void updateFalseTracksChart(QwtPlot *plot,QwtPlotCurve *curve,
+                            const QVector<double>& falseTrackCounts,
+                            const QString& title,const QString& xAxisTitle)
+{
+    QVector<double> periods;
+    periods.reserve(falseTrackCounts.size());
+    for(int i=0;i<falseTrackCounts.size();i++)
+        periods.append(i+1);
+
     plot->setTitle(title);
-    plot->setAxisTitle(QwtPlot::xBottom,QObject::tr("Scan number"));
+    plot->setAxisTitle(QwtPlot::xBottom,xAxisTitle);
     plot->setAxisTitle(QwtPlot::yLeft,QObject::tr("Number of false tracks"));
-    plot->setCanvasBackground(Qt::white);
 
     int maximumCount=0;
     foreach(double value,falseTrackCounts)
         maximumCount=qMax(maximumCount,qRound(value));
 
-    const int scanCount=scanNumbers.size();
-    const int horizontalStep=qMax(1,qCeil((scanCount-1)/10.0));
-    if(scanCount==1)
+    const int periodCount=periods.size();
+    const int horizontalStep=qMax(1,qCeil((periodCount-1)/10.0));
+    if(periodCount==1)
         plot->setAxisScale(QwtPlot::xBottom,0.0,2.0,1.0);
     else
-        plot->setAxisScale(QwtPlot::xBottom,1.0,scanCount,horizontalStep);
+        plot->setAxisScale(QwtPlot::xBottom,1.0,periodCount,horizontalStep);
 
     const int verticalStep=qMax(1,qCeil(maximumCount/10.0));
     const int verticalMaximum=maximumCount ?
             ((maximumCount/verticalStep)+1)*verticalStep : 1;
     plot->setAxisScale(QwtPlot::yLeft,0.0,verticalMaximum,verticalStep);
 
+    curve->setSamples(periods.data(),falseTrackCounts.data(),periodCount);
+    plot->replot();
+}
+
+void showFalseTracksChart(const QVector<double>& scanFalseTrackCounts,
+                          const QVector<QDateTime>& scanBeginTimes,
+                          const QDateTime& begin,const QDateTime& end,
+                          const QString& baseTitle,const QString& titleSuffix)
+{
+    QWidget *window=new QWidget;
+    window->setAttribute(Qt::WA_DeleteOnClose);
+
+    QwtPlot *plot=new QwtPlot(window);
+    plot->setCanvasBackground(Qt::white);
+
     QwtPlotGrid *grid=new QwtPlotGrid;
     grid->setMajorPen(QPen(QColor(190,190,190),0,Qt::DashLine));
     grid->attach(plot);
 
     QwtPlotCurve *curve=new QwtPlotCurve(QObject::tr("False tracks"));
-    curve->setSamples(scanNumbers.data(),falseTrackCounts.data(),scanCount);
     curve->setPen(QPen(QColor(35,100,190),2));
     curve->setSymbol(new QwtSymbol(QwtSymbol::Ellipse,
                                    QBrush(QColor(35,100,190)),
@@ -58,9 +98,54 @@ void showFalseTracksChart(const QVector<double>& scanNumbers,
     new QwtPlotMagnifier(plot->canvas());
     new QwtPlotPanner(plot->canvas());
 
-    plot->resize(1000,600);
-    plot->replot();
-    plot->show();
+    QComboBox *periodCombo=new QComboBox(window);
+    periodCombo->setObjectName(QStringLiteral("falseTracksPeriodCombo"));
+    periodCombo->addItem(QObject::tr("Scans"));
+    periodCombo->addItem(QObject::tr("1 min"));
+    periodCombo->addItem(QObject::tr("5 min"));
+
+    QHBoxLayout *controlsLayout=new QHBoxLayout;
+    controlsLayout->addStretch();
+    controlsLayout->addWidget(periodCombo);
+
+    QVBoxLayout *windowLayout=new QVBoxLayout(window);
+    windowLayout->addWidget(plot);
+    windowLayout->addLayout(controlsLayout);
+
+    const auto refreshChart=[=](int periodIndex)
+    {
+        QVector<double> counts;
+        QString periodTitle;
+        QString xAxisTitle;
+        if(periodIndex==0)
+        {
+            counts=scanFalseTrackCounts;
+            periodTitle=QObject::tr(" per scan");
+            xAxisTitle=QObject::tr("Scan number");
+        }
+        else
+        {
+            const int minutes=periodIndex==1 ? 1 : 5;
+            counts=countsForTimePeriod(scanFalseTrackCounts,scanBeginTimes,
+                                       begin,end,
+                                       minutes*60*1000);
+            periodTitle=QObject::tr(" per %1 min").arg(minutes);
+            xAxisTitle=QObject::tr("%1-minute period").arg(minutes);
+        }
+
+        const QString title=baseTitle+periodTitle+titleSuffix;
+        window->setWindowTitle(title);
+        updateFalseTracksChart(plot,curve,counts,title,xAxisTitle);
+    };
+
+    QObject::connect(periodCombo,
+                     static_cast<void (QComboBox::*)(int)>(
+                         &QComboBox::currentIndexChanged),
+                     refreshChart);
+
+    refreshChart(0);
+    window->resize(1000,600);
+    window->show();
 }
 
 }
@@ -104,8 +189,11 @@ bool FalsePSRTask::execute(bool firstStage)
 
     int count=0;
     bool hasPreviousNorthMarker=false;
-    QVector<double> scanNumbers;
     QVector<double> falseTrackCounts;
+    QVector<QDateTime> scanBeginTimes;
+    QDateTime collectionBegin;
+    QDateTime collectionEnd;
+    QDateTime currentScanBegin;
 
     QMap<quint64,int> trackLen;
     const IAnalyser::ModeSSelection modeS=analyser->getSelectedModeS();
@@ -120,11 +208,17 @@ bool FalsePSRTask::execute(bool firstStage)
             {
                 if(hasPreviousNorthMarker)
                 {
-                    scanNumbers.append(scanNumbers.size()+1);
                     falseTrackCounts.append(count);
+                    scanBeginTimes.append(currentScanBegin);
+                    collectionEnd=m->getTime();
+                    currentScanBegin=m->getTime();
                 }
                 else
+                {
                     hasPreviousNorthMarker=true;
+                    collectionBegin=m->getTime();
+                    currentScanBegin=m->getTime();
+                }
                 count = 0;
             }
             continue;
@@ -180,19 +274,24 @@ bool FalsePSRTask::execute(bool firstStage)
         trackLen[trackKey]++;
     }
 
-    if(scanNumbers.isEmpty())
+    if(falseTrackCounts.isEmpty())
     {
         QMessageBox::critical(0,tr("Error"),
                 tr("At least two North markers are required to build the chart"));
         return false;
     }
 
-    QString title=source==IAnalyser::SourcePSR ?
-            tr("False PSR tracks per scan") : tr("False SSR tracks per scan");
+    const QString baseTitle=(source==IAnalyser::SourcePSR ?
+            tr("False PSR tracks (\u2264 %1 points)") :
+            tr("False SSR tracks (\u2264 %1 points)")).arg(maxLen);
+    QString titleSuffix;
     if(source==IAnalyser::SourceSSR && modeS!=IAnalyser::ModeSAny)
-        title+=modeS==IAnalyser::ModeSEnabled ? tr(" (Mode-S)") : tr(" (non-Mode-S)");
+        titleSuffix=modeS==IAnalyser::ModeSEnabled ?
+                    tr(" (Mode-S)") : tr(" (non-Mode-S)");
 
-    showFalseTracksChart(scanNumbers,falseTrackCounts,title);
+    showFalseTracksChart(falseTrackCounts,scanBeginTimes,
+                         collectionBegin,collectionEnd,
+                         baseTitle,titleSuffix);
 
     return true;
 }

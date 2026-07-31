@@ -6,10 +6,14 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDebug>
+#include <QDialog>
+#include <QDialogButtonBox>
 #include <QDir>
+#include <QDoubleSpinBox>
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QFormLayout>
 #include <QGraphicsObject>
 #include <QHeaderView>
 #include <QInputDialog>
@@ -33,8 +37,8 @@ namespace
 
 const quint8 ScenarioRadarId=50;
 const double NauticalMileMeters=1852.0;
-const double ScenarioRangeGateMeters=0.25*NauticalMileMeters;
-const double ScenarioAzimuthGateDegrees=2.0;
+const double DefaultScenarioRangeGateMeters=700.0;
+const double DefaultScenarioAzimuthGateDegrees=1.0;
 const double ScenarioStartToleranceSeconds=0.010;
 const uint ScenarioDiagnosticModeA=2522;
 const bool ScenarioDiagnosticLogging=false;
@@ -48,6 +52,18 @@ enum ScenarioAssociationMethod
 {
     CurrentMaximumCardinalityAssociation,
     MinimumCostMaximumCardinalityAssociation
+};
+
+struct ScenarioAssociationConfig
+{
+    double rangeGateMeters;
+    double azimuthGateDegrees;
+
+    ScenarioAssociationConfig():
+        rangeGateMeters(DefaultScenarioRangeGateMeters),
+        azimuthGateDegrees(DefaultScenarioAzimuthGateDegrees)
+    {
+    }
 };
 
 struct ScenarioTarget
@@ -109,6 +125,44 @@ struct AssociationResult
 
     AssociationResult():totalCost(0.0) {}
 };
+
+bool selectAssociationGates(ScenarioAssociationConfig& config)
+{
+    QDialog dialog;
+    dialog.setWindowTitle(QObject::tr("A/C resolution gates"));
+
+    QFormLayout layout(&dialog);
+    QDoubleSpinBox rangeGate;
+    rangeGate.setDecimals(1);
+    rangeGate.setRange(1.0,1000000.0);
+    rangeGate.setSingleStep(50.0);
+    rangeGate.setSuffix(QObject::tr(" m"));
+    rangeGate.setValue(config.rangeGateMeters);
+    layout.addRow(QObject::tr("Range gate:"),&rangeGate);
+
+    QDoubleSpinBox azimuthGate;
+    azimuthGate.setDecimals(2);
+    azimuthGate.setRange(0.01,180.0);
+    azimuthGate.setSingleStep(0.1);
+    azimuthGate.setSuffix(QObject::tr(" deg"));
+    azimuthGate.setValue(config.azimuthGateDegrees);
+    layout.addRow(QObject::tr("Azimuth gate:"),&azimuthGate);
+
+    QDialogButtonBox buttons(
+                QDialogButtonBox::Ok|QDialogButtonBox::Cancel);
+    QObject::connect(&buttons,&QDialogButtonBox::accepted,
+                     &dialog,&QDialog::accept);
+    QObject::connect(&buttons,&QDialogButtonBox::rejected,
+                     &dialog,&QDialog::reject);
+    layout.addRow(&buttons);
+    dialog.setMinimumWidth(320);
+
+    if(dialog.exec()!=QDialog::Accepted)
+        return false;
+    config.rangeGateMeters=rangeGate.value();
+    config.azimuthGateDegrees=azimuthGate.value();
+    return true;
+}
 
 struct ScenarioDiagnosticBasePlot
 {
@@ -557,7 +611,8 @@ bool findAugmentingMatch(
 
 QVector<QVector<MatchCandidate> > buildMatchCandidates(
         const QVector<ScenarioOpportunity>& opportunities,
-        const QVector<const NRadarPlot*>& plots)
+        const QVector<const NRadarPlot*>& plots,
+        const ScenarioAssociationConfig& config)
 {
     QVector<QVector<MatchCandidate> > candidates(opportunities.size());
     for(int opportunityIndex=0;
@@ -579,19 +634,19 @@ QVector<QVector<MatchCandidate> > buildMatchCandidates(
                 continue;
             const double rangeDifference=
                     qAbs(plotPolar.y()-opportunity.polarPosition.y());
-            if(rangeDifference>ScenarioRangeGateMeters)
+            if(rangeDifference>config.rangeGateMeters)
                 continue;
 
             const double angleDifference=azimuthDifference(
                         plotPolar.x(),opportunity.polarPosition.x());
-            if(angleDifference>ScenarioAzimuthGateDegrees)
+            if(angleDifference>config.azimuthGateDegrees)
                 continue;
 
             MatchCandidate candidate;
             candidate.plotIndex=plotIndex;
             candidate.cost=
-                    qPow(rangeDifference/ScenarioRangeGateMeters,2.0)+
-                    qPow(angleDifference/ScenarioAzimuthGateDegrees,2.0);
+                    qPow(rangeDifference/config.rangeGateMeters,2.0)+
+                    qPow(angleDifference/config.azimuthGateDegrees,2.0);
             opportunityCandidates.append(candidate);
         }
     }
@@ -600,10 +655,11 @@ QVector<QVector<MatchCandidate> > buildMatchCandidates(
 
 QVector<int> matchScan(
         const QVector<ScenarioOpportunity>& opportunities,
-        const QVector<const NRadarPlot*>& plots)
+        const QVector<const NRadarPlot*>& plots,
+        const ScenarioAssociationConfig& config)
 {
     QVector<QVector<MatchCandidate> > candidates=
-            buildMatchCandidates(opportunities,plots);
+            buildMatchCandidates(opportunities,plots,config);
     for(int opportunityIndex=0;
             opportunityIndex<candidates.size();opportunityIndex++)
     {
@@ -874,16 +930,19 @@ QVector<int> minimumCostMaximumMatches(
 
 QVector<int> matchScanMinimumCostMaximum(
         const QVector<ScenarioOpportunity>& opportunities,
-        const QVector<const NRadarPlot*>& plots)
+        const QVector<const NRadarPlot*>& plots,
+        const ScenarioAssociationConfig& config)
 {
     return minimumCostMaximumMatches(
-                buildMatchCandidates(opportunities,plots),plots.size());
+                buildMatchCandidates(opportunities,plots,config),
+                plots.size());
 }
 
 AssociationResult associationResult(
         const QVector<int>& matches,
         const QVector<ScenarioOpportunity>& opportunities,
-        const QVector<const NRadarPlot*>& plots)
+        const QVector<const NRadarPlot*>& plots,
+        const ScenarioAssociationConfig& config)
 {
     AssociationResult result;
     result.plotForOpportunity=matches;
@@ -911,9 +970,9 @@ AssociationResult associationResult(
                     measuredPolar.x(),expectedPolar.x());
         pair.cost=
                 qPow(pair.rangeResidualMeters/
-                     ScenarioRangeGateMeters,2.0)+
+                     config.rangeGateMeters,2.0)+
                 qPow(pair.azimuthResidualDegrees/
-                     ScenarioAzimuthGateDegrees,2.0);
+                     config.azimuthGateDegrees,2.0);
         result.selectedPairs.append(pair);
         result.totalCost+=pair.cost;
     }
@@ -929,14 +988,16 @@ AssociationResult associationResult(
 AssociationResult associateScan(
         const QVector<ScenarioOpportunity>& opportunities,
         const QVector<const NRadarPlot*>& plots,
-        ScenarioAssociationMethod method)
+        ScenarioAssociationMethod method,
+        const ScenarioAssociationConfig& config)
 {
     QVector<int> matches;
     if(method==MinimumCostMaximumCardinalityAssociation)
-        matches=matchScanMinimumCostMaximum(opportunities,plots);
+        matches=matchScanMinimumCostMaximum(
+                    opportunities,plots,config);
     else
-        matches=matchScan(opportunities,plots);
-    return associationResult(matches,opportunities,plots);
+        matches=matchScan(opportunities,plots,config);
+    return associationResult(matches,opportunities,plots,config);
 }
 
 QString associationMethodText(ScenarioAssociationMethod method)
@@ -998,6 +1059,7 @@ ScenarioEpochDetection detectScenarioEpoch(
         const QVector<const NRadarMarker*>& markers,
         const QVector<QVector<const NRadarPlot*> >& plotsByScan,
         ScenarioAssociationMethod associationMethod,
+        const ScenarioAssociationConfig& associationConfig,
         IAnalyser *analyser)
 {
     ScenarioEpochDetection result;
@@ -1045,7 +1107,7 @@ ScenarioEpochDetection detectScenarioEpoch(
                         sampleTargets);
             const AssociationResult association=associateScan(
                         opportunities,plotsByScan.at(scanIndex),
-                        associationMethod);
+                        associationMethod,associationConfig);
             expectedCount+=opportunities.size();
             matchedCount+=association.selectedPairs.size();
             totalPenalty+=association.totalCost+
@@ -1155,7 +1217,8 @@ QString writeScenarioAssociationDiagnostics(
         const QVector<const NRadarPlot*>& eligiblePlots,
         const QList<NRadarAbstractPlot*>& allData,
         const QVector<ScenarioTarget>& targets,
-        const QVector<ScenarioDiagnosticBasePlot>& basePlots)
+        const QVector<ScenarioDiagnosticBasePlot>& basePlots,
+        const ScenarioAssociationConfig& associationConfig)
 {
     const QString fileName=QString(
                 "ac_resolution_scenario_mode_a_%1.log")
@@ -1183,8 +1246,8 @@ QString writeScenarioAssociationDiagnostics(
     out << "Automatically detected scenario epoch / radar 51 North marker: "
         << utcText(scenarioEpoch) << " UTC\n";
     out << "Current association criteria: same radar-51 North-marker scan, "
-        << ScenarioRangeGateMeters/NauticalMileMeters
-        << " NM range gate, " << ScenarioAzimuthGateDegrees
+        << associationConfig.rangeGateMeters
+        << " m range gate, " << associationConfig.azimuthGateDegrees
         << " degree azimuth gate, one measured plot per base plot\n\n";
 
     out << "SCENARIO TARGETS WITH THIS MODE A\n";
@@ -1370,18 +1433,18 @@ QString writeScenarioAssociationDiagnostics(
                     opportunity.elapsedSeconds;
             neighbor.cost=
                     qPow(neighbor.rangeDifferenceMeters/
-                         ScenarioRangeGateMeters,2.0)+
+                         associationConfig.rangeGateMeters,2.0)+
                     qPow(neighbor.azimuthDifferenceDegrees/
-                         ScenarioAzimuthGateDegrees,2.0);
+                         associationConfig.azimuthGateDegrees,2.0);
             neighbors.append(neighbor);
 
             if(plotScan==basePlot.scanIndex)
             {
                 sameScanPlotCount++;
                 if(neighbor.rangeDifferenceMeters<=
-                        ScenarioRangeGateMeters &&
+                        associationConfig.rangeGateMeters &&
                         neighbor.azimuthDifferenceDegrees<=
-                        ScenarioAzimuthGateDegrees)
+                        associationConfig.azimuthGateDegrees)
                     sameScanPassingCount++;
             }
         }
@@ -1430,10 +1493,10 @@ QString writeScenarioAssociationDiagnostics(
                        NauticalMileMeters,'f',6)
                 << " passRange="
                 << (neighbor.rangeDifferenceMeters<=
-                    ScenarioRangeGateMeters ? "yes" : "no")
+                    associationConfig.rangeGateMeters ? "yes" : "no")
                 << " passAz="
                 << (neighbor.azimuthDifferenceDegrees<=
-                    ScenarioAzimuthGateDegrees ? "yes" : "no")
+                    associationConfig.azimuthGateDegrees ? "yes" : "no")
                 << '\n';
         }
     }
@@ -1476,7 +1539,8 @@ void showResults(const QString& path,const QString& scenarioName,
                  const QVector<ScenarioTarget>& targets,
                  const QVector<TargetStatistics>& statistics,
                  const ScenarioEpochDetection& epochDetection,
-                 ScenarioAssociationMethod associationMethod)
+                 ScenarioAssociationMethod associationMethod,
+                 const ScenarioAssociationConfig& associationConfig)
 {
     QWidget *widget=new QWidget;
     widget->setAttribute(Qt::WA_DeleteOnClose);
@@ -1494,6 +1558,10 @@ void showResults(const QString& path,const QString& scenarioName,
     layout->addWidget(new QLabel(
             QObject::tr("Association: %1")
             .arg(associationMethodText(associationMethod)),widget));
+    layout->addWidget(new QLabel(
+            QObject::tr("Association gates: %1 m range, %2 deg azimuth")
+            .arg(associationConfig.rangeGateMeters,0,'f',1)
+            .arg(associationConfig.azimuthGateDegrees,0,'f',2),widget));
     layout->addWidget(new QLabel(
             QObject::tr("Scenario time zero: automatically detected North "
                         "marker %1 at %2 UTC")
@@ -1635,6 +1703,9 @@ bool ScenarioResolutionTask::execute(bool firstStage)
             selectedMethod==currentMethodText ?
                 CurrentMaximumCardinalityAssociation :
                 MinimumCostMaximumCardinalityAssociation;
+    ScenarioAssociationConfig associationConfig;
+    if(!selectAssociationGates(associationConfig))
+        return false;
 
     QVector<ScenarioTarget> targets;
     QString scenarioName;
@@ -1665,7 +1736,7 @@ bool ScenarioResolutionTask::execute(bool firstStage)
     analyser->setTaskProgress(0);
     const ScenarioEpochDetection epochDetection=detectScenarioEpoch(
                 targets,analyser->getActiveMap(),markers,plotsByScan,
-                associationMethod,analyser);
+                associationMethod,associationConfig,analyser);
     if(epochDetection.markerIndex<0)
     {
         analyser->setTaskProgress(0,false);
@@ -1688,10 +1759,10 @@ bool ScenarioResolutionTask::execute(bool firstStage)
             .arg(epochDetection.meanPenalty,0,'f',4)
             .arg(epochDetection.secondBestPenalty,0,'f',4);
     qDebug().noquote() << tr(
-            "Matching window: %1 NM range, %2 deg azimuth, "
+            "Matching window: %1 m range, %2 deg azimuth, "
             "within the same antenna scan")
-            .arg(ScenarioRangeGateMeters/NauticalMileMeters,0,'f',2)
-            .arg(ScenarioAzimuthGateDegrees,0,'f',2);
+            .arg(associationConfig.rangeGateMeters,0,'f',1)
+            .arg(associationConfig.azimuthGateDegrees,0,'f',2);
     qDebug().noquote() << tr("Association method: %1")
             .arg(associationMethodText(associationMethod));
     QVector<TargetStatistics> statistics(targets.size());
@@ -1732,7 +1803,8 @@ bool ScenarioResolutionTask::execute(bool firstStage)
         const QVector<const NRadarPlot*>& scanPlots=
                 plotsByScan.at(scanIndex);
         const AssociationResult association=associateScan(
-                    opportunities,scanPlots,associationMethod);
+                    opportunities,scanPlots,associationMethod,
+                    associationConfig);
         const QVector<int>& matches=association.plotForOpportunity;
         for(int opportunityIndex=0;
                 opportunityIndex<matches.size();opportunityIndex++)
@@ -1785,14 +1857,14 @@ bool ScenarioResolutionTask::execute(bool firstStage)
         diagnosticPath=writeScenarioAssociationDiagnostics(
                     path,ScenarioDiagnosticModeA,scenarioEpoch,
                     analyser->getActiveMap(),markers,plots,allData,targets,
-                    diagnosticBasePlots);
+                    diagnosticBasePlots,associationConfig);
         if(!diagnosticPath.isEmpty())
             qDebug().noquote() << tr("Mode A %1 diagnostic log: %2")
                     .arg(modeAText(ScenarioDiagnosticModeA))
                     .arg(diagnosticPath);
     }
     showResults(path,scenarioName,scenarioEpoch,targets,statistics,
-                epochDetection,associationMethod);
+                epochDetection,associationMethod,associationConfig);
     emit finished(true);
     return true;
 }
