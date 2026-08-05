@@ -84,6 +84,7 @@ public:
     QToolButton *btnAircraftIDClear;
     QToolButton *btnAddressClear;
     QToolButton *btnTrackNoClear;
+    QCheckBox *predictedTracks_chk;
     QDockWidget *dockDetails;
     QWidget *dockWidgetContents_3;
     QVBoxLayout *verticalLayout_6;
@@ -384,6 +385,12 @@ public:
 
         verticalLayout_4->addLayout(horizontalLayout);
 
+        predictedTracks_chk = new QCheckBox(dockWidgetContents_2);
+        predictedTracks_chk->setObjectName(QString::fromUtf8("predictedTracks_chk"));
+        predictedTracks_chk->setChecked(true);
+
+        verticalLayout_4->addWidget(predictedTracks_chk);
+
         dockFilters->setWidget(dockWidgetContents_2);
         AppWindow->addDockWidget(Qt::RightDockWidgetArea, dockFilters);
         dockDetails = new QDockWidget(AppWindow);
@@ -542,6 +549,7 @@ public:
         btnAircraftIDClear->setText(QCoreApplication::translate("AppWindow", "X", nullptr));
         btnAddressClear->setText(QCoreApplication::translate("AppWindow", "X", nullptr));
         btnTrackNoClear->setText(QCoreApplication::translate("AppWindow", "X", nullptr));
+        predictedTracks_chk->setText(QCoreApplication::translate("AppWindow", "Predicted tracks", nullptr));
         dockDetails->setWindowTitle(QCoreApplication::translate("AppWindow", "Selection details", nullptr));
         blackWhite_chk->setText(QCoreApplication::translate("AppWindow", "Black and white mode", nullptr));
         connectTracks_chk->setText(QCoreApplication::translate("AppWindow", "Connect track points", nullptr));

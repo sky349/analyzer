@@ -41,6 +41,10 @@ public:
     NRadarScene* getRadarScene() const;
     SourceSelection getSelectedSource() const;
     ModeSSelection getSelectedModeS() const;
+    QDateTime getSelectedBeginTime() const;
+    QDateTime getSelectedEndTime() const;
+    bool getShowPredictedTrackPoints() const;
+    quint64 getTrackInstanceId(const NRadarTrackPlot *track) const;
 
     //set plot color
     void setPlotColor(const NRadarAbstractPlot* plot,const QColor& color);

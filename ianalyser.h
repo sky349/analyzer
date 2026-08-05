@@ -14,6 +14,8 @@
 //plot area
 #include <radarview/nradarscene.h>
 
+class NRadarTrackPlot;
+
 //the host interface represents "Analyser" application with all data and UI
 class IAnalyser
 {
@@ -46,6 +48,11 @@ public:
     //current source and Mode-S selections used by analysis tasks
     virtual SourceSelection getSelectedSource() const =0;
     virtual ModeSSelection getSelectedModeS() const =0;
+    virtual QDateTime getSelectedBeginTime() const =0;
+    virtual QDateTime getSelectedEndTime() const =0;
+    virtual bool getShowPredictedTrackPoints() const =0;
+    // Stable identity for one continuous use of a radar track number.
+    virtual quint64 getTrackInstanceId(const NRadarTrackPlot *track) const =0;
     //if the plot is visible with current active filters
     bool isPlotVisible(const NRadarAbstractPlot* plot) const
     { return plot->getUserData()!=0; }

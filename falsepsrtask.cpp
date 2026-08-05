@@ -14,10 +14,47 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
+#include <algorithm>
+
 #include "falsepsrtask.h"
 
 namespace
 {
+
+const qint64 TrackEndInactivityMs=30000;
+
+struct TrackSummary
+{
+    TrackSummary():trackKey(0),pointCount(0),hasVisiblePoint(false),
+        hasExplicitEnd(false) {}
+
+    quint64 trackKey;
+    int pointCount;
+    bool hasVisiblePoint;
+    bool hasExplicitEnd;
+    QDateTime lastPointTime;
+    QDateTime explicitEndTime;
+};
+
+int scanIndexForTime(const QVector<QDateTime>& northMarkerTimes,
+                     const QDateTime& time)
+{
+    if(northMarkerTimes.size()<2 || time<northMarkerTimes.first() ||
+            time>=northMarkerTimes.last())
+        return -1;
+
+    int first=0;
+    int last=northMarkerTimes.size()-1;
+    while(first+1<last)
+    {
+        const int middle=(first+last)/2;
+        if(northMarkerTimes.at(middle)<=time)
+            first=middle;
+        else
+            last=middle;
+    }
+    return first;
+}
 
 QVector<double> countsForTimePeriod(const QVector<double>& scanFalseTrackCounts,
                                     const QVector<QDateTime>& scanBeginTimes,
@@ -187,40 +224,28 @@ bool FalsePSRTask::execute(bool firstStage)
             tr("Maximum number of track points"),3,1,100,1,&ok);
     if(!ok) return false;
 
-    int count=0;
-    bool hasPreviousNorthMarker=false;
-    QVector<double> falseTrackCounts;
-    QVector<QDateTime> scanBeginTimes;
-    QDateTime collectionBegin;
-    QDateTime collectionEnd;
-    QDateTime currentScanBegin;
-
-    QMap<quint64,int> trackLen;
+    QVector<QDateTime> northMarkerTimes;
+    QMap<quint64,TrackSummary> tracks;
     const IAnalyser::ModeSSelection modeS=analyser->getSelectedModeS();
+    const QDateTime selectedBegin=analyser->getSelectedBeginTime();
+    const QDateTime selectedEnd=analyser->getSelectedEndTime();
+    const bool showPredictedPoints=analyser->getShowPredictedTrackPoints();
+    const quint8 northRadarId=source==IAnalyser::SourcePSR ? 51 : 50;
+    QDateTime availableDataEnd;
 
-    //run through every plot
+    // Build the same continuous track instances used by the short-track
+    // display filter, while retaining North markers for scan assignment.
     foreach(NRadarAbstractPlot* data,analyser->getAllData())
     {
+        if(!availableDataEnd.isValid() || availableDataEnd<data->getTime())
+            availableDataEnd=data->getTime();
+
         if(data->getType()==NRadarAbstractPlot::TypeMarker)
         {
             NRadarMarker* m = static_cast<NRadarMarker*>(data);
-            if(m->getRadarId()==51 && m->isNorthMarker())
-            {
-                if(hasPreviousNorthMarker)
-                {
-                    falseTrackCounts.append(count);
-                    scanBeginTimes.append(currentScanBegin);
-                    collectionEnd=m->getTime();
-                    currentScanBegin=m->getTime();
-                }
-                else
-                {
-                    hasPreviousNorthMarker=true;
-                    collectionBegin=m->getTime();
-                    currentScanBegin=m->getTime();
-                }
-                count = 0;
-            }
+            if(m->getRadarId()==northRadarId && m->isNorthMarker() &&
+                    m->getTime()>=selectedBegin && m->getTime()<=selectedEnd)
+                northMarkerTimes.append(m->getTime());
             continue;
         }
 
@@ -230,27 +255,27 @@ bool FalsePSRTask::execute(bool firstStage)
 
         //get the Track object
         NRadarTrackPlot* tplot=static_cast<NRadarTrackPlot*>(data);
+        const quint64 trackInstance=analyser->getTrackInstanceId(tplot);
+        if(!trackInstance)
+            continue;
 
         const quint64 trackKey=(quint64(tplot->getRadarId())<<32) |
                 quint64(tplot->getTrackId());
 
-        // Endpoints often do not preserve the source and Mode-S metadata of
-        // the preceding track points. Always close the matching track state,
-        // but count it only if at least one qualifying point was accumulated.
         if(tplot->getTrackPlotType()==NRadarTrackPlot::EndPoint)
         {
-            QMap<quint64,int>::iterator track=trackLen.find(trackKey);
-            if(track!=trackLen.end())
-            {
-                if(track.value()<=maxLen)
-                    count++;
-                trackLen.erase(track);
-            }
+            TrackSummary& track=tracks[trackInstance];
+            track.trackKey=trackKey;
+            track.hasExplicitEnd=true;
+            track.explicitEndTime=tplot->getTime();
             continue;
         }
 
         if(tplot->getTrackPlotType()!=NRadarTrackPlot::NormalPoint &&
                 tplot->getTrackPlotType()!=NRadarTrackPlot::PredictedPoint)
+            continue;
+        if(tplot->getTrackPlotType()==NRadarTrackPlot::PredictedPoint &&
+                !showPredictedPoints)
             continue;
 
         const NRadarPlot::NPlotSourceType trackSource=tplot->getSource();
@@ -267,18 +292,83 @@ bool FalsePSRTask::execute(bool firstStage)
                 continue;
         }
 
-        //don't process in if it's no selected with current filters
-        if(!analyser->isPlotVisible(data))
-            continue;
-
-        trackLen[trackKey]++;
+        TrackSummary& track=tracks[trackInstance];
+        track.trackKey=trackKey;
+        track.pointCount++;
+        if(!track.lastPointTime.isValid() || track.lastPointTime<tplot->getTime())
+            track.lastPointTime=tplot->getTime();
+        if(analyser->isPlotVisible(data))
+            track.hasVisiblePoint=true;
     }
 
-    if(falseTrackCounts.isEmpty())
+    std::sort(northMarkerTimes.begin(),northMarkerTimes.end());
+    QVector<QDateTime> physicalNorthMarkerTimes;
+    physicalNorthMarkerTimes.reserve(northMarkerTimes.size());
+    foreach(const QDateTime& markerTime,northMarkerTimes)
+    {
+        // CAT034 can contain separate PSR/MSSR North reports for the same
+        // antenna rotation. Most have identical timestamps, but recordings
+        // also contain pairs a few milliseconds apart. A real rotation is
+        // several seconds, so reports less than one second apart are one scan.
+        if(physicalNorthMarkerTimes.isEmpty() ||
+                physicalNorthMarkerTimes.last().msecsTo(markerTime)>=1000)
+            physicalNorthMarkerTimes.append(markerTime);
+    }
+    northMarkerTimes.swap(physicalNorthMarkerTimes);
+
+    if(northMarkerTimes.size()<2)
     {
         QMessageBox::critical(0,tr("Error"),
                 tr("At least two North markers are required to build the chart"));
         return false;
+    }
+
+    QVector<double> falseTrackCounts(northMarkerTimes.size()-1,0.0);
+    QVector<QDateTime> scanBeginTimes;
+    scanBeginTimes.reserve(falseTrackCounts.size());
+    for(int scanIndex=0;scanIndex<falseTrackCounts.size();scanIndex++)
+        scanBeginTimes.append(northMarkerTimes.at(scanIndex));
+
+    QMap<quint64,QDateTime> latestPointByTrackKey;
+    QMapIterator<quint64,TrackSummary> latestTrack(tracks);
+    while(latestTrack.hasNext())
+    {
+        latestTrack.next();
+        const TrackSummary& value=latestTrack.value();
+        if(value.pointCount &&
+                (!latestPointByTrackKey.contains(value.trackKey) ||
+                 latestPointByTrackKey.value(value.trackKey)<value.lastPointTime))
+            latestPointByTrackKey[value.trackKey]=value.lastPointTime;
+    }
+
+    QMapIterator<quint64,TrackSummary> track(tracks);
+    while(track.hasNext())
+    {
+        track.next();
+        const TrackSummary& value=track.value();
+        if(!value.pointCount || !value.hasVisiblePoint ||
+                value.pointCount>maxLen)
+            continue;
+
+        // CAT048 recordings often omit explicit endpoint reports. Treat an
+        // instance as ended when it has an endpoint, a later reuse of the
+        // same radar/track number, or enough following data to establish
+        // that it did not continue. This excludes tracks censored by the end
+        // of the imported recording.
+        const bool hasLaterInstance=
+                value.lastPointTime<latestPointByTrackKey.value(value.trackKey);
+        const bool inactiveBeforeDataEnd=value.lastPointTime.isValid() &&
+                value.lastPointTime.msecsTo(availableDataEnd)>
+                TrackEndInactivityMs;
+        if(!value.hasExplicitEnd && !hasLaterInstance &&
+                !inactiveBeforeDataEnd)
+            continue;
+
+        const QDateTime endTime=value.hasExplicitEnd ?
+                    value.explicitEndTime : value.lastPointTime;
+        const int scanIndex=scanIndexForTime(northMarkerTimes,endTime);
+        if(scanIndex>=0)
+            falseTrackCounts[scanIndex]++;
     }
 
     const QString baseTitle=(source==IAnalyser::SourcePSR ?
@@ -290,7 +380,7 @@ bool FalsePSRTask::execute(bool firstStage)
                     tr(" (Mode-S)") : tr(" (non-Mode-S)");
 
     showFalseTracksChart(falseTrackCounts,scanBeginTimes,
-                         collectionBegin,collectionEnd,
+                         selectedBegin,selectedEnd,
                          baseTitle,titleSuffix);
 
     return true;

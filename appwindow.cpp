@@ -43,6 +43,11 @@ const double TrackPathMaximumPlausibleSpeedMps = 1200.0;
 const double TrackPathSpatialCellSize = 50000.0;
 const int TrackPathChunkSegmentCount = 32;
 
+uint rawTrackNumber(uint trackId)
+{
+    return trackId&0xffffu;
+}
+
 QPointF displayPosition(const NRadarPlot *plot,int altitudeMultiplier)
 {
     if(altitudeMultiplier<=0)
@@ -513,6 +518,10 @@ AppWindow::AppWindow():QMainWindow(0),
         radarView->viewport()->update();
     });
 
+    connect(predictedTracks_chk,&QCheckBox::toggled,this,[this](bool){
+        applyFilter();
+    });
+
     shortTracksLimit_edit->setValidator(new QIntValidator(0,999999999,
                                                            shortTracksLimit_edit));
     connect(shortTracks_chk,&QCheckBox::toggled,this,[this](bool checked){
@@ -707,9 +716,10 @@ void AppWindow::initFilters(const DataPack *data)
 
 		if(plot->getType()==NRadarAbstractPlot::TypePlot)
 			foreach(uint tid,plot->getAssociatedTrackIds())
-				tmp3[tid]=true;
+				tmp3[rawTrackNumber(tid)]=true;
 		else if(plot->getSource()!=NRadarPlot::ADSB)
-			tmp3[static_cast<NRadarTrackPlot*>(ap)->getTrackId()]=true;
+			tmp3[rawTrackNumber(
+					static_cast<NRadarTrackPlot*>(ap)->getTrackId())]=true;
 
 		QString id=plot->getOption(NRadarPlot::AircraftId).toString().toUpper();
 		if(id.length()) idList[id]=true;
@@ -768,6 +778,7 @@ void AppWindow::applyFilter(bool fullFilter)
 	int src=cmbSource->currentIndex();
 	int type=cmbType->currentIndex();
 	const bool limitTrackPoints=shortTracks_chk->isChecked();
+	const bool showPredictedTrackPoints=predictedTracks_chk->isChecked();
 
 	if(limitTrackPoints)
 	{
@@ -808,6 +819,12 @@ void AppWindow::applyFilter(bool fullFilter)
 	{
 		NRadarPlot *plot=static_cast<NRadarPlot*>(data);
 
+		if(!showPredictedTrackPoints &&
+				data->getType()==NRadarAbstractPlot::TypeTrack &&
+				static_cast<NRadarTrackPlot*>(data)->getTrackPlotType()==
+				NRadarTrackPlot::PredictedPoint)
+			return true;
+
 		if(data->getType()==NRadarAbstractPlot::TypeTrack &&
 				(type!=1 || limitTrackPoints) && src)
 		{
@@ -840,9 +857,17 @@ void AppWindow::applyFilter(bool fullFilter)
 		{
 			if(data->getType()==NRadarAbstractPlot::TypePlot)
 			{
-				if(!plot->getAssociatedTrackIds().contains(trackNo)) return true;
+				bool matchingTrack=false;
+				foreach(uint associatedTrackId,plot->getAssociatedTrackIds())
+					if(rawTrackNumber(associatedTrackId)==trackNo)
+					{
+						matchingTrack=true;
+						break;
+					}
+				if(!matchingTrack) return true;
 			}
-			else if(static_cast<NRadarTrackPlot*>(data)->getTrackId()!=trackNo)
+			else if(rawTrackNumber(
+					static_cast<NRadarTrackPlot*>(data)->getTrackId())!=trackNo)
 				return true;
 		}
 
@@ -869,6 +894,8 @@ void AppWindow::applyFilter(bool fullFilter)
 				continue;
 
 			const NRadarTrackPlot *track=static_cast<const NRadarTrackPlot*>(data);
+			if(track->getTrackPlotType()==NRadarTrackPlot::EndPoint)
+				continue;
 			visibleTrackPointCounts[m_trackInstances.value(track)]++;
 		}
 	}
@@ -1258,7 +1285,8 @@ void AppWindow::onPlotSelected(NRadarItem* radarItem)
 		count++;
 
 		if(plot->getSource()!=NRadarPlot::ADSB)
-			addItemToDetails(item,tr("Track No"),QString::number(tplot->getTrackId()));
+			addItemToDetails(item,tr("Track No"),
+					QString::number(rawTrackNumber(tplot->getTrackId())));
 
 		addItemToDetails(item,::trackFieldName(Field_Speed),NUnitsConverter::speed1kStr(tplot->getSpeed(),0));
 		addItemToDetails(item,::trackFieldName(Field_Heading),NUnitsConverter::angleStr(tplot->getHeading()));
@@ -1531,6 +1559,26 @@ IAnalyser::SourceSelection AppWindow::getSelectedSource() const
 IAnalyser::ModeSSelection AppWindow::getSelectedModeS() const
 {
     return static_cast<IAnalyser::ModeSSelection>(cmbModeS->currentIndex());
+}
+
+QDateTime AppWindow::getSelectedBeginTime() const
+{
+    return dateBegin->dateTime();
+}
+
+QDateTime AppWindow::getSelectedEndTime() const
+{
+    return dateEnd->dateTime();
+}
+
+bool AppWindow::getShowPredictedTrackPoints() const
+{
+    return predictedTracks_chk->isChecked();
+}
+
+quint64 AppWindow::getTrackInstanceId(const NRadarTrackPlot *track) const
+{
+    return m_trackInstances.value(track,0);
 }
 
 bool AppWindow::eventFilter(QObject *obj,QEvent *event)

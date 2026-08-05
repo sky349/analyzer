@@ -466,7 +466,17 @@
          </item>
         </layout>
        </item>
-      </layout>
+     </layout>
+     </item>
+     <item>
+      <widget class="QCheckBox" name="predictedTracks_chk">
+       <property name="text">
+        <string>Predicted tracks</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
