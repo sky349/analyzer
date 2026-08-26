@@ -29,7 +29,6 @@
 #include "duplicatetask.h"
 #include "falsepsrtask.h"
 #include "closepointstask.h"
-#include "closepsrplotstask.h"
 #include "ampfiltertask.h"
 #include "acresolutiontask.h"
 #include "scenarioresolutiontask.h"
@@ -484,7 +483,6 @@ AppWindow::AppWindow():QMainWindow(0),
     tasks<<new DuplicateTask(this);
     tasks<<new FalsePSRTask(this);
     tasks<<new CloseTrackPointsTask(this);
-    tasks<<new ClosePSRPlotsTask(this);
     tasks<<new AmpFilterTask(this);
     tasks<<new ACResolutionTask(this);
     tasks<<new ScenarioResolutionTask(this);

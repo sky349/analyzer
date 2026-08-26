@@ -23,7 +23,6 @@ SOURCES += main.cpp\
     duplicatetask.cpp \
     falsepsrtask.cpp \
     closepointstask.cpp \
-    closepsrplotstask.cpp \
 	guifilter.cpp \
 	podtask.cpp \
 	reflectorstask.cpp \
@@ -44,7 +43,6 @@ HEADERS  += appwindow.h \
 	duplicatetask.h \
 	falsepsrtask.h \
 	closepointstask.h \
-	closepsrplotstask.h \
 	guifilter.h \
 	podtask.h \
 	ianalyser.h \

@@ -11,7 +11,6 @@ debug/common.o
 debug/duplicatetask.o
 debug/falsepsrtask.o
 debug/closepointstask.o
-debug/closepsrplotstask.o
 debug/guifilter.o
 debug/podtask.o
 debug/reflectorstask.o

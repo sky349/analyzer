@@ -98,7 +98,7 @@ public:
 
         painter->save();
         painter->setRenderHint(QPainter::Antialiasing,true);
-        QPen pen(QColor(0,255,80),1.5);
+        QPen pen(Qt::red,1.5);
         pen.setCosmetic(true);
         painter->setPen(pen);
         painter->drawLines(visibleLines);
@@ -466,10 +466,12 @@ bool CloseTrackPointsTask::execute(bool firstStage)
     if(!views.isEmpty())
         views.first()->viewport()->update();
 
+    QMessageBox::information(0,tr("Find close track points"),
+                             tr("Close points found: %1")
+                             .arg(matchLines.size()));
+
     if(matchLines.isEmpty())
     {
-        QMessageBox::warning(0,tr("Find close track points"),
-                             tr("No points found"));
         emit finished(false);
         return false;
     }
