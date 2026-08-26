@@ -10,6 +10,8 @@ release/datapack.o
 release/common.o
 release/duplicatetask.o
 release/falsepsrtask.o
+release/closepointstask.o
+release/closepsrplotstask.o
 release/guifilter.o
 release/podtask.o
 release/reflectorstask.o

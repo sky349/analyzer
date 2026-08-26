@@ -25,9 +25,11 @@
 #include "reflectorstask.h"
 #include "sampletask.h"
 #include "amplitudestask.h"
-#include "falsepsrtask.h"
 #include "ampscattertask.h"
 #include "duplicatetask.h"
+#include "falsepsrtask.h"
+#include "closepointstask.h"
+#include "closepsrplotstask.h"
 #include "ampfiltertask.h"
 #include "acresolutiontask.h"
 #include "scenarioresolutiontask.h"
@@ -478,9 +480,11 @@ AppWindow::AppWindow():QMainWindow(0),
 	tasks<<new PoDTask(this);
 	tasks<<new ReflectorsTask(this);
 	tasks<<new AmplitudesTask(this);
-	tasks<<new FalsePSRTask(this);
     tasks<<new ampScatterTask(this);
     tasks<<new DuplicateTask(this);
+    tasks<<new FalsePSRTask(this);
+    tasks<<new CloseTrackPointsTask(this);
+    tasks<<new ClosePSRPlotsTask(this);
     tasks<<new AmpFilterTask(this);
     tasks<<new ACResolutionTask(this);
     tasks<<new ScenarioResolutionTask(this);
@@ -1813,8 +1817,14 @@ void AppWindow::executeTask(QAction *act)
 	int id=act->data().toUInt();
 	if(id>=tasks.size()) return;
 
-	tasks[id]->execute(act->isChecked());
+	const bool firstStage=act->isChecked();
+	if(!tasks[id]->execute(firstStage))
+	{
+		if(tasks[id]->getType()==AnalyserTask::TwoStages)
+			act->setChecked(!firstStage);
+		return;
+	}
 	rebuildTrackPaths();
 	if(tasks[id]->getType()==AnalyserTask::TwoStages)
-		act->setText(tasks[id]->getName(!act->isChecked()));
+		act->setText(tasks[id]->getName(!firstStage));
 }
