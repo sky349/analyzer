@@ -1,5 +1,5 @@
-#include <radardata/nradarmarker.h>
-#include <radardata/nradarplot.h>
+#include <libradardata/nradarmarker.h>
+#include <libradardata/nradarplot.h>
 
 #include <QAbstractItemView>
 #include <QBrush>

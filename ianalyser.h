@@ -8,11 +8,11 @@
 #include <QtCore>
 
 //we need NRadarAbstractPlot interface
-#include <radardata/nradarabstractplot.h>
+#include <libradardata/nradarabstractplot.h>
 //coordinate conversion routines
-#include <nradarmap.h>
+#include <libradarmap/nradarmap.h>
 //plot area
-#include <radarview/nradarscene.h>
+#include <libradarview/nradarscene.h>
 
 class NRadarTrackPlot;
 

@@ -1,6 +1,6 @@
 
 //header for tracks class
-#include <radardata/nradartrackplot.h>
+#include <libradardata/nradartrackplot.h>
 
 #include "ampscattertask.h"
 #include <qwt_plot.h>

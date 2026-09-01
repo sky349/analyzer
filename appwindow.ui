@@ -684,7 +684,7 @@
   <customwidget>
    <class>NRadarView</class>
    <extends>QGraphicsView</extends>
-   <header location="global">radarview/nradarview.h</header>
+   <header location="global">libradarview/nradarview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

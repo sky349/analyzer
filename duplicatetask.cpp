@@ -1,7 +1,7 @@
 
 //header for tracks class
-#include <radardata/nradartrackplot.h>
-#include <radardata/nradarmarker.h>
+#include <libradardata/nradartrackplot.h>
+#include <libradardata/nradarmarker.h>
 
 #include "duplicatetask.h"
 

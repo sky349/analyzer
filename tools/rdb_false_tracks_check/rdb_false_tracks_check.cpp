@@ -1,11 +1,11 @@
 #include <QtCore>
 
 #include <asterix/asterix.h>
-#include <nradarmap.h>
-#include <radardata/nasterixconverter.h>
-#include <radardata/nradarmarker.h>
-#include <radardata/nradarplot.h>
-#include <radardata/nradartrackplot.h>
+#include <libradarmap/nradarmap.h>
+#include <libradardata/nasterixconverter.h>
+#include <libradardata/nradarmarker.h>
+#include <libradardata/nradarplot.h>
+#include <libradardata/nradartrackplot.h>
 
 #include <algorithm>
 #include <functional>
@@ -165,7 +165,7 @@ bool decodePacket(const QByteArray& bytes,const QDateTime& recordTime,
     }
     case 21:
     {
-        Asterix_21_13 packet13;
+        Asterix_21 packet13;
         Asterix_21_023 packet023;
         int error13=0;
         int error023=0;

@@ -1,4 +1,4 @@
-#include <radardata/nradarplot.h>
+#include <libradardata/nradarplot.h>
 
 #include <QAbstractItemView>
 #include <QBrush>

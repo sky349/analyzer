@@ -5,9 +5,9 @@
 
 #include "ui_appwindow.h"
 
-#include <radardata/nradarabstractplot.h>
-#include <radarview/nradarscene.h>
-#include <radarview/nradaritem.h>
+#include <libradardata/nradarabstractplot.h>
+#include <libradarview/nradarscene.h>
+#include <libradarview/nradaritem.h>
 
 #include "ianalyser.h"
 

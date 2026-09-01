@@ -1,7 +1,7 @@
 #ifndef REFLECTORSTASK_H
 #define REFLECTORSTASK_H
 
-#include <radarview/nradarobjectitem.h>
+#include <libradarview/nradarobjectitem.h>
 
 #include "ianalyser.h"
 

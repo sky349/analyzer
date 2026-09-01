@@ -1,7 +1,7 @@
 
 #include <QtGui>
 
-#include <radardata/nradartrackplot.h>
+#include <libradardata/nradartrackplot.h>
 
 #include "podtask.h"
 

@@ -1,8 +1,8 @@
 
-#include <radardata/nradartrackplot.h>
-#include <radarview/nunitsconverter.h>
-#include <radarview/nradardecoration.h>
-#include <radarview/nradaritem.h>
+#include <libradardata/nradartrackplot.h>
+#include <libradarview/nunitsconverter.h>
+#include <libradarview/nradardecoration.h>
+#include <libradarview/nradaritem.h>
 
 #include <QGraphicsItem>
 #include <QGraphicsLineItem>

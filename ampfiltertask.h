@@ -2,7 +2,7 @@
 
 //main interface header, read it first!
 #include "ianalyser.h"
-#include <radarview/nradarobjectitem.h>
+#include <libradarview/nradarobjectitem.h>
 
 class AmpFilterTask:public AnalyserTask
 {
@@ -21,4 +21,3 @@ private:
     int amplMapSize;
     double scale=1.;
 };
-

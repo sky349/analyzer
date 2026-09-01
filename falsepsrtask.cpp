@@ -1,6 +1,6 @@
 
-#include <radardata/nradarmarker.h>
-#include <radardata/nradartrackplot.h>
+#include <libradardata/nradarmarker.h>
+#include <libradardata/nradartrackplot.h>
 
 #include <qwt_plot.h>
 #include <qwt_plot_curve.h>

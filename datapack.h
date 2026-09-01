@@ -2,7 +2,7 @@
 #define DATAPACK_H
 
 #include <QtCore>
-#include <radardata/nradarabstractplot.h>
+#include <libradardata/nradarabstractplot.h>
 
 class DataPack
 {

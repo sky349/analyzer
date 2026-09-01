@@ -2,7 +2,7 @@
 
 //main interface header, read it first!
 #include "ianalyser.h"
-#include <radarview/nradarobjectitem.h>
+#include <libradarview/nradarobjectitem.h>
 
 //inherits AnalyserTask interface
 class DuplicateTask:public AnalyserTask

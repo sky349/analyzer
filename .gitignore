@@ -12,4 +12,10 @@ release/
 .qtc_clangd/
 .claude/
 *.pro.user
-
+/CMakeCache.txt
+/CMakeFiles/
+/cmake_install.cmake
+/build.ninja
+/.ninja_*
+/analyser
+/rdb_false_tracks_check

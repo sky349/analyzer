@@ -1,6 +1,6 @@
 
-#include <radardata/nradartrackplot.h>
-#include <nradarmap.h>
+#include <libradardata/nradartrackplot.h>
+#include <libradarmap/nradarmap.h>
 
 #include "reflectorstask.h"
 
@@ -294,4 +294,3 @@ void ReflectorsTask::removeReflector()
         }
         else c++;
 }
-

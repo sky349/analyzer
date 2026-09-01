@@ -1,6 +1,6 @@
 
 //header for tracks class
-#include <radardata/nradarplot.h>
+#include <libradardata/nradarplot.h>
 
 #include "amplitudestask.h"
 #include "amplitudedlg.h"

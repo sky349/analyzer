@@ -1,11 +1,11 @@
 
 
-#include <rdb/rdbfolder.h>
+#include <libradardatabase/rdbfolder.h>
 #include <version.h>
 #include <asterix/asterix.h>
-#include <radardata/nasterixconverter.h>
-#include <radardata/nradarplot.h>
-#include <nradarmap.h>
+#include <libradardata/nasterixconverter.h>
+#include <libradardata/nradarplot.h>
+#include <libradarmap/nradarmap.h>
 
 #include "datasourcedlg.h"
 #include "datapack.h"
@@ -204,7 +204,7 @@ bool DataSourceDlg::processAsterix(const QByteArray& data)
                 process(&pkt,dt,&shiftDate);
         } break;
         case 21: {
-            Asterix_21_13 pkt13;
+            Asterix_21 pkt13;
             Asterix_21_023 pkt023;
             if((len=pkt13.read(buf,data.size(),&err)) && err==0)
             {
@@ -272,7 +272,7 @@ bool DataSourceDlg::dataIn(qint64 msecs,const QByteArray& data)
             process(&pkt,dt);
         } break;
     case 21: {
-        Asterix_21_13 pkt13;
+        Asterix_21 pkt13;
         Asterix_21_023 pkt023;
         if(pkt13.read(buf,data.size(),&err) && err==0)
         {
@@ -331,7 +331,7 @@ void DataSourceDlg::updateMapCenter(const Asterix_Abstract *data)
     }
     else
     {
-        const Asterix_21_13 *astrx=(const Asterix_21_13*)data;
+        const Asterix_21 *astrx=(const Asterix_21*)data;
         if(!astrx->i021_080.data || !astrx->fspec.i021_130) return;
         tmp=QPointF((double)astrx->i021_130.latitude*180.0/8388608,(double)astrx->i021_130.longitude*180.0/8388608);
     }

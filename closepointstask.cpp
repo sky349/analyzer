@@ -1,6 +1,6 @@
-#include <radardata/nradartrackplot.h>
-#include <radarview/nradaritem.h>
-#include <radarview/nradarscenelayer.h>
+#include <libradardata/nradartrackplot.h>
+#include <libradarview/nradaritem.h>
+#include <libradarview/nradarscenelayer.h>
 
 #include <QDialog>
 #include <QDialogButtonBox>
