@@ -8,9 +8,11 @@
 #include <QGraphicsLineItem>
 #include <QGraphicsProxyWidget>
 #include <QHeaderView>
+#include <QLabel>
 #include <QMouseEvent>
 
 #include <algorithm>
+#include <cmath>
 
 #include "commondefs.h"
 
@@ -18,6 +20,10 @@
 
 #include "datapack.h"
 #include "datasourcedlg.h"
+#include "prp3record.h"
+#include "prp3signalwindow.h"
+#include "compareprp3task.h"
+#include <libradarview/nradarscenelayer.h>
 
 #include "guifilter.h"
 
@@ -135,6 +141,30 @@ QColor colorWithOpacity(QColor color,double opacity)
 {
     color.setAlpha(qRound(color.alpha()*opacity));
     return color;
+}
+
+QColor interpolateColor(const QColor &from, const QColor &to, double amount)
+{
+    return QColor::fromRgbF(from.redF() + (to.redF() - from.redF()) * amount,
+                            from.greenF() + (to.greenF() - from.greenF()) * amount,
+                            from.blueF() + (to.blueF() - from.blueF()) * amount);
+}
+
+QColor prp3DopplerColor(const Prp3PlotRecord &record)
+{
+    if (!record.restoration.valid || !std::isfinite(record.restoration.frequencyHz))
+        return QColor(125, 125, 125);
+
+    const auto normalised = std::max(-1.0, std::min(1.0, record.restoration.frequencyHz
+                                                            / PsrDoppler::MAX_ABS_DOPPLER_FREQUENCY_HZ));
+    const QColor neutral(245, 245, 245);
+    return normalised < 0.0 ? interpolateColor(neutral, QColor(8, 48, 107), -normalised)
+                            : interpolateColor(neutral, QColor(255, 145, 145), normalised);
+}
+
+QString yesNo(bool value)
+{
+    return value ? QObject::tr("yes") : QObject::tr("no");
 }
 
 }
@@ -396,6 +426,10 @@ public:
 		}
 		else
 		{
+            QPen pen(color1(opt));
+            pen.setCosmetic(true);
+            painter->setPen(pen);
+            painter->setBrush(Qt::NoBrush);
 			painter->drawEllipse(boundingRect());
 		}
 	}
@@ -475,6 +509,31 @@ AppWindow::AppWindow():QMainWindow(0),
 	statusBar()->addWidget(barWorking);
 	barWorking->setVisible(false);
 
+    m_prp3DopplerLegend = new QLabel(this);
+    m_prp3DopplerLegend->setAlignment(Qt::AlignCenter);
+    m_prp3DopplerLegend->setMinimumWidth(480);
+    m_prp3DopplerLegend->setText(
+        tr("Doppler  -%1 Hz              0              +%1 Hz   |   grey: invalid")
+            .arg(PsrDoppler::MAX_ABS_DOPPLER_FREQUENCY_HZ, 0, 'f', 1));
+    m_prp3DopplerLegend->setStyleSheet(QStringLiteral(
+        "QLabel { color: black; padding: 3px 8px; border: 1px solid #666; "
+        "background: qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #08306b,stop:0.5 #f5f5f5,stop:1 #ff9191); }"));
+    statusBar()->addPermanentWidget(m_prp3DopplerLegend);
+    m_prp3DopplerLegend->hide();
+
+    tasks << new ComparePrp3Task(this, this, [this] {
+        Prp3Records records;
+        if (!property("valid").toBool())
+            return records;
+        for (const auto *plot : dataPack->getData()) {
+            const auto record = dataPack->getPrp3Record(plot);
+            // AppWindow installs only PlotItem pointers in imported plot user data.
+            const auto *item = static_cast<const PlotItem *>(plot->getUserData());
+            if (record && item && item->isVisible() && item->getLayer() && item->getLayer()->isVisible())
+                records.append(record);
+        }
+        return records;
+    });
 	tasks<<new SampleTask(this);
 	tasks<<new PoDTask(this);
 	tasks<<new ReflectorsTask(this);
@@ -618,6 +677,11 @@ bool AppWindow::importData(bool confirm)
 
 	setProperty("valid",false);
 
+    if (m_prp3SignalWindow) {
+        m_prp3SignalWindow->clearRecord();
+        m_prp3SignalWindow->hide();
+    }
+    m_prp3DopplerLegend->hide();
 	clearTrackPaths();
 	m_hasHighlightedTrack=false;
 	radarScene->clear();
@@ -650,6 +714,7 @@ bool AppWindow::importData(bool confirm)
 		f->clear();
 
 	qDebug()<<"Imported data size: "<<dataPack->getData().size();
+    m_prp3DopplerLegend->setVisible(dataPack->hasPrp3Data());
 
 	setProperty("valid",true);
 
@@ -970,6 +1035,8 @@ void AppWindow::applyFilter(bool fullFilter)
                                 id==11 ? id+plot->getSource() : id,
                                 &m_notAssociated,
                                 &m_blackWhiteMode);
+                if (const auto record = dataPack->getPrp3Record(data))
+                    pi->fixedColor = prp3DopplerColor(*record);
 				radarScene->addItem(pi,layers[id]);
 			}
 		}
@@ -1210,6 +1277,133 @@ QTreeWidgetItem* AppWindow::addItemToDetails(QTreeWidgetItem *parent,const QStri
 	return item;
 }
 
+void AppWindow::addPrp3Details(QTreeWidgetItem *root, const Prp3PlotRecord &record)
+{
+    auto *prp = addItemToDetails(root, tr("PRP3 log record"));
+    addItemToDetails(prp, tr("Source file"), record.filePath);
+    addItemToDetails(prp, tr("Envelope offset"), QString::number(record.envelopeOffset));
+    addItemToDetails(prp, tr("Producer build"), record.producerBuild);
+    addItemToDetails(prp, tr("Sequence"), QString::number(record.sequence));
+    addItemToDetails(prp, tr("Input channel"), QString::number(record.inputChannel));
+    addItemToDetails(prp, tr("Exact CBOR payload"), tr("%1 bytes retained").arg(record.cborPayload.size()));
+    addItemToDetails(prp, tr("Input frame"), tr("%1 bytes retained").arg(record.inputFrame.size()));
+    addItemToDetails(prp, tr("Output APOI"), tr("%1 bytes retained").arg(record.outputApoi.size()));
+
+    auto *legacy = addItemToDetails(prp, tr("Legacy plot"));
+    addItemToDetails(legacy, tr("Valid"), yesNo(record.legacy.valid));
+    addItemToDetails(legacy, tr("Azimuth raw / degrees"),
+                     QStringLiteral("%1 / %2")
+                         .arg(record.legacy.azimuthRaw)
+                         .arg(record.legacy.azimuthDegrees, 0, 'f', 5));
+    addItemToDetails(legacy, tr("Range raw / km"),
+                     QStringLiteral("%1 / %2").arg(record.legacy.rangeRaw).arg(record.legacy.rangeKm, 0, 'f', 3));
+    addItemToDetails(legacy, tr("Selected cluster Doppler"),
+                     QString::number(record.legacy.selectedClusterDoppler));
+    addItemToDetails(legacy, tr("CPI group count"), QString::number(record.legacy.cpiGroupCount));
+    addItemToDetails(legacy, tr("Amplitude"), QString::number(record.legacy.amplitude));
+    addItemToDetails(legacy, tr("Trailer"),
+                     QStringLiteral("0x%1").arg(record.legacy.trailer, 2, 16, QLatin1Char('0')));
+    auto *groups = addItemToDetails(legacy, tr("Groups"), QString::number(record.legacy.groups.size()));
+    for (const auto &group : record.legacy.groups)
+        addItemToDetails(groups, tr("Group %1").arg(group.index),
+                         tr("Doppler %1, amplitude %2").arg(group.doppler).arg(group.amplitude));
+
+    auto *filter = addItemToDetails(prp, tr("Filter"));
+    addItemToDetails(filter, tr("Evaluated / enabled"),
+                     QStringLiteral("%1 / %2").arg(yesNo(record.filter.evaluated), yesNo(record.filter.enabled)));
+    addItemToDetails(filter, tr("Value"), QString::number(record.filter.value, 'f', 3));
+    addItemToDetails(filter, tr("Drop plot"), yesNo(record.filter.dropPlot));
+
+    auto *background = addItemToDetails(prp, tr("Background"));
+    addItemToDetails(background, tr("Enabled / observed / passed"),
+                     QStringLiteral("%1 / %2 / %3")
+                         .arg(yesNo(record.background.enabled), yesNo(record.background.observed),
+                              yesNo(record.background.passed)));
+    addItemToDetails(background, tr("Warmup / history degraded"),
+                     QStringLiteral("%1 / %2")
+                         .arg(yesNo(record.background.warmup), yesNo(record.background.historyDegraded)));
+    addItemToDetails(background, tr("Threshold"), QString::number(record.background.threshold));
+
+    auto *snapshotItem = addItemToDetails(prp, tr("DPS1 snapshot"));
+    addItemToDetails(snapshotItem, tr("Present / decoded"),
+                     QStringLiteral("%1 / %2").arg(yesNo(record.snapshot.present), yesNo(record.snapshot.decoded)));
+    addItemToDetails(snapshotItem, tr("Decode result"),
+                     QStringLiteral("%1 (%2)").arg(record.snapshot.decodeErrorName).arg(record.snapshot.decodeError));
+    if (record.snapshot.decoded) {
+        const auto &snapshot = record.snapshot.evidence.snapshot;
+        addItemToDetails(snapshotItem, tr("Flags"),
+                         QStringLiteral("0x%1").arg(snapshot.flags, 4, 16, QLatin1Char('0')));
+        addItemToDetails(snapshotItem, tr("Scan / azimuth cell / range bin"),
+                         QStringLiteral("%1 / %2 / %3")
+                             .arg(snapshot.scanNumber)
+                             .arg(snapshot.azimuthCellNumber)
+                             .arg(snapshot.rangeBin));
+        addItemToDetails(snapshotItem, tr("Representative CPI"), QString::number(snapshot.representativeCpi));
+        addItemToDetails(snapshotItem, tr("Signal / bin / mode"),
+                         QStringLiteral("%1 / %2 / %3")
+                             .arg(record.snapshot.signalName, record.snapshot.binName, record.snapshot.modeName));
+        addItemToDetails(snapshotItem, tr("Reason"), record.snapshot.reasonName);
+        auto *branches = addItemToDetails(snapshotItem, tr("Branches"), QString::number(snapshot.branchCount));
+        for (int branchIndex = 0; branchIndex < snapshot.branchCount; ++branchIndex) {
+            const auto &branch = snapshot.branches[branchIndex];
+            auto *branchItem = addItemToDetails(
+                branches, branch.branch == PsrDoppler::Branch::A ? tr("Branch A") : tr("Branch B"),
+                tr("SIC 0x%1, reason %2, mask 0x%3")
+                    .arg(branch.sourceSic, 2, 16, QLatin1Char('0'))
+                    .arg(branch.reason)
+                    .arg(branch.validMask, 4, 16, QLatin1Char('0')));
+            for (int sampleIndex = 0; sampleIndex < PsrDoppler::SAMPLE_COUNT; ++sampleIndex) {
+                const auto &sample = branch.samples[sampleIndex];
+                addItemToDetails(branchItem, tr("Sample %1").arg(sampleIndex),
+                                 tr("I %1, Q %2, next %3 us")
+                                     .arg(sample.i, 0, 'g', 8)
+                                     .arg(sample.q, 0, 'g', 8)
+                                     .arg(sample.followingIntervalUs));
+            }
+        }
+    }
+
+    const auto &restoration = record.restoration;
+    auto *restorationItem = addItemToDetails(prp, tr("Doppler restoration"));
+    addItemToDetails(restorationItem, tr("Valid / reason"),
+                     QStringLiteral("%1 / %2 (%3)")
+                         .arg(yesNo(restoration.valid), restoration.reasonName)
+                         .arg(restoration.reason));
+    addItemToDetails(restorationItem, tr("Flags / branch mask"),
+                     QStringLiteral("0x%1 / 0x%2")
+                         .arg(restoration.flags, 4, 16, QLatin1Char('0'))
+                         .arg(restoration.branchMask, 2, 16, QLatin1Char('0')));
+    addItemToDetails(restorationItem, tr("Frequency"), tr("%1 Hz").arg(restoration.frequencyHz, 0, 'f', 4));
+    addItemToDetails(restorationItem, tr("Nominal radial speed (2.8 GHz)"),
+                     tr("%1 m/s / %2 km/h")
+                         .arg(restoration.radialSpeedMps, 0, 'f', 4)
+                         .arg(restoration.radialSpeedKmh, 0, 'f', 4));
+    addItemToDetails(restorationItem, tr("Coherent energy"),
+                     QString::number(restoration.coherentEnergy, 'g', 10));
+    addItemToDetails(restorationItem, tr("Fit residual"),
+                     tr("%1 rad").arg(restoration.fitResidualRad, 0, 'g', 8));
+    addItemToDetails(restorationItem, tr("Ambiguity margin / candidate"),
+                     QStringLiteral("%1 / %2 (%3)")
+                         .arg(restoration.ambiguityMargin, 0, 'g', 8)
+                         .arg(restoration.candidateIndex)
+                         .arg(restoration.candidateIndexScope));
+    addItemToDetails(restorationItem, tr("Branch disagreement"),
+                     tr("%1 Hz").arg(restoration.branchDisagreementHz, 0, 'f', 4));
+    for (const auto &branch : restoration.branches) {
+        auto *branchItem = addItemToDetails(restorationItem, tr("Restoration branch %1").arg(branch.slotName.toUpper()),
+                                            QStringLiteral("%1 / %2").arg(yesNo(branch.valid), branch.reasonName));
+        addItemToDetails(branchItem, tr("Stored branch"), branch.branchName.toUpper());
+        addItemToDetails(branchItem, tr("Frequency"), tr("%1 Hz").arg(branch.frequencyHz, 0, 'f', 4));
+        addItemToDetails(branchItem, tr("Energy / residual / margin"),
+                         QStringLiteral("%1 / %2 / %3")
+                             .arg(branch.coherentEnergy, 0, 'g', 8)
+                             .arg(branch.fitResidualRad, 0, 'g', 8)
+                             .arg(branch.ambiguityMargin, 0, 'g', 8));
+        addItemToDetails(branchItem, tr("Candidate"),
+                         QStringLiteral("%1 (%2)").arg(branch.candidateIndex).arg(branch.candidateIndexScope));
+    }
+}
+
 //копипаста из RadarClient-а
 void AppWindow::onPlotSelected(NRadarItem* radarItem)
 {
@@ -1226,6 +1420,7 @@ void AppWindow::onPlotSelected(NRadarItem* radarItem)
 
 	const NRadarPlot* plot=static_cast<PlotItem*>(radarItem)->plot;
 	if(!plot) return;
+    const auto prp3Record = dataPack->getPrp3Record(plot);
 
 	QTreeWidget* tree=treeDetails;
 	tree->clear();
@@ -1521,7 +1716,18 @@ void AppWindow::onPlotSelected(NRadarItem* radarItem)
 	int ampl=plot->getOption(NRadarPlot::RAW_SSRAmplitude).toInt();
 	if(ampl>0) addItemToDetails(item,tr("Amplitude"),QString("%1 dBm [%2]").arg(qRound(20*log10(ampl/18.0)-102)).arg((ampl)));
 
+    if (prp3Record)
+        addPrp3Details(root, *prp3Record);
+
 	tree->expandAll();
+    if (prp3Record) {
+        if (!m_prp3SignalWindow)
+            m_prp3SignalWindow = new Prp3SignalWindow(this);
+        m_prp3SignalWindow->setRecord(prp3Record);
+        m_prp3SignalWindow->show();
+        m_prp3SignalWindow->raise();
+        m_prp3SignalWindow->activateWindow();
+    }
 }
 
 /////////////

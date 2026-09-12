@@ -15,8 +15,11 @@ class DataPack;
 class GuiFilter;
 class QGraphicsLineItem;
 class QGraphicsProxyWidget;
+class QLabel;
 class NRadarTrackPlot;
 class PlotLabel;
+class Prp3SignalWindow;
+struct Prp3PlotRecord;
 class TrackPathsOverlayItem;
 
 struct PlotPopupData
@@ -104,6 +107,7 @@ private:
     void setTrackPathsVisible(bool visible);
     void updateTrackPathStyles();
     void setHighlightedTrack(const NRadarTrackPlot *track);
+    void addPrp3Details(QTreeWidgetItem *root, const Prp3PlotRecord &record);
 
     QList<PlotPopupData> m_plotPopups;
     TrackPathsOverlayItem *m_trackOverlay;
@@ -115,6 +119,8 @@ private:
     int m_altitudeMultiplier;
     bool m_hasHighlightedTrack;
     quint64 m_highlightedTrackInstance;
+    QLabel *m_prp3DopplerLegend = nullptr;
+    Prp3SignalWindow *m_prp3SignalWindow = nullptr;
 };
 
 #endif // APPWINDOW_H

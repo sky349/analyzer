@@ -3,6 +3,7 @@
 
 #include <QtGui>
 #include <QtWidgets>
+#include <QElapsedTimer>
 
 #include "ui_datasource.h"
 
@@ -31,7 +32,11 @@ protected slots:
     bool dataIn(qint64 msecs,const QByteArray& data);
 
 protected:
+    enum class ImportType { NONE, RDB, ASTERIX, PRP3 };
+
     void initRDBReader(const QString& path,bool isFile);
+    void initPrp3Reader(const QStringList &paths);
+    bool importPrp3();
     bool processAsterix(const QByteArray& data);
     void process(Asterix_Abstract* pkt, const QDateTime& tm, int *shiftDate=0);
 
@@ -45,10 +50,12 @@ protected:
 
     NAsterixConverter *converter;
     RDBFolderReader *reader;
+    QStringList m_prp3Files;
+    ImportType m_importType = ImportType::NONE;
 
     bool abortRead;
 
-    QTime progressImportUpdate;
+    QElapsedTimer progressImportUpdate;
     qint64 msecsStart,msecsEnd;
 
     uint lastProcessedTime;

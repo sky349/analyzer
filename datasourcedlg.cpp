@@ -9,8 +9,75 @@
 
 #include "datasourcedlg.h"
 #include "datapack.h"
+#include "prp3logreader.h"
+
+#include <QDir>
+#include <QFileInfo>
+
+#include <cmath>
 
 #define DEFAULT_DB_PATH NRPL_MK_PATH("var/rdps/rdb")
+
+namespace
+{
+constexpr int PRP3_DISPLAY_RADAR_ID = 1;
+
+bool isPrp3File(const QString &path)
+{
+    return path.endsWith(QLatin1String(".prp3.cbor"), Qt::CaseInsensitive);
+}
+
+bool looksLikeLegacyPrp(const QString &path)
+{
+    const auto leaf = QFileInfo(path).fileName().toLower();
+    return leaf.endsWith(QLatin1String(".prp")) || leaf.endsWith(QLatin1String(".prp1"))
+        || leaf.endsWith(QLatin1String(".prp2")) || leaf.contains(QLatin1String(".prp1."))
+        || leaf.contains(QLatin1String(".prp2.")) || leaf.endsWith(QLatin1String("_i.txt"))
+        || leaf.endsWith(QLatin1String("_o.txt"));
+}
+
+QStringList prp3FilesIn(const QString &path)
+{
+    const QDir directory(path);
+    const auto leaves = directory.entryList({ QStringLiteral("*.prp3.cbor") }, QDir::Files | QDir::Readable,
+                                            QDir::Name);
+    QStringList files;
+    files.reserve(leaves.size());
+    for (const auto &leaf : leaves)
+        files.append(directory.absoluteFilePath(leaf));
+    return files;
+}
+
+void applyPrp3Options(NRadarPlot &plot, const Prp3PlotRecord &record)
+{
+    const auto backgroundFlags = (record.background.observed ? 0x01 : 0)
+        | (record.background.passed ? 0x02 : 0) | (record.background.warmup ? 0x04 : 0)
+        | (record.background.historyDegraded ? 0x08 : 0);
+    plot.setOption(NRadarPlot::RAW_PSR_FILTER_VALUE, record.filter.value);
+    plot.setOption(NRadarPlot::RAW_PSR_BG_FLAGS, backgroundFlags);
+    plot.setOption(NRadarPlot::RAW_PSR_BG_THRESHOLD, record.background.threshold);
+    plot.setOption(NRadarPlot::RAW_PSR_AMPLITUDE, record.legacy.amplitude);
+    if (record.legacy.cpiGroupCount >= 1 && record.legacy.cpiGroupCount <= 15)
+        plot.setOption(NRadarPlot::RAW_PSR_CPI_GROUP_COUNT, record.legacy.cpiGroupCount);
+    plot.setOption(NRadarPlot::RAW_PSR_DOPPLER_FLAGS, record.restoration.flags);
+    plot.setOption(NRadarPlot::RAW_PSR_DOPPLER_REASON, record.restoration.reason);
+    plot.setOption(NRadarPlot::RAW_PSR_DOPPLER_BRANCH_MASK, record.restoration.branchMask);
+    plot.setOption(NRadarPlot::RAW_PSR_DOPPLER_FREQUENCY_HZ, record.restoration.frequencyHz);
+    plot.setOption(NRadarPlot::RAW_PSR_DOPPLER_ENERGY, record.restoration.coherentEnergy);
+    plot.setOption(NRadarPlot::RAW_PSR_DOPPLER_FIT_RESIDUAL, record.restoration.fitResidualRad);
+    plot.setOption(NRadarPlot::RAW_PSR_DOPPLER_AMBIGUITY_MARGIN, record.restoration.ambiguityMargin);
+    plot.setOption(NRadarPlot::RAW_PSR_DOPPLER_AMBIGUITY_INDEX, record.restoration.candidateIndex);
+    plot.setOption(NRadarPlot::RAW_PSR_DOPPLER_BRANCH_DISAGREEMENT_HZ,
+                   record.restoration.branchDisagreementHz);
+    plot.setOption(NRadarPlot::RAW_PSR_RADIAL_SPEED_MPS, record.restoration.radialSpeedMps);
+    for (const auto &branch : record.restoration.branches)
+        plot.setOption(branch.slot ? NRadarPlot::RAW_PSR_DOPPLER_BRANCH_B_HZ
+                                   : NRadarPlot::RAW_PSR_DOPPLER_BRANCH_A_HZ,
+                       branch.frequencyHz);
+    if (record.filter.dropPlot)
+        plot.setOption(NRadarPlot::TestPlot, true);
+}
+}
 
 DataSourceDlg::DataSourceDlg(DataPack *dataPack,NRadarMap *map,QWidget *parent):QDialog(parent),reader(0)
 {
@@ -63,8 +130,15 @@ void DataSourceDlg::onImport()
 
     converter->setCenterPoint(getMapCenter());
 
-    if(/*radioFolder->isChecked() &&*/ reader)
-    {
+    if (m_importType == ImportType::PRP3) {
+        const bool imported = importPrp3();
+        stackActions->setCurrentIndex(0);
+        if (imported)
+            accept();
+        return;
+    }
+
+    if (m_importType == ImportType::RDB && reader) {
         QDateTime dtFrom,dtTo;
         dtFrom=dateFrom->dateTime();
         dtFrom.setTimeSpec(Qt::UTC);
@@ -87,25 +161,38 @@ void DataSourceDlg::onImport()
         stackActions->setCurrentIndex(0);
 
         accept();
+        return;
     }
-    else if(radioFile->isChecked() && !edFile->text().endsWith(".rdb"))
-    {
+
+    if (m_importType == ImportType::ASTERIX && radioFile->isChecked()) {
         QFile input(edFile->text());
-        if(!input.exists() || !input.open(QIODevice::ReadOnly)) return;
+        if (!input.exists() || !input.open(QIODevice::ReadOnly)) {
+            stackActions->setCurrentIndex(0);
+            QMessageBox::critical(this, tr("Data import"),
+                                  tr("Cannot open %1: %2").arg(input.fileName(), input.errorString()));
+            return;
+        }
 
         QByteArray data=input.readAll();
         input.close();
 
-        bool res=processAsterix(data);
+        const bool res = !data.isEmpty() && processAsterix(data);
+        stackActions->setCurrentIndex(0);
+        if (!res) {
+            QMessageBox::critical(this, tr("Data import"), tr("The file contains no supported ASTERIX plots."));
+            return;
+        }
 
         dataPack->begin=dataPack->data.first()->getTime();
         dataPack->end=dataPack->data.last()->getTime();
         dataPack->center=getMapCenter();
 
-        stackActions->setCurrentIndex(0);
-
-        if(res) accept();
+        accept();
+        return;
     }
+
+    stackActions->setCurrentIndex(0);
+    QMessageBox::warning(this, tr("Data import"), tr("Choose an RDB, ASTERIX, or framed PRP3 source first."));
 }
 
 void DataSourceDlg::onAbortImport()
@@ -118,17 +205,43 @@ void DataSourceDlg::onBrowseFile()
     radioFile->setChecked(true);
 
     QString start=edFile->text();
-    QString path=QFileDialog::getOpenFileName(this,tr("Choose RDB file or ASTERIX dump"),start);
+    QString path = QFileDialog::getOpenFileName(
+        this, tr("Choose PRP3, RDB, or ASTERIX data"), start,
+        tr("Supported data (*.prp3.cbor *.rdb);;PRP3 Doppler logs (*.prp3.cbor);;"
+           "RDB files (*.rdb);;ASTERIX dumps (*)"));
     if(path.isNull()) return;
 
     edFile->setText(path);
-    if(path.endsWith(".rdb"))
-        initRDBReader(path,true);
-    else if(reader)
-    {
-        delete reader;
-        reader = 0;
+    if (isPrp3File(path)) {
+        initPrp3Reader({ path });
+        return;
     }
+    if (looksLikeLegacyPrp(path)) {
+        m_importType = ImportType::NONE;
+        m_prp3Files.clear();
+        if (reader) {
+            delete reader;
+            reader = nullptr;
+        }
+        dateFrom->setEnabled(false);
+        dateTo->setEnabled(false);
+        QMessageBox::warning(this, tr("Unsupported PRP format"),
+                             tr("Only Doppler-capable framed *.prp3.cbor logs are supported; PRP1 and PRP2 are not."));
+        return;
+    }
+    if (path.endsWith(QLatin1String(".rdb"), Qt::CaseInsensitive)) {
+        initRDBReader(path, true);
+        return;
+    }
+
+    if (reader) {
+        delete reader;
+        reader = nullptr;
+    }
+    m_prp3Files.clear();
+    m_importType = ImportType::ASTERIX;
+    dateFrom->setEnabled(false);
+    dateTo->setEnabled(false);
 }
 
 void DataSourceDlg::onBrowseFolder()
@@ -137,17 +250,21 @@ void DataSourceDlg::onBrowseFolder()
 
     QString start=edFolder->text();
     if(!start.length()) start=DEFAULT_DB_PATH;
-    QString path=QFileDialog::getExistingDirectory(this,tr("Choose RDB files folder"),start);
+    QString path = QFileDialog::getExistingDirectory(this, tr("Choose PRP3 or RDB files folder"), start);
     if(path.isNull()) return;
 
     edFolder->setText(path);
 
-    initRDBReader(path,false);
+    const auto prp3Files = prp3FilesIn(path);
+    prp3Files.isEmpty() ? initRDBReader(path, false) : initPrp3Reader(prp3Files);
 }
 
 void DataSourceDlg::initRDBReader(const QString& path,bool isFile)
 {
     if(reader) delete reader;
+    reader = nullptr;
+    m_prp3Files.clear();
+    m_importType = ImportType::NONE;
 
     reader = !isFile ? new RDBFolderReader(path) : new RDBFolderReader(QStringList({path}));
     if(reader->isEmpty())
@@ -170,6 +287,88 @@ void DataSourceDlg::initRDBReader(const QString& path,bool isFile)
     reader->getRange(tm1,tm2);
     dateFrom->setDateTime(tm1);
     dateTo->setDateTime(tm2);
+    m_importType = ImportType::RDB;
+}
+
+void DataSourceDlg::initPrp3Reader(const QStringList &paths)
+{
+    if (reader) {
+        delete reader;
+        reader = nullptr;
+    }
+    m_prp3Files = paths;
+    m_importType = m_prp3Files.isEmpty() ? ImportType::NONE : ImportType::PRP3;
+    dateFrom->setEnabled(false);
+    dateTo->setEnabled(false);
+}
+
+bool DataSourceDlg::importPrp3()
+{
+    Prp3LogReader logReader;
+    Prp3LogReader::Result result;
+    QString error;
+    progressImportUpdate.start();
+    const auto status = logReader.read(m_prp3Files, result, error, [this](qint64 completed, qint64 total) {
+        progressImport->setValue(total ? int(90.0 * completed / total) : 0);
+        if (progressImportUpdate.elapsed() > 100) {
+            qApp->processEvents();
+            progressImportUpdate.restart();
+        }
+        return !abortRead;
+    });
+    if (status == Prp3LogReader::Status::CANCELLED)
+        return false;
+    if (status == Prp3LogReader::Status::ERROR) {
+        QMessageBox::critical(this, tr("PRP3 import failed"), error);
+        return false;
+    }
+    if (result.plots.isEmpty()) {
+        QMessageBox::critical(this, tr("PRP3 import failed"),
+                              tr("The selected PRP3 source contains no plot records."));
+        return false;
+    }
+
+    dataPack->clear();
+    for (int plotIndex = 0; plotIndex < result.plots.size(); ++plotIndex) {
+        if (progressImportUpdate.elapsed() > 100) {
+            qApp->processEvents();
+            progressImportUpdate.restart();
+            if (abortRead) {
+                dataPack->clear();
+                return false;
+            }
+        }
+
+        const auto &record = result.plots.at(plotIndex);
+        const auto arrival = QDateTime::fromMSecsSinceEpoch(record->arrivalUtcMs, Qt::UTC);
+        int consumed = -1;
+        const auto decoded = record->outputApoi.isEmpty()
+            ? QSharedPointer<NRadarAbstractPlot>()
+            : converter->convertFromAPOI(record->outputApoi, PRP3_DISPLAY_RADAR_ID, consumed, arrival);
+        auto plot = !decoded.isNull() && consumed == record->outputApoi.size()
+                && decoded->getType() == NRadarAbstractPlot::TypePlot
+            ? qSharedPointerDynamicCast<NRadarPlot>(decoded)
+            : QSharedPointer<NRadarPlot>();
+        if (plot.isNull()) {
+            plot = QSharedPointer<NRadarPlot>::create(PRP3_DISPLAY_RADAR_ID, arrival, converter->getRadarMap());
+            plot->setSourceType(NRadarPlot::PSR);
+            plot->setPlotAssociation(NRadarPlot::NotAssociated);
+            plot->setADCoord(QPointF(std::fmod(record->legacy.azimuthRaw * 360.0 / 16384.0, 360.0),
+                                    record->legacy.rangeKm * 1000.0));
+        }
+        applyPrp3Options(*plot, *record);
+
+        dataPack->data.append(plot.data());
+        dataPack->savedData.append(plot);
+        dataPack->prp3Data.insert(plot.data(), record);
+        progressImport->setValue(90 + int(10.0 * (plotIndex + 1) / result.plots.size()));
+    }
+
+    dataPack->begin = result.begin;
+    dataPack->end = result.end;
+    dataPack->center = getMapCenter();
+    qInfo() << "Imported PRP3 plots/events:" << result.plots.size() << result.eventCount;
+    return true;
 }
 
 bool DataSourceDlg::processAsterix(const QByteArray& data)

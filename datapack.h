@@ -4,6 +4,8 @@
 #include <QtCore>
 #include <libradardata/nradarabstractplot.h>
 
+struct Prp3PlotRecord;
+
 class DataPack
 {
 public:
@@ -16,6 +18,8 @@ public:
     void clear();
 
     const PlotList& getData() const;
+    QSharedPointer<const Prp3PlotRecord> getPrp3Record(const NRadarAbstractPlot *plot) const;
+    bool hasPrp3Data() const;
 
     QPointF getCenter() const;
     QDateTime getBeginDate() const;
@@ -24,6 +28,7 @@ public:
 protected:
     PlotList data;
     QList<QSharedPointer<NRadarAbstractPlot>> savedData;
+    QHash<const NRadarAbstractPlot *, QSharedPointer<Prp3PlotRecord>> prp3Data;
 
     QDateTime begin;
     QDateTime end;
