@@ -21,6 +21,7 @@ class PlotLabel;
 class Prp3SignalWindow;
 struct Prp3PlotRecord;
 class TrackPathsOverlayItem;
+class TrackerEvidencePanel;
 
 struct PlotPopupData
 {
@@ -93,6 +94,7 @@ private:
 
     void showPlotPopup(NRadarItem *radarItem,const QPointF& scenePos);
     void closeAllPlotPopups();
+    void clearPlotItems();
     void closePlotPopup(int index);
     void updatePlotPopupLines();
     void populatePlotPopup(PlotLabel *label, NRadarItem *radarItem);
@@ -103,11 +105,13 @@ private:
     void rebuildTrackPaths();
     void ensureTrackPathOverlays();
     void addTrackPolyline(const QPolygonF& polyline,quint8 radarId,uint trackId,
-                          quint64 trackInstance,bool adsb);
+                          quint64 trackInstance,bool adsb, const QColor &colour = {});
     void setTrackPathsVisible(bool visible);
     void updateTrackPathStyles();
     void setHighlightedTrack(const NRadarTrackPlot *track);
     void addPrp3Details(QTreeWidgetItem *root, const Prp3PlotRecord &record);
+    void setPrp3MotionColours(bool on);
+    void updatePrp3Legends();
 
     QList<PlotPopupData> m_plotPopups;
     TrackPathsOverlayItem *m_trackOverlay;
@@ -120,7 +124,12 @@ private:
     bool m_hasHighlightedTrack;
     quint64 m_highlightedTrackInstance;
     QLabel *m_prp3DopplerLegend = nullptr;
+    QLabel *m_prp3MotionLegend = nullptr;
+    bool m_prp3MotionColours = false;
     Prp3SignalWindow *m_prp3SignalWindow = nullptr;
+    TrackerEvidencePanel *m_trackerEvidence = nullptr;
+    bool m_filtering = false;
+    bool m_filterPending = false;
 };
 
 #endif // APPWINDOW_H

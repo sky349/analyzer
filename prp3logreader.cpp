@@ -1,5 +1,8 @@
 #include "prp3logreader.h"
 
+#include <processor/rdps3/dopplerrestorer.h>
+#include <processor/rdps3/prp3compact.h>
+
 #include <QCborArray>
 #include <QCborMap>
 #include <QCborStreamReader>
@@ -19,9 +22,11 @@ namespace
 constexpr int FILE_HEADER_SIZE = 16;
 constexpr int RECORD_ENVELOPE_SIZE = 10;
 constexpr quint16 FILE_FORMAT_VERSION = 1;
-constexpr quint32 MAX_DECLARED_FILE_BYTES = 10000000;
+constexpr quint32 MAX_DECLARED_FILE_BYTES = 300000000;
 constexpr quint64 SELF_DESCRIBED_CBOR_TAG = 55799;
 constexpr quint16 RESTORATION_RESULT_VALID = 0x0001;
+constexpr quint8 RESTORATION_DEGRADED_SINGLE_BRANCH = 8;
+constexpr quint8 RESTORATION_DISABLED = 1, RESTORATION_INVALID_CONFIGURATION = 15;
 
 const char *const DECODE_ERROR_NAMES[] = { "none",          "not_present",       "truncated",
                                           "bad_magic",     "bad_length",        "bad_version",
@@ -32,8 +37,11 @@ const char *const DECODE_ERROR_NAMES[] = { "none",          "not_present",      
 const char *const RESTORATION_REASON_NAMES[] = { "valid", "disabled", "no_snapshot", "snapshot_invalid",
                                                 "incomplete_branch", "zero_energy",
                                                 "insufficient_timing_diversity", "no_hypothesis",
-                                                "degraded_single_branch", "ambiguous_hypothesis" };
+                                                "degraded_single_branch", "ambiguous_hypothesis", "uncalibrated",
+                                                "calibration_expired", "insufficient_signal", "poor_fit",
+                                                "branch_inconsistent", "invalid_configuration" };
 const char *const SNAPSHOT_REASON_NAMES[] = { "none", "missing_a", "missing_b" };
+const char *const MOTION_CLASS_NAMES[] = { "unavailable", "stationary_like", "undecided", "moving" };
 const char *const SIGNAL_NAMES[] = { "mh", "nfm" };
 const char *const BIN_NAMES[] = { "upper", "lower" };
 const char *const MODE_NAMES[] = { "a", "b", "diversity" };
@@ -173,11 +181,13 @@ bool parseCommon(const QCborMap &root, QString &recordType, QString &producerBui
         return false;
     if (schema != QLatin1String("nrpl.rdps3.prp3"))
         return reject(error, scope, "schema", QStringLiteral("is unsupported"));
-    if (schemaVersion != 1)
+    if (schemaVersion != 1 && schemaVersion != 2)
         return reject(error, scope, "schema_version", QStringLiteral("is unsupported"));
     if (application != QLatin1String("rdps3"))
         return reject(error, QStringLiteral("root.producer"), "application", QStringLiteral("is unsupported"));
-    if (recordType != QLatin1String("plot") && recordType != QLatin1String("event"))
+    if (recordType != QLatin1String("plot") && recordType != QLatin1String("event")
+        && (schemaVersion != 2 || (recordType != QLatin1String("run") && recordType != QLatin1String("input")
+                                  && recordType != QLatin1String("track") && recordType != QLatin1String("end"))))
         return reject(error, scope, "record_type", QStringLiteral("is unsupported"));
     return true;
 }
@@ -435,7 +445,8 @@ bool parseRestoration(const QCborMap &root, Prp3PlotRecord &record, QString &err
     if (record.restoration.candidateIndexScope != QLatin1String("plot_local_sorted_candidates"))
         return reject(error, scope, "candidate_index_scope", QStringLiteral("is unsupported"));
     if (record.restoration.valid != bool(record.restoration.flags & RESTORATION_RESULT_VALID)
-        || (record.restoration.valid && record.restoration.reason != 0))
+        || (record.restoration.valid && record.restoration.reason != 0
+            && record.restoration.reason != RESTORATION_DEGRADED_SINGLE_BRANCH))
         return reject(error, scope, "valid", QStringLiteral("is inconsistent with flags/reason"));
     if (record.restoration.valid
         && std::fabs(record.restoration.frequencyHz) > PsrDoppler::MAX_ABS_DOPPLER_FREQUENCY_HZ)
@@ -487,6 +498,43 @@ bool parseRestoration(const QCborMap &root, Prp3PlotRecord &record, QString &err
     return true;
 }
 
+// A logged map counts only when the producer evaluated it; otherwise the authoritative DPS1 is classified here.
+bool parseMotion(const QCborMap &root, Prp3PlotRecord &record, QString &error)
+{
+    const auto restoration = root.value(QLatin1String("restoration")).toMap();
+    auto &motion = record.motion;
+    if (restoration.contains(QLatin1String("motion"))) {
+        const QString scope = QStringLiteral("root.restoration.motion");
+        QCborMap map;
+        QString className;
+        if (!cborMap(restoration, "motion", map, QStringLiteral("root.restoration"), error)
+            || !cborUnsigned(map, "class", motion.motionClass, arrayCount(MOTION_CLASS_NAMES) - 1, scope, error)
+            || !cborString(map, "class_name", className, scope, error)
+            || !expectedText(className, MOTION_CLASS_NAMES, arrayCount(MOTION_CLASS_NAMES), motion.motionClass, error,
+                             scope, "class_name")
+            || !cborBool(map, "mti_available", motion.mtiAvailable, scope, error)
+            || !cborNumber(map, "mti_ratio", motion.mtiRatio, scope, error)
+            || !cborBool(map, "incoherence_available", motion.incoherenceAvailable, scope, error)
+            || !cborNumber(map, "stationary_incoherence", motion.stationaryIncoherence, scope, error)
+            || !cborNumber(map, "peak_snr_db", motion.peakSnrDb, scope, error)
+            || !cborUnsigned(map, "supported_samples", motion.supportedSamples, 2 * PsrDoppler::SAMPLE_COUNT, scope,
+                             error))
+            return false;
+        if (record.restoration.reason != RESTORATION_DISABLED
+            && record.restoration.reason != RESTORATION_INVALID_CONFIGURATION) {
+            motion.source = Prp3MotionInfo::Source::LOGGED;
+            return true;
+        }
+    }
+    static const DopplerRestorer restorer; // production defaults; immutable, so shared reads are safe
+    const auto evidence = record.snapshot.decoded ? restorer.motion(record.snapshot.evidence.snapshot)
+                                                  : DopplerRestorer::MotionEvidence{};
+    motion = { record.snapshot.decoded ? Prp3MotionInfo::Source::RECOMPUTED : Prp3MotionInfo::Source::NONE,
+               quint8(evidence.motionClass), evidence.mtiAvailable, evidence.incoherenceAvailable, evidence.mtiRatio,
+               evidence.stationaryIncoherence, evidence.peakSnrDb, evidence.supportedSamples };
+    return true;
+}
+
 bool parsePlot(const QCborMap &root, const QByteArray &payload, const QString &filePath, qint64 envelopeOffset,
                const QString &producerBuild, QSharedPointer<Prp3PlotRecord> &record, QString &error)
 {
@@ -516,7 +564,7 @@ bool parsePlot(const QCborMap &root, const QByteArray &payload, const QString &f
                       QStringLiteral("does not match output_apoi"));
     if (!parseLegacy(root, *parsed, error) || !parseFilter(root, *parsed, error)
         || !parseBackground(root, *parsed, error) || !parseSnapshot(root, *parsed, error)
-        || !parseRestoration(root, *parsed, error))
+        || !parseRestoration(root, *parsed, error) || !parseMotion(root, *parsed, error))
         return false;
 
     record = std::move(parsed);
@@ -532,8 +580,208 @@ bool parseEvent(const QCborMap &root, QString &error)
         && cborString(root, "message", message, QStringLiteral("root"), error);
 }
 
+struct CompactImport
+{
+    struct Run
+    {
+        QCborMap info;
+        qint64 part = -1, sequence = 0, observations = 0, outcomes = 0;
+        bool ended = false, complete = true, allowPartGap = false;
+        QMap<qint64, QSharedPointer<Prp3PlotRecord>> inputs;
+        QSet<qint64> pending;
+    };
+    QMap<QString, Run> runs;
+    QMap<QString, bool> compactFiles;
+    QString runId, file;
+    QStringList warnings;
+
+    bool append(const QCborMap &root, const QString &path, QSharedPointer<Prp3PlotRecord> &plot, QString &error)
+    {
+        using namespace Prp3Compact;
+        using namespace Prp3Compact::Key;
+        if (!validateRecord(root, error))
+            return false;
+        const auto kind = root.value(KIND).toInteger();
+        if (kind == qint64(Kind::RUN)) {
+            if (file == path)
+                return Prp3Compact::reject(error, QStringLiteral("duplicate part header"));
+            file = path;
+            runId = root.value(RUN_ID).toString();
+            auto &run = runs[runId];
+            const auto part = root.value(PART).toInteger();
+            if (part <= run.part || run.ended)
+                return Prp3Compact::reject(error, QStringLiteral("duplicate/reordered part or part after end"));
+            if (part != run.part + 1) {
+                warnings.append(QStringLiteral("Run %1: missing preceding part(s); selected coverage only.").arg(runId));
+                run.complete = false;
+                run.allowPartGap = true;
+            }
+            const auto info = root.value(INFO).toMap();
+            if (run.part >= 0 && run.info != info)
+                return Prp3Compact::reject(error,
+                                          QStringLiteral("configuration changed without a supported epoch"));
+            run.info = info;
+            run.part = part;
+            return true;
+        }
+        if (file != path || !runs.contains(runId))
+            return Prp3Compact::reject(error, QStringLiteral("part does not begin with run metadata"));
+        auto &run = runs[runId];
+        const auto sequence = root.value(SEQUENCE).toInteger();
+        if (run.ended || sequence <= run.sequence || (!run.allowPartGap && sequence != run.sequence + 1))
+            return Prp3Compact::reject(error, QStringLiteral("invalid sequence or record after end"));
+        run.sequence = sequence;
+        run.allowPartGap = false;
+        if (kind >= 128) {
+            warnings.append(QStringLiteral("Run %1: optional event kind %2 is unsupported.").arg(runId).arg(kind));
+            return true;
+        }
+        if (kind == qint64(Kind::END)) {
+            const auto counts = root.value(INFO).toArray();
+            if (run.complete && (counts.at(0).toInteger() != run.observations
+                                 || counts.at(1).toInteger() != run.outcomes
+                                 || counts.at(2).toInteger() != run.pending.size()))
+                return Prp3Compact::reject(error, QStringLiteral("end counters disagree with captured records"));
+            run.ended = true;
+            return true;
+        }
+        if (kind == qint64(Kind::INPUT_CONTROL)) {
+            const auto reason = root.value(REASON).toInteger();
+            if (reason != 1)
+                warnings.append(QStringLiteral("Run %1, record %2: coverage/control reason %3, radar %4, "
+                                               "channel %5, details %6; input coverage is incomplete.")
+                    .arg(runId).arg(sequence).arg(reason).arg(root.value(RADAR).toInteger(-1))
+                    .arg(root.value(CHANNEL).toInteger(-1)).arg(root.value(INFO).toDiagnosticNotation()));
+            return true;
+        }
+        if (kind == qint64(Kind::OUTCOME)) {
+            ++run.outcomes;
+            const auto id = root.value(ORIGIN).toInteger();
+            const auto original = run.inputs.value(id);
+            if (!original) {
+                if (run.complete)
+                    return Prp3Compact::reject(error, QStringLiteral("outcome precedes unknown observation"));
+                warnings.append(QStringLiteral("Run %1: outcome for missing observation %2.").arg(runId).arg(id));
+                return true;
+            }
+            const auto delivered = root.contains(PLOT) ? root.value(PLOT).toMap()
+                : applyChanges(original->originalSnapshot, root.value(CHANGES).toMap());
+            const auto status = root.value(STATUS).toInteger();
+            if (status == qint64(Outcome::FORWARDED) && !validateSnapshot(delivered, error))
+                return false;
+            original->preprocessingStatus = int(status);
+            original->preprocessingOutcomes.append(root);
+            run.pending.remove(id);
+            return true;
+        }
+        const auto id = root.value(ID).toInteger();
+        if (run.inputs.contains(id))
+            return Prp3Compact::reject(error, QStringLiteral("duplicate observation identity"));
+        auto record = QSharedPointer<Prp3PlotRecord>::create();
+        record->compact = true;
+        record->richDiagnostics = false;
+        record->runId = runId;
+        record->runInfo = run.info;
+        record->inputOrdinal = id;
+        record->sequence = quint64(sequence);
+        record->preprocessingStatus = int(root.value(STATUS).toInteger());
+        record->arrivalUtcMs = root.value(TIME).toInteger();
+        record->producerBuild = run.info.value(QStringLiteral("producer")).toMap()
+                                       .value(QStringLiteral("build")).toString();
+        ++run.observations;
+        run.inputs.insert(id, record);
+        if (record->preprocessingStatus == int(Outcome::PENDING))
+            run.pending.insert(id);
+        if (kind == qint64(Kind::OBSERVATION)) {
+            record->originalSnapshot = root.value(PLOT).toMap();
+            record->radarId = int(record->originalSnapshot.value(PlotKey::RADAR).toInteger());
+            record->arrivalUtcMs = record->originalSnapshot.value(PlotKey::TIME).toInteger();
+            if (record->originalSnapshot.value(PlotKey::TYPE).toInteger() == NRadarAbstractPlot::TypePlot)
+                plot = record;
+            return true;
+        }
+        record->radarId = int(root.value(RADAR).toInteger());
+        record->arrivalUtcMs = root.value(MEASUREMENT).toInteger();
+        record->inputChannel = quint8(root.value(CHANNEL).toInteger());
+        record->inputFrame = root.value(FRAME).toByteArray();
+        record->outputApoi = root.value(APOI).toByteArray();
+        const auto &frame = record->inputFrame;
+        if (quint8(frame.at(3)) != 1)
+            return true;
+        if (frame.size() < PsrDoppler::LEGACY_PLOT_SIZE)
+            return Prp3Compact::reject(error, QStringLiteral("truncated type-1 frame"));
+        auto &legacy = record->legacy;
+        legacy.azimuthRaw = qFromBigEndian<quint16>(frame.constData() + 4);
+        legacy.rangeRaw = qFromBigEndian<quint16>(frame.constData() + 6);
+        legacy.rangeKm = legacy.rangeRaw * 0.075;
+        legacy.azimuthDegrees = 90.0 - legacy.azimuthRaw * 360.0 / 16384.0;
+        legacy.selectedClusterDoppler = quint8(frame.at(8));
+        legacy.cpiGroupCount = quint8(frame.at(9));
+        legacy.amplitude = qFromBigEndian<quint16>(frame.constData() + 10);
+        legacy.trailer = quint8(frame.at(57));
+        for (int i = 0; i < std::min<int>(legacy.cpiGroupCount, 15); ++i)
+            legacy.groups.append({ i, quint8(frame.at(12 + i * 3)),
+                                   qFromBigEndian<quint16>(frame.constData() + 13 + i * 3) });
+        auto &snapshot = record->snapshot;
+        snapshot.present = legacy.trailer & PsrDoppler::EXTENSION_PRESENT;
+        // The byte view is read-only and bounded by the preceding legacy-length check.
+        snapshot.evidence = snapshot.present
+            ? PsrDoppler::decode(reinterpret_cast<const quint8 *>(frame.constData()) + PsrDoppler::LEGACY_PLOT_SIZE,
+                                frame.size() - PsrDoppler::LEGACY_PLOT_SIZE) : PsrDoppler::DecodeResult{};
+        snapshot.decoded = snapshot.evidence.isValid();
+        snapshot.decodeError = quint8(snapshot.evidence.error);
+        snapshot.decodeErrorName = QLatin1String(DECODE_ERROR_NAMES[snapshot.decodeError]);
+        if (snapshot.decoded) {
+            const auto &raw = snapshot.evidence.snapshot;
+            snapshot.signalName = QLatin1String(SIGNAL_NAMES[int(raw.signal)]);
+            snapshot.binName = QLatin1String(BIN_NAMES[int(raw.bin)]);
+            snapshot.modeName = QLatin1String(MODE_NAMES[int(raw.mode)]);
+            snapshot.reasonName = QLatin1String(SNAPSHOT_REASON_NAMES[int(raw.reason)]);
+        }
+        const auto live = root.value(LIVE).toArray();
+        if (!live.isEmpty()) {
+            legacy.valid = live.at(0).toBool();
+            record->filter = { legacy.valid, live.at(1).toBool(), live.at(2).toDouble(), live.at(3).toBool() };
+            const auto flags = live.at(4).toInteger();
+            record->background = { bool(flags & 1), bool(flags & 2), bool(flags & 4), bool(flags & 8),
+                                   bool(flags & 16), quint16(live.at(5).toInteger()) };
+            auto &restoration = record->restoration;
+            restoration.flags = quint16(live.at(7).toInteger());
+            restoration.valid = restoration.flags & RESTORATION_RESULT_VALID;
+            restoration.reason = quint8(live.at(8).toInteger());
+            restoration.reasonName = restoration.reason < arrayCount(RESTORATION_REASON_NAMES)
+                ? QLatin1String(RESTORATION_REASON_NAMES[restoration.reason]) : QStringLiteral("unsupported");
+            restoration.branchMask = quint8(live.at(9).toInteger());
+            restoration.frequencyHz = live.at(10).toDouble();
+            const auto basis = run.info.value(QStringLiteral("doppler_basis_hz")).toDouble();
+            restoration.radialSpeedMps = basis > 0.0 ? restoration.frequencyHz * 299792458.0 / (2.0 * basis)
+                                                     : std::numeric_limits<double>::quiet_NaN();
+            restoration.radialSpeedKmh = restoration.radialSpeedMps * 3.6;
+            record->motion = { Prp3MotionInfo::Source::LOGGED, quint8(live.at(11).toInteger()),
+                               live.at(12).toBool(), live.at(14).toBool(), live.at(13).toDouble(),
+                               live.at(15).toDouble(), live.at(16).toDouble(), int(live.at(17).toInteger()) };
+        }
+        plot = record;
+        return true;
+    }
+
+    void finish()
+    {
+        for (auto it = runs.cbegin(); it != runs.cend(); ++it) {
+            if (!it->ended)
+                warnings.append(QStringLiteral("Run %1: no clean end; live/open or interrupted coverage.")
+                                    .arg(it.key()));
+            if (!it->pending.isEmpty())
+                warnings.append(QStringLiteral("Run %1: %2 observations have pending/censored outcomes.")
+                                    .arg(it.key()).arg(it->pending.size()));
+        }
+        warnings.removeDuplicates();
+    }
+};
+
 bool parsePayload(const QByteArray &payload, const QString &filePath, qint64 envelopeOffset,
-                  QSharedPointer<Prp3PlotRecord> &record, bool &event, QString &error)
+                  QSharedPointer<Prp3PlotRecord> &record, bool &event, Prp3TrackerRecording &tracker,
+                  CompactImport &compact, QString &error)
 {
     QCborStreamReader reader(payload);
     const auto tagged = QCborValue::fromCbor(reader);
@@ -550,9 +798,68 @@ bool parsePayload(const QByteArray &payload, const QString &filePath, qint64 env
                       QStringLiteral("must be self-described CBOR tag 55799 around a map"));
 
     const auto root = tagged.taggedValue().toMap();
+    const auto isCompact = root.contains(Prp3Compact::Key::VERSION);
+    if (compact.compactFiles.contains(filePath) && compact.compactFiles.value(filePath) != isCompact)
+        return Prp3Compact::reject(error, QStringLiteral("mixed compact/historical schemas in one file"));
+    compact.compactFiles.insert(filePath, isCompact);
+    if (isCompact) {
+        if (!compact.append(root, filePath, record, error))
+            return false;
+        event = !record;
+        if (record) {
+            record->filePath = filePath;
+            record->envelopeOffset = envelopeOffset;
+            record->cborPayload = payload;
+        }
+        return true;
+    }
     QString recordType, producerBuild;
     if (!parseCommon(root, recordType, producerBuild, error))
         return false;
+    if (root.value(QStringLiteral("schema_version")).toInteger() == 2) {
+        if (!tracker.append(root, error))
+            return false;
+        event = recordType != QLatin1String("plot");
+        if (recordType == QLatin1String("plot")) {
+            if (!parsePlot(root, payload, filePath, envelopeOffset, producerBuild, record, error))
+                return false;
+        } else if (recordType == QLatin1String("input")) {
+            const auto input = root.value(QStringLiteral("input")).toMap();
+            const auto frame = input.value(QStringLiteral("frame")).toByteArray();
+            if (quint8(frame.at(3)) == 1) { // append() has validated the complete frame first.
+                record = QSharedPointer<Prp3PlotRecord>::create();
+                record->richDiagnostics = false;
+                record->filePath = filePath;
+                record->envelopeOffset = envelopeOffset;
+                record->producerBuild = producerBuild;
+                record->cborPayload = payload;
+                record->inputFrame = frame;
+                record->outputApoi = input.value(QStringLiteral("output_apoi")).toByteArray();
+                record->inputChannel = quint8(input.value(QStringLiteral("channel")).toInteger());
+                record->legacy.azimuthRaw = qFromBigEndian<quint16>(frame.constData() + 4);
+                record->legacy.rangeRaw = qFromBigEndian<quint16>(frame.constData() + 6);
+                record->legacy.rangeKm = record->legacy.rangeRaw * 0.075;
+                record->legacy.azimuthDegrees = 90.0 - record->legacy.azimuthRaw * 360.0 / 16384.0;
+                record->legacy.amplitude = qFromBigEndian<quint16>(frame.constData() + 10);
+                event = false;
+            }
+        } else if (recordType == QLatin1String("event")) {
+            return parseEvent(root, error);
+        }
+        if (record) {
+            const auto input = root.value(QStringLiteral("input")).toMap();
+            if (record->inputFrame != input.value(QStringLiteral("frame")).toByteArray()
+                || record->outputApoi != input.value(QStringLiteral("output_apoi")).toByteArray())
+                return reject(error, QStringLiteral("root"), "input", QStringLiteral("disagrees with plot bytes"));
+            record->runId = root.value(QStringLiteral("run_id")).toString();
+            record->inputOrdinal = input.value(QStringLiteral("ordinal")).toInteger();
+            record->radarId = int(input.value(QStringLiteral("radar")).toInteger());
+            record->arrivalUtcMs = input.value(QStringLiteral("measurement_ms")).toInteger();
+            record->arrivalUtcIso = QDateTime::fromMSecsSinceEpoch(record->arrivalUtcMs, Qt::UTC)
+                                           .toString(Qt::ISODateWithMs);
+        }
+        return true;
+    }
     event = recordType == QLatin1String("event");
     return event ? parseEvent(root, error)
                  : parsePlot(root, payload, filePath, envelopeOffset, producerBuild, record, error);
@@ -593,6 +900,7 @@ Prp3LogReader::Status Prp3LogReader::read(const QStringList &filePaths, Result &
     }
 
     Result parsed;
+    CompactImport compact;
     if (progress && !progress(0, totalBytes))
         return Status::CANCELLED;
 
@@ -621,7 +929,13 @@ Prp3LogReader::Status Prp3LogReader::read(const QStringList &filePaths, Result &
         }
         if (declaredMaximum < FILE_HEADER_SIZE + RECORD_ENVELOPE_SIZE + 1
             || declaredMaximum > MAX_DECLARED_FILE_BYTES || fileSize > declaredMaximum) {
-            error = fileError(path, 12, QStringLiteral("invalid declared maximum or oversized physical file"));
+            error = fileError(path, 12,
+                              QStringLiteral("invalid file size: declared maximum %1 bytes, physical size %2 bytes; "
+                                             "supported declaration %3..%4 bytes, physical size must not exceed it")
+                                  .arg(declaredMaximum)
+                                  .arg(fileSize)
+                                  .arg(FILE_HEADER_SIZE + RECORD_ENVELOPE_SIZE + 1)
+                                  .arg(MAX_DECLARED_FILE_BYTES));
             return Status::ERROR;
         }
 
@@ -656,7 +970,7 @@ Prp3LogReader::Status Prp3LogReader::read(const QStringList &filePaths, Result &
             QSharedPointer<Prp3PlotRecord> record;
             bool event = false;
             QString payloadError;
-            if (!parsePayload(payload, path, envelopeOffset, record, event, payloadError)) {
+            if (!parsePayload(payload, path, envelopeOffset, record, event, *parsed.tracker, compact, payloadError)) {
                 error = fileError(path, envelopeOffset + RECORD_ENVELOPE_SIZE, payloadError);
                 return Status::ERROR;
             }
@@ -672,9 +986,21 @@ Prp3LogReader::Status Prp3LogReader::read(const QStringList &filePaths, Result &
             if (progress && !progress(completedBytes + file.pos(), totalBytes))
                 return Status::CANCELLED;
         }
+        if (fileSize == FILE_HEADER_SIZE)
+            parsed.tracker->warnings.append(QStringLiteral("%1: header only; no schema, observations or clean end "
+                                                          "were recorded; coverage is unavailable.").arg(path));
         completedBytes += fileSize;
     }
 
+    parsed.tracker->resolve();
+    compact.finish();
+    parsed.tracker->warnings.append(compact.warnings);
+    for (const auto &life : std::as_const(parsed.tracker->lives))
+        for (const auto &sample : std::as_const(life->samples)) {
+            const auto time = QDateTime::fromMSecsSinceEpoch(qint64(std::llround(sample->time * 1000.0)), Qt::UTC);
+            parsed.begin = !parsed.begin.isValid() || time < parsed.begin ? time : parsed.begin;
+            parsed.end = !parsed.end.isValid() || time > parsed.end ? time : parsed.end;
+        }
     result = std::move(parsed);
     return Status::SUCCESS;
 }

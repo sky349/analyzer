@@ -3,6 +3,7 @@
 #include "ianalyser.h"
 #include "prp3phasediagnostics.h"
 #include "prp3record.h"
+#include "prp3radialdiagnostics.h"
 
 #include <QPointer>
 #include <QWidget>
@@ -38,23 +39,29 @@ private:
     void analyseBatch();
     void present();
     void selectPlot();
+    void presentRadial();
+    void selectRadial(int index);
     int selectedIndex() const;
     int referenceIndex(int group) const;
     void openPlot();
 
     Prp3Records m_records;
+    Prp3RadialDiagnostics::Analysis m_radialAnalysis;
     QVector<Prp3ComparisonRow> m_rows;
     QMap<QStringList, int> m_groups;
     QMap<int, int> m_references;
     QComboBox *m_channel = nullptr;
     QComboBox *m_mapping = nullptr;
     QLabel *m_status = nullptr;
+    QLabel *m_radialStatus = nullptr;
     QTableWidget *m_table = nullptr;
     QTextBrowser *m_summary = nullptr;
     QTextBrowser *m_detail = nullptr;
     QwtPlot *m_frequencyPlot = nullptr;
     QwtPlot *m_qualityPlot = nullptr;
     QwtPlot *m_residualPlot = nullptr;
+    QwtPlot *m_radialPlot = nullptr;
+    QwtPlot *m_radialHistory = nullptr;
     QTimer *m_timer = nullptr;
 };
 

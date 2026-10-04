@@ -14,6 +14,8 @@ void DataPack::clear()
 {
     data.clear();
     prp3Data.clear();
+    m_trackerUses.clear();
+    m_trackerRecording.clear();
     savedData.clear();
     begin = end = QDateTime();
     center = QPointF();
@@ -27,6 +29,9 @@ QSharedPointer<const Prp3PlotRecord> DataPack::getPrp3Record(const NRadarAbstrac
 
 bool DataPack::hasPrp3Data() const
 { return !prp3Data.isEmpty(); }
+
+QVector<Prp3TrackerUse> DataPack::trackerUses(const NRadarAbstractPlot *plot) const
+{ return m_trackerUses.value(plot); }
 
 QPointF DataPack::getCenter() const
 { return center; }

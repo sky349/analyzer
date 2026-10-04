@@ -31,6 +31,7 @@ private:
     QCheckBox *m_manualFrequency = nullptr;
     QDoubleSpinBox *m_rawFrequency = nullptr;
     QTextBrowser *m_diagnostics = nullptr;
+    QTextBrowser *m_archive = nullptr;
     QwtPlot *m_predictionPlot = nullptr;
     QwtPlot *m_residualPlot = nullptr;
     QwtPlotCurve *m_observedCurve = nullptr;

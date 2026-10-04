@@ -1,6 +1,7 @@
 #pragma once
 
 #include "prp3record.h"
+#include "prp3trackerevidence.h"
 
 #include <QDateTime>
 #include <QSharedPointer>
@@ -20,6 +21,7 @@ public:
         int eventCount = 0;
         QDateTime begin;
         QDateTime end;
+        QSharedPointer<Prp3TrackerRecording> tracker = QSharedPointer<Prp3TrackerRecording>::create();
     };
 
     using Progress = std::function<bool(qint64, qint64)>;

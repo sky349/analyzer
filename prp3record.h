@@ -3,6 +3,8 @@
 #include <libradardata/psrdopplersnapshot.h>
 
 #include <QByteArray>
+#include <QCborArray>
+#include <QCborMap>
 #include <QString>
 #include <QVector>
 
@@ -94,8 +96,33 @@ struct Prp3RestorationInfo
     QVector<Prp3RestorationBranch> branches;
 };
 
+// F-108 target/clutter motion evidence: the logged rdps3 result when the producer evaluated it, otherwise recomputed
+// from the decoded snapshot with the production DopplerRestorer defaults.
+struct Prp3MotionInfo
+{
+    enum class Source { NONE, LOGGED, RECOMPUTED };
+
+    Source source = Source::NONE;
+    quint8 motionClass = 0; // DopplerRestorer::MotionClass: 0 unavailable, 1 stationary-like, 2 undecided, 3 moving
+    bool mtiAvailable = false;
+    bool incoherenceAvailable = false;
+    double mtiRatio = 0.0;
+    double stationaryIncoherence = 0.0;
+    double peakSnrDb = 0.0;
+    int supportedSamples = 0;
+};
+
 struct Prp3PlotRecord
 {
+    QString runId;
+    qint64 inputOrdinal = -1;
+    int radarId = 1;
+    bool richDiagnostics = true;
+    bool compact = false;
+    QCborMap originalSnapshot;
+    QCborArray preprocessingOutcomes;
+    QCborMap runInfo;
+    int preprocessingStatus = 0;
     QString filePath;
     qint64 envelopeOffset = 0;
     QByteArray cborPayload;
@@ -111,4 +138,5 @@ struct Prp3PlotRecord
     Prp3BackgroundInfo background;
     Prp3SnapshotInfo snapshot;
     Prp3RestorationInfo restoration;
+    Prp3MotionInfo motion;
 };

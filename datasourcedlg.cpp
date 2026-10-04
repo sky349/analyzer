@@ -5,14 +5,17 @@
 #include <asterix/asterix.h>
 #include <libradardata/nasterixconverter.h>
 #include <libradardata/nradarplot.h>
+#include <libradardata/nradartrackplot.h>
 #include <libradarmap/nradarmap.h>
 
 #include "datasourcedlg.h"
 #include "datapack.h"
 #include "prp3logreader.h"
+#include <processor/rdps3/prp3compact.h>
 
 #include <QDir>
 #include <QFileInfo>
+#include <QCborArray>
 
 #include <cmath>
 
@@ -20,8 +23,6 @@
 
 namespace
 {
-constexpr int PRP3_DISPLAY_RADAR_ID = 1;
-
 bool isPrp3File(const QString &path)
 {
     return path.endsWith(QLatin1String(".prp3.cbor"), Qt::CaseInsensitive);
@@ -204,7 +205,7 @@ void DataSourceDlg::onBrowseFile()
 {
     radioFile->setChecked(true);
 
-    QString start=edFile->text();
+    const auto start = edFile->text().isEmpty() ? QStringLiteral("/nrpl/var/rdps/prp3") : edFile->text();
     QString path = QFileDialog::getOpenFileName(
         this, tr("Choose PRP3, RDB, or ASTERIX data"), start,
         tr("Supported data (*.prp3.cbor *.rdb);;PRP3 Doppler logs (*.prp3.cbor);;"
@@ -322,13 +323,45 @@ bool DataSourceDlg::importPrp3()
         QMessageBox::critical(this, tr("PRP3 import failed"), error);
         return false;
     }
-    if (result.plots.isEmpty()) {
+    if (result.plots.isEmpty() && result.tracker->lives.isEmpty()) {
         QMessageBox::critical(this, tr("PRP3 import failed"),
                               tr("The selected PRP3 source contains no plot records."));
         return false;
     }
 
+    QMap<QString, QSharedPointer<NRadarMap>> compactMaps;
+    for (const auto &record : qAsConst(result.plots)) {
+        if (!record->compact || compactMaps.contains(record->runId))
+            continue;
+        const auto center = record->runInfo.value(QStringLiteral("map_center")).toArray();
+        NRadarMap::Definition definition;
+        definition.center = QPointF(center.at(0).toDouble(), center.at(1).toDouble());
+        const auto frame = record->runInfo.value(QStringLiteral("initial_context")).toMap()
+                               .value(QStringLiteral("map")).toMap();
+        if (!frame.isEmpty()) {
+            definition.range = int(frame.value(QStringLiteral("range_m")).toInteger());
+            definition.isMulti = frame.value(QStringLiteral("multi")).toBool();
+            definition.azimuthZeroAtNorth = frame.value(QStringLiteral("azimuth_zero_north")).toBool();
+            definition.azimuthClockwise = frame.value(QStringLiteral("azimuth_clockwise")).toBool();
+        }
+        compactMaps.insert(record->runId, QSharedPointer<NRadarMap>(
+            NRadarMap::createMap(definition)));
+        if (!compactMaps.value(record->runId)) {
+            QMessageBox::critical(this, tr("PRP3 import failed"), tr("Unsupported compact coordinate frame."));
+            return false;
+        }
+    }
     dataPack->clear();
+    dataPack->m_trackerRecording = result.tracker;
+    if (!compactMaps.isEmpty())
+        converter->setCenterPoint(compactMaps.first()->getCenterPoint());
+    if (result.tracker->runs.size() == 1) {
+        const auto recordedCenter = result.tracker->runs.first().value(QStringLiteral("map_center")).toArray();
+        if (recordedCenter.size() == 2) {
+            const auto center = QPointF(recordedCenter.at(0).toDouble(), recordedCenter.at(1).toDouble());
+            converter->setCenterPoint(center);
+        }
+    }
     for (int plotIndex = 0; plotIndex < result.plots.size(); ++plotIndex) {
         if (progressImportUpdate.elapsed() > 100) {
             qApp->processEvents();
@@ -342,21 +375,35 @@ bool DataSourceDlg::importPrp3()
         const auto &record = result.plots.at(plotIndex);
         const auto arrival = QDateTime::fromMSecsSinceEpoch(record->arrivalUtcMs, Qt::UTC);
         int consumed = -1;
-        const auto decoded = record->outputApoi.isEmpty()
+        const auto decoded = record->compact || record->outputApoi.isEmpty()
             ? QSharedPointer<NRadarAbstractPlot>()
-            : converter->convertFromAPOI(record->outputApoi, PRP3_DISPLAY_RADAR_ID, consumed, arrival);
+            : converter->convertFromAPOI(record->outputApoi, record->radarId, consumed, arrival);
         auto plot = !decoded.isNull() && consumed == record->outputApoi.size()
                 && decoded->getType() == NRadarAbstractPlot::TypePlot
             ? qSharedPointerDynamicCast<NRadarPlot>(decoded)
             : QSharedPointer<NRadarPlot>();
+        if (record->compact && !record->originalSnapshot.isEmpty())
+            plot = Prp3Compact::displayPlot(record->originalSnapshot, converter->getRadarMap());
         if (plot.isNull()) {
-            plot = QSharedPointer<NRadarPlot>::create(PRP3_DISPLAY_RADAR_ID, arrival, converter->getRadarMap());
+            plot = QSharedPointer<NRadarPlot>::create(quint8(record->radarId), arrival, converter->getRadarMap());
             plot->setSourceType(NRadarPlot::PSR);
             plot->setPlotAssociation(NRadarPlot::NotAssociated);
-            plot->setADCoord(QPointF(std::fmod(record->legacy.azimuthRaw * 360.0 / 16384.0, 360.0),
-                                    record->legacy.rangeKm * 1000.0));
+            const auto ad = QPointF(std::fmod(record->legacy.azimuthRaw * 360.0 / 16384.0, 360.0),
+                                    record->legacy.rangeKm * 1000.0);
+            if (record->compact)
+                plot->setLLCoord(compactMaps.value(record->runId)->convertADToLL(ad));
+            else
+                plot->setADCoord(ad);
         }
-        applyPrp3Options(*plot, *record);
+        if (record->richDiagnostics)
+            applyPrp3Options(*plot, *record);
+        const auto uses = result.tracker->inputUses.value(
+                Prp3TrackerRecording::inputKey(record->runId, record->inputOrdinal));
+        if (!uses.isEmpty()) {
+            dataPack->m_trackerUses.insert(plot.data(), uses);
+            for (const auto &use : uses)
+                plot->addAssociatedTrackId((quint32(use.life->table) << 16) | quint32(use.life->slot));
+        }
 
         dataPack->data.append(plot.data());
         dataPack->savedData.append(plot);
@@ -364,10 +411,36 @@ bool DataSourceDlg::importPrp3()
         progressImport->setValue(90 + int(10.0 * (plotIndex + 1) / result.plots.size()));
     }
 
+    for (const auto &life : std::as_const(result.tracker->lives)) {
+        for (const auto &sample : std::as_const(life->samples)) {
+            if (sample->event != QStringLiteral("seed") && sample->event != QStringLiteral("update"))
+                continue;
+            const auto time = QDateTime::fromMSecsSinceEpoch(qint64(std::llround(sample->time * 1000.0)), Qt::UTC);
+            const auto track = QSharedPointer<NRadarTrackPlot>::create(quint8(sample->table), time,
+                                                                       converter->getRadarMap());
+            track->setSourceType(static_cast<NRadarPlot::NPlotSourceType>(
+                    sample->fields.value(QStringLiteral("source_type")).toInteger(NRadarPlot::PSR)));
+            track->setTrackId((quint32(sample->table) << 16) | quint32(sample->slot));
+            track->setTrackPlotType(NRadarTrackPlot::NormalPoint);
+            track->setLLCoord(sample->stateLl);
+            const auto velocity = sample->fields.value(QStringLiteral("velocity")).toArray();
+            if (velocity.size() == 2 && velocity.at(0).isDouble() && velocity.at(1).isDouble()) {
+                const auto vx = velocity.at(0).toDouble(), vy = velocity.at(1).toDouble();
+                track->setSpeed(float(std::hypot(vx, vy) * 3.6));
+                track->setHeading(float(std::fmod(450.0 - std::atan2(vy, vx) * 180.0 / M_PI, 360.0)));
+            }
+            dataPack->data.append(track.data());
+            dataPack->savedData.append(track);
+            dataPack->m_trackerUses.insert(track.data(), { { life, sample } });
+        }
+    }
+
     dataPack->begin = result.begin;
     dataPack->end = result.end;
-    dataPack->center = getMapCenter();
+    dataPack->center = converter->getRadarMap()->getCenterPoint();
     qInfo() << "Imported PRP3 plots/events:" << result.plots.size() << result.eventCount;
+    if (!result.tracker->warnings.isEmpty())
+        QMessageBox::warning(this, tr("Recording coverage"), result.tracker->warnings.join(QLatin1Char('\n')));
     return true;
 }
 

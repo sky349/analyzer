@@ -13,6 +13,9 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iterator>
+
+#include <processor/rdps3/dopplerrestorer.h>
 
 #include "commondefs.h"
 
@@ -23,6 +26,8 @@
 #include "prp3record.h"
 #include "prp3signalwindow.h"
 #include "compareprp3task.h"
+#include "mtilabelstask.h"
+#include "trackerevidencepanel.h"
 #include <libradarview/nradarscenelayer.h>
 
 #include "guifilter.h"
@@ -158,8 +163,53 @@ QColor prp3DopplerColor(const Prp3PlotRecord &record)
     const auto normalised = std::max(-1.0, std::min(1.0, record.restoration.frequencyHz
                                                             / PsrDoppler::MAX_ABS_DOPPLER_FREQUENCY_HZ));
     const QColor neutral(245, 245, 245);
-    return normalised < 0.0 ? interpolateColor(neutral, QColor(8, 48, 107), -normalised)
-                            : interpolateColor(neutral, QColor(255, 145, 145), normalised);
+    return normalised < 0.0 ? interpolateColor(neutral, QColor(64, 156, 255), -normalised)
+                            : interpolateColor(neutral, QColor(255, 80, 80), normalised);
+}
+
+// Ordinal motion-evidence palette, validated (OKLab CVD/normal-vision separation, contrast) on the dark satellite
+// and light tiles-off surfaces: violet stationary-like, cool-grey undecided, one orange hue brightening with the MTI
+// ratio q for moving (an m-only moving call joins the first step), dark grey unavailable. Blue is avoided because the
+// Doppler palette uses it for negative frequency.
+const QColor PRP3_MOTION_STATIONARY(0x90, 0x85, 0xe9), PRP3_MOTION_UNDECIDED(0x97, 0xa9, 0xa9),
+    PRP3_MOTION_UNAVAILABLE(0x64, 0x64, 0x62);
+const QColor PRP3_MOTION_MOVING[] = { QColor(0xb1, 0x3e, 0x06), QColor(0xce, 0x51, 0x1e), QColor(0xe5, 0x6c, 0x40),
+                                      QColor(0xfe, 0x7d, 0x4d) };
+const double PRP3_MOTION_MTI_LEVELS[] = { 0.3, 0.6, 1.0 }; // lower bounds of moving steps 2..4
+
+QColor prp3MotionColor(const Prp3PlotRecord &record)
+{
+    const auto &motion = record.motion;
+    switch (DopplerRestorer::MotionClass(motion.motionClass)) {
+    case DopplerRestorer::MotionClass::STATIONARY_LIKE:
+        return PRP3_MOTION_STATIONARY;
+    case DopplerRestorer::MotionClass::UNDECIDED:
+        return PRP3_MOTION_UNDECIDED;
+    case DopplerRestorer::MotionClass::MOVING:
+        return PRP3_MOTION_MOVING[motion.mtiAvailable
+                                      ? std::upper_bound(std::begin(PRP3_MOTION_MTI_LEVELS),
+                                                         std::end(PRP3_MOTION_MTI_LEVELS), motion.mtiRatio)
+                                            - std::begin(PRP3_MOTION_MTI_LEVELS)
+                                      : 0];
+    case DopplerRestorer::MotionClass::UNAVAILABLE:
+    default:
+        return PRP3_MOTION_UNAVAILABLE;
+    }
+}
+
+QString prp3MotionClassName(quint8 motionClass)
+{
+    switch (DopplerRestorer::MotionClass(motionClass)) {
+    case DopplerRestorer::MotionClass::STATIONARY_LIKE:
+        return QObject::tr("stationary-like");
+    case DopplerRestorer::MotionClass::UNDECIDED:
+        return QObject::tr("undecided");
+    case DopplerRestorer::MotionClass::MOVING:
+        return QObject::tr("moving");
+    case DopplerRestorer::MotionClass::UNAVAILABLE:
+    default:
+        return QObject::tr("unavailable");
+    }
 }
 
 QString yesNo(bool value)
@@ -212,11 +262,11 @@ public:
     void addPolyline(const QPolygonF& polyline,
                      quint8 radarId,
                      uint trackId,
-                     quint64 trackInstance)
+                     quint64 trackInstance, const QColor &colour = {})
     {
         if(polyline.size()<2) return;
 
-        const QColor color=trackColor(radarId,trackId,trackInstance);
+        const auto color = colour.isValid() ? colour : trackColor(radarId, trackId, trackInstance);
         const Qt::PenStyle monochromeStyle=
                 monochromeTrackStyle(radarId,trackId,trackInstance);
 
@@ -517,9 +567,35 @@ AppWindow::AppWindow():QMainWindow(0),
             .arg(PsrDoppler::MAX_ABS_DOPPLER_FREQUENCY_HZ, 0, 'f', 1));
     m_prp3DopplerLegend->setStyleSheet(QStringLiteral(
         "QLabel { color: black; padding: 3px 8px; border: 1px solid #666; "
-        "background: qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #08306b,stop:0.5 #f5f5f5,stop:1 #ff9191); }"));
+        "background: qlineargradient(x1:0,y1:0,x2:1,y2:0,stop:0 #409cff,stop:0.5 #f5f5f5,stop:1 #ff5050); }"));
     statusBar()->addPermanentWidget(m_prp3DopplerLegend);
     m_prp3DopplerLegend->hide();
+
+    m_prp3MotionLegend = new QLabel(this);
+    m_prp3MotionLegend->setAlignment(Qt::AlignCenter);
+    m_prp3MotionLegend->setTextFormat(Qt::RichText);
+    const auto swatch = [](const QColor &color, const QString &text) {
+        return QStringLiteral("<span style=\"color:%1\">&#9632;</span>&nbsp;%2")
+            .arg(color.name(), text.toHtmlEscaped());
+    };
+    m_prp3MotionLegend->setText(
+        QStringLiteral("MTI&nbsp;&nbsp;%1&nbsp;&nbsp;%2&nbsp;&nbsp;&nbsp;moving&nbsp;q:&nbsp;%3&nbsp;%4&nbsp;%5&nbsp;%6"
+                       "&nbsp;&nbsp;&nbsp;%7")
+            .arg(swatch(PRP3_MOTION_STATIONARY, tr("stationary-like")), swatch(PRP3_MOTION_UNDECIDED, tr("undecided")),
+                 swatch(PRP3_MOTION_MOVING[0], QStringLiteral("<0.3")),
+                 swatch(PRP3_MOTION_MOVING[1], QStringLiteral("0.3-0.6")),
+                 swatch(PRP3_MOTION_MOVING[2], QStringLiteral("0.6-1")),
+                 swatch(PRP3_MOTION_MOVING[3], QStringLiteral(">=1")),
+                 swatch(PRP3_MOTION_UNAVAILABLE, tr("unavailable"))));
+    m_prp3MotionLegend->setToolTip(
+        tr("Per-plot motion evidence (F-108): logged by RDPS3 when available, otherwise recomputed from the logged "
+           "DPS1 snapshot with the production defaults. It means \"not a stationary scatterer\", not \"aircraft\"; "
+           "tangential aircraft can look stationary. Moving levels follow the two-pulse MTI ratio q; an m-only "
+           "moving call is shown in the first level."));
+    m_prp3MotionLegend->setStyleSheet(
+        QStringLiteral("QLabel { color: white; padding: 3px 8px; border: 1px solid #666; background: #1a1a19; }"));
+    statusBar()->addPermanentWidget(m_prp3MotionLegend);
+    m_prp3MotionLegend->hide();
 
     tasks << new ComparePrp3Task(this, this, [this] {
         Prp3Records records;
@@ -534,6 +610,7 @@ AppWindow::AppWindow():QMainWindow(0),
         }
         return records;
     });
+    tasks << new MtiLabelsTask(this, [this](bool on) { setPrp3MotionColours(on); });
 	tasks<<new SampleTask(this);
 	tasks<<new PoDTask(this);
 	tasks<<new ReflectorsTask(this);
@@ -595,6 +672,13 @@ AppWindow::AppWindow():QMainWindow(0),
     });
 
 	dataPack=new DataPack();
+    m_trackerEvidence = new TrackerEvidencePanel(this);
+    addDockWidget(Qt::BottomDockWidgetArea, m_trackerEvidence);
+    QMainWindow::menuBar()->addAction(m_trackerEvidence->toggleViewAction());
+    connect(m_trackerEvidence, &TrackerEvidencePanel::displayChanged, this, [this] {
+        applyFilter();
+        updatePrp3Legends();
+    });
 
 	if(!importData(false)) return;
 
@@ -605,6 +689,7 @@ AppWindow::~AppWindow()
 {
     closeAllPlotPopups();
 	clearTrackPaths();
+    clearPlotItems();
 	delete dataPack;
 
 	qDeleteAll(tasks);
@@ -670,20 +755,26 @@ void AppWindow::loadMap()
 
 bool AppWindow::importData(bool confirm)
 {
+    if (m_filtering)
+        return false;
 	if(property("valid").toBool())
 		if(confirm && QMessageBox::warning(this,tr("Data import"),tr("This will clear all previously imported data.\nIs it OK to continue?"),
 									   QMessageBox::Yes,QMessageBox::No)==QMessageBox::No)
 		return false;
 
 	setProperty("valid",false);
+    closeAllPlotPopups();
+    m_trackerEvidence->setRecording({});
 
     if (m_prp3SignalWindow) {
         m_prp3SignalWindow->clearRecord();
         m_prp3SignalWindow->hide();
     }
     m_prp3DopplerLegend->hide();
+    m_prp3MotionLegend->hide();
 	clearTrackPaths();
 	m_hasHighlightedTrack=false;
+    clearPlotItems();
 	radarScene->clear();
 	layers.clear();
 	dataPack->clear();
@@ -714,7 +805,8 @@ bool AppWindow::importData(bool confirm)
 		f->clear();
 
 	qDebug()<<"Imported data size: "<<dataPack->getData().size();
-    m_prp3DopplerLegend->setVisible(dataPack->hasPrp3Data());
+    m_trackerEvidence->setRecording(dataPack->trackerRecording());
+    updatePrp3Legends();
 
 	setProperty("valid",true);
 
@@ -771,6 +863,11 @@ void AppWindow::initFilters(const DataPack *data)
 			continue;
 
 		NRadarPlot* plot=static_cast<NRadarPlot*>(ap);
+        if (plot->getType() == NRadarAbstractPlot::TypeTrack && plot->getSource() != NRadarPlot::ADSB)
+            tmp3[rawTrackNumber(static_cast<NRadarTrackPlot *>(plot)->getTrackId())] = true;
+        else if (plot->getType() == NRadarAbstractPlot::TypePlot)
+            for (const auto id : plot->getAssociatedTrackIds())
+                tmp3[rawTrackNumber(id)] = true;
 		if(plot->getSource()==NRadarPlot::PSR) continue;
 
 		if(plot->hasBoardNumber())
@@ -780,13 +877,6 @@ void AppWindow::initFilters(const DataPack *data)
 
 		uint address=plot->getOption(NRadarPlot::AircraftAddress).toUInt();
 		if(address) tmp2[address]=true;
-
-		if(plot->getType()==NRadarAbstractPlot::TypePlot)
-			foreach(uint tid,plot->getAssociatedTrackIds())
-				tmp3[rawTrackNumber(tid)]=true;
-		else if(plot->getSource()!=NRadarPlot::ADSB)
-			tmp3[rawTrackNumber(
-					static_cast<NRadarTrackPlot*>(ap)->getTrackId())]=true;
 
 		QString id=plot->getOption(NRadarPlot::AircraftId).toString().toUpper();
 		if(id.length()) idList[id]=true;
@@ -828,11 +918,10 @@ void AppWindow::fillComboBox(QComboBox *cmb,const QMap<QString,bool>& list)
 {
 	cmb->clear();
 	cmb->addItem(tr("Any"),0);
+    cmb->setEnabled(!list.isEmpty());
 
-	if(!list.size())
-		cmb->setEnabled(false);
-	else foreach(QString name,list.keys())
-		cmb->addItem(name);
+    for (auto it = list.cbegin(); it != list.cend(); ++it)
+        cmb->addItem(it.key());
 }
 
 void AppWindow::applyFilterToLayers()
@@ -840,7 +929,17 @@ void AppWindow::applyFilterToLayers()
 
 void AppWindow::applyFilter(bool fullFilter)
 {
-	if(!property("valid").toBool()) return;
+    if (!property("valid").toBool())
+        return;
+    if (m_filtering) {
+        if (!std::exchange(m_filterPending, true))
+            QTimer::singleShot(0, this, [this] {
+                m_filterPending = false;
+                applyFilter();
+            });
+        return;
+    }
+    const QScopedValueRollback<bool> filtering(m_filtering, true);
 
 	int src=cmbSource->currentIndex();
 	int type=cmbType->currentIndex();
@@ -920,7 +1019,7 @@ void AppWindow::applyFilter(bool fullFilter)
 				return true;
 		}
 
-		if(trackNo)
+		if(cmbTrackNo->currentIndex() != 0)
 		{
 			if(data->getType()==NRadarAbstractPlot::TypePlot)
 			{
@@ -948,6 +1047,8 @@ void AppWindow::applyFilter(bool fullFilter)
 		const QDateTime time=plot->getTime();
 		if(time<begin || time>end)
 			return true;
+        if (!m_trackerEvidence->accepts(dataPack->trackerUses(data)))
+            return true;
 
 		return !area.isEmpty() && !area.containsPoint(plot->getXYCoord(),Qt::OddEvenFill);
 	};
@@ -1010,6 +1111,9 @@ void AppWindow::applyFilter(bool fullFilter)
 
 		if(filterOut && pi)
 		{
+            for (int index = m_plotPopups.size() - 1; index >= 0; --index)
+                if (m_plotPopups.at(index).radarItem == pi)
+                    closePlotPopup(index);
 			delete pi;
 			pi=0;
 		}
@@ -1036,11 +1140,20 @@ void AppWindow::applyFilter(bool fullFilter)
                                 &m_notAssociated,
                                 &m_blackWhiteMode);
                 if (const auto record = dataPack->getPrp3Record(data))
-                    pi->fixedColor = prp3DopplerColor(*record);
+                    pi->fixedColor = m_prp3MotionColours ? prp3MotionColor(*record) : prp3DopplerColor(*record);
 				radarScene->addItem(pi,layers[id]);
 			}
 		}
 		plot->setUserData(pi);
+        if (pi) {
+            const auto colour = m_trackerEvidence->colour(dataPack->trackerUses(data));
+            if (colour.isValid())
+                pi->fixedColor = colour;
+            else if (const auto record = dataPack->getPrp3Record(data))
+                pi->fixedColor = m_prp3MotionColours ? prp3MotionColor(*record) : prp3DopplerColor(*record);
+            else if (!dataPack->trackerUses(data).isEmpty())
+                pi->fixedColor = {};
+        }
 	}
 
 	rebuildTrackPaths();
@@ -1066,6 +1179,8 @@ void AppWindow::clearTrackPaths()
 void AppWindow::rebuildTrackInstances()
 {
     m_trackInstances.clear();
+    quint64 nextTrackInstance = 1;
+    QMap<QString, quint64> recordedInstances;
 
     QMap<quint64,QList<const NRadarTrackPlot*> > tracks;
     foreach(NRadarAbstractPlot *data,dataPack->getData())
@@ -1074,11 +1189,18 @@ void AppWindow::rebuildTrackInstances()
             continue;
 
         const NRadarTrackPlot *track=static_cast<const NRadarTrackPlot*>(data);
+        const auto uses = dataPack->trackerUses(track);
+        if (uses.size() == 1) {
+            const auto key = uses.first().sample->key();
+            if (!recordedInstances.contains(key))
+                recordedInstances.insert(key, nextTrackInstance++);
+            m_trackInstances.insert(track, recordedInstances.value(key));
+            continue;
+        }
         const quint64 key=(quint64(track->getRadarId())<<32)|quint64(track->getTrackId());
         tracks[key]<<track;
     }
 
-    quint64 nextTrackInstance=1;
     QMapIterator<quint64,QList<const NRadarTrackPlot*> > trackIt(tracks);
     while(trackIt.hasNext())
     {
@@ -1138,11 +1260,11 @@ void AppWindow::addTrackPolyline(const QPolygonF& polyline,
                                  quint8 radarId,
                                  uint trackId,
                                  quint64 trackInstance,
-                                 bool adsb)
+                                 bool adsb, const QColor &colour)
 {
     TrackPathsOverlayItem *overlay=adsb ? m_adsbTrackOverlay : m_trackOverlay;
     if(overlay)
-        overlay->addPolyline(polyline,radarId,trackId,trackInstance);
+        overlay->addPolyline(polyline,radarId,trackId,trackInstance, colour);
 }
 
 void AppWindow::setTrackPathsVisible(bool visible)
@@ -1208,9 +1330,14 @@ void AppWindow::rebuildTrackPaths()
 
             PlotItem *point=static_cast<PlotItem*>(track->getUserData());
             const bool visible=point && point->isVisible();
-            if(visible)
+            if(visible) {
                 polyline<<displayPosition(track,m_altitudeMultiplier);
-            else
+                if (m_trackerEvidence->coloursEnabled() && polyline.size() > 1) {
+                    addTrackPolyline(polyline, track->getRadarId(), track->getTrackId(), trackInstance, pathIsAdsb,
+                                      m_trackerEvidence->colour(dataPack->trackerUses(track)));
+                    polyline.remove(0, polyline.size() - 1);
+                }
+            } else
             {
                 addTrackPolyline(polyline,track->getRadarId(),track->getTrackId(),
                                  trackInstance,pathIsAdsb);
@@ -1288,6 +1415,10 @@ void AppWindow::addPrp3Details(QTreeWidgetItem *root, const Prp3PlotRecord &reco
     addItemToDetails(prp, tr("Exact CBOR payload"), tr("%1 bytes retained").arg(record.cborPayload.size()));
     addItemToDetails(prp, tr("Input frame"), tr("%1 bytes retained").arg(record.inputFrame.size()));
     addItemToDetails(prp, tr("Output APOI"), tr("%1 bytes retained").arg(record.outputApoi.size()));
+    if (!record.richDiagnostics) {
+        addItemToDetails(prp, tr("Signal diagnostics"), tr("Unavailable: recorded input used the V1 prefilter"));
+        return;
+    }
 
     auto *legacy = addItemToDetails(prp, tr("Legacy plot"));
     addItemToDetails(legacy, tr("Valid"), yesNo(record.legacy.valid));
@@ -1402,6 +1533,20 @@ void AppWindow::addPrp3Details(QTreeWidgetItem *root, const Prp3PlotRecord &reco
         addItemToDetails(branchItem, tr("Candidate"),
                          QStringLiteral("%1 (%2)").arg(branch.candidateIndex).arg(branch.candidateIndexScope));
     }
+
+    const auto &motion = record.motion;
+    const auto unavailable = tr("unavailable");
+    auto *motionItem = addItemToDetails(prp, tr("Motion evidence (MTI)"), prp3MotionClassName(motion.motionClass));
+    addItemToDetails(motionItem, tr("Source"),
+                     motion.source == Prp3MotionInfo::Source::LOGGED       ? tr("logged by RDPS3")
+                         : motion.source == Prp3MotionInfo::Source::RECOMPUTED ? tr("recomputed, production defaults")
+                                                                               : tr("none (no decoded snapshot)"));
+    addItemToDetails(motionItem, tr("MTI ratio q"),
+                     motion.mtiAvailable ? QString::number(motion.mtiRatio, 'f', 4) : unavailable);
+    addItemToDetails(motionItem, tr("Stationary incoherence m"),
+                     motion.incoherenceAvailable ? QString::number(motion.stationaryIncoherence, 'f', 4) : unavailable);
+    addItemToDetails(motionItem, tr("Peak SNR / supported samples"),
+                     tr("%1 dB / %2").arg(motion.peakSnrDb, 0, 'f', 1).arg(motion.supportedSamples));
 }
 
 //копипаста из RadarClient-а
@@ -1421,6 +1566,10 @@ void AppWindow::onPlotSelected(NRadarItem* radarItem)
 	const NRadarPlot* plot=static_cast<PlotItem*>(radarItem)->plot;
 	if(!plot) return;
     const auto prp3Record = dataPack->getPrp3Record(plot);
+    const auto trackerUses = dataPack->trackerUses(plot);
+    m_trackerEvidence->inspect(trackerUses);
+    if (!trackerUses.isEmpty())
+        m_trackerEvidence->show();
 
 	QTreeWidget* tree=treeDetails;
 	tree->clear();
@@ -1718,9 +1867,11 @@ void AppWindow::onPlotSelected(NRadarItem* radarItem)
 
     if (prp3Record)
         addPrp3Details(root, *prp3Record);
+    if (!trackerUses.isEmpty())
+        addItemToDetails(root, tr("Recorded tracker evidence"), m_trackerEvidence->summary(trackerUses));
 
 	tree->expandAll();
-    if (prp3Record) {
+    if (prp3Record && prp3Record->richDiagnostics) {
         if (!m_prp3SignalWindow)
             m_prp3SignalWindow = new Prp3SignalWindow(this);
         m_prp3SignalWindow->setRecord(prp3Record);
@@ -1955,6 +2106,8 @@ void AppWindow::populatePlotPopup(PlotLabel *label, NRadarItem *radarItem)
     entries << NUnitsConverter::angleStr(pt.x(), 1) + " / " + NUnitsConverter::length1kStr(pt.y() / 1000.0, 3);
     if (plot->hasHeight())
         entries << tr("Alt: %1").arg(NUnitsConverter::lengthStr(plot->getHeight()));
+    if (!dataPack->trackerUses(plot).isEmpty())
+        entries << m_trackerEvidence->summary(dataPack->trackerUses(plot));
 
     label->setEntries(entries);
 }
@@ -1994,6 +2147,18 @@ void AppWindow::closeAllPlotPopups()
         closePlotPopup(i);
 }
 
+void AppWindow::clearPlotItems()
+{
+    // Scene-layer teardown destroys its quadtrees before NRadarItem deletes the layer's children.
+    // Remove our points while their layer indexes and backing plots are still alive.
+    radarScene->clearRadarSelection();
+    for (auto *plot : dataPack->getData()) {
+        auto *item = static_cast<PlotItem *>(plot->getUserData());
+        plot->setUserData(nullptr);
+        delete item;
+    }
+}
+
 int AppWindow::findPopupAtPos(const QPoint& viewPos)
 {
     QList<QGraphicsItem*> itemsAtPos=radarView->items(viewPos);
@@ -2012,6 +2177,28 @@ void AppWindow::setPlotColor(const NRadarAbstractPlot* plot,const QColor& color)
 	if(!plot->getUserData()) return;
 
 	((PlotItem*)(plot->getUserData()))->fixedColor=color;
+}
+
+// applyFilter() reads the same flag, so plot items it recreates later keep the selected PRP3 palette.
+void AppWindow::setPrp3MotionColours(bool on)
+{
+    m_prp3MotionColours = on;
+    for (const auto *plot : dataPack->getData())
+        if (const auto record = dataPack->getPrp3Record(plot))
+            setPlotColor(plot, m_trackerEvidence->coloursEnabled()
+                                      ? m_trackerEvidence->colour(dataPack->trackerUses(plot))
+                                      : on ? prp3MotionColor(*record) : prp3DopplerColor(*record));
+    updatePrp3Legends();
+    radarView->resetCachedContent();
+    radarView->viewport()->update();
+}
+
+void AppWindow::updatePrp3Legends()
+{
+    m_prp3DopplerLegend->setVisible(dataPack->hasPrp3Data() && !m_prp3MotionColours
+                                   && !m_trackerEvidence->coloursEnabled());
+    m_prp3MotionLegend->setVisible(dataPack->hasPrp3Data() && m_prp3MotionColours
+                                  && !m_trackerEvidence->coloursEnabled());
 }
 
 /////////////

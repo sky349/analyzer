@@ -2,6 +2,7 @@
 
 #include "prp3record.h"
 #include "prp3phasediagnostics.h"
+#include <processor/rdps3/prp3compact.h>
 
 #include <qwt_legend.h>
 #include <qwt_plot.h>
@@ -166,10 +167,14 @@ Prp3SignalWindow::Prp3SignalWindow(QWidget *parent)
     }
 
     auto *tabs = new QTabWidget(this);
+    m_archive = new QTextBrowser(tabs);
+    m_archive->setOpenLinks(false);
+    m_archive->setOpenExternalLinks(false);
     auto *signalPage = new QWidget(tabs);
     auto *diagnostics = new QWidget(tabs);
     tabs->addTab(signalPage, tr("Signal samples"));
     tabs->addTab(diagnostics, tr("Phase diagnostics"));
+    tabs->addTab(m_archive, tr("Recorded observation and outcome"));
     auto *outerLayout = new QGridLayout(this);
     outerLayout->addWidget(m_summary, 0, 0);
     outerLayout->addWidget(tabs, 1, 0);
@@ -241,6 +246,68 @@ void Prp3SignalWindow::setRecord(const QSharedPointer<const Prp3PlotRecord> &rec
     if (m_record.isNull()) {
         clearRecord();
         return;
+    }
+
+    if (m_record->compact) {
+        using namespace Prp3Compact;
+        const auto status = m_record->preprocessingStatus;
+        auto html = tr("<p>Run %1, observation %2. Outcome: <b>%3</b>. "
+                       "The map displays the original observation once. Delivered values below are separate. "
+                       "No tracks or detailed live estimator diagnostics were recorded.</p>")
+            .arg(m_record->runId.toHtmlEscaped()).arg(m_record->inputOrdinal)
+            .arg(status == int(Outcome::FORWARDED) ? tr("forwarded toward tracker input")
+                 : status == int(Outcome::SUPPRESSED) ? tr("suppressed")
+                 : status == int(Outcome::UNAVAILABLE) ? tr("unavailable") : tr("pending/censored"));
+        const auto describe = [](const QCborMap &fields) {
+            QString text = QStringLiteral("<table border='1' cellspacing='0' cellpadding='4'>");
+            const QStringList names{ QStringLiteral("type"), QStringLiteral("radar"), QStringLiteral("UTC ms"),
+                QStringLiteral("source"), QStringLiteral("latitude / longitude"), QStringLiteral("map x / y (m)"),
+                QStringLiteral("SSR type"), QStringLiteral("squawk"), QStringLiteral("height (m)"),
+                QStringLiteral("flags"), QStringLiteral("typed options"), QStringLiteral("marker sector") };
+            for (auto it = fields.cbegin(); it != fields.cend(); ++it) {
+                const auto key = it.key().toInteger();
+                text += tableRow({ key >= 0 && key < names.size() ? names.at(int(key)) : QString::number(key),
+                                   it.value().toDiagnosticNotation(QCborValue::LineWrapped) });
+            }
+            return text + QStringLiteral("</table>");
+        };
+        html += tr("<h3>Original input</h3>") + describe(m_record->originalSnapshot);
+        if (!m_record->inputFrame.isEmpty())
+            html += tr("<p>Exact received PRP/DPS1 bytes:</p><pre>%1</pre><p>Actual APOI bytes:</p><pre>%2</pre>")
+                .arg(QString::fromLatin1(m_record->inputFrame.toHex(' ')),
+                     QString::fromLatin1(m_record->outputApoi.toHex(' ')));
+        const auto root = QCborValue::fromCbor(m_record->cborPayload).taggedValue().toMap();
+        html += tr("<p>Recorded ingress: %1 UTC ms; original measurement/proxy: %2 UTC ms; record %3.</p>")
+            .arg(root.value(Key::TIME).toInteger()).arg(m_record->arrivalUtcMs)
+            .arg(root.value(Key::SEQUENCE).toInteger());
+        const auto live = root.value(Key::LIVE).toArray();
+        if (!live.isEmpty())
+            html += tr("<h3>Actual live signal result</h3><p>Legacy valid / filter enabled: %1/%2; score %3; drop %4. "
+                       "Doppler flags %5, reason %6, branch mask %7, frequency %8 Hz. "
+                       "Motion class %9; q %10; m %11; peak SNR %12 dB; support %13. "
+                       "Availability is independent of frequency acceptance. "
+                       "Snapshot decode code at producer: %14.</p>")
+                .arg(live.at(0).toBool()).arg(live.at(1).toBool()).arg(number(live.at(2).toDouble()))
+                .arg(live.at(3).toBool()).arg(live.at(7).toInteger()).arg(live.at(8).toInteger())
+                .arg(live.at(9).toInteger()).arg(number(live.at(10).toDouble())).arg(live.at(11).toInteger())
+                .arg(live.at(12).toBool() ? number(live.at(13).toDouble()) : tr("unavailable"))
+                .arg(live.at(14).toBool() ? number(live.at(15).toDouble()) : tr("unavailable"))
+                .arg(number(live.at(16).toDouble())).arg(live.at(17).toInteger()).arg(live.at(6).toInteger());
+        if (!live.isEmpty())
+            html += tr("<p>Background flags: %1; threshold: %2 (transport amplitude units).</p>")
+                .arg(live.at(4).toInteger()).arg(live.at(5).toInteger());
+        for (const auto &value : m_record->preprocessingOutcomes) {
+            const auto outcome = value.toMap();
+            html += tr("<h3>Outcome at %1 UTC ms (record %2)</h3><p>Status %3, reason %4.</p>")
+                .arg(outcome.value(Key::TIME).toInteger()).arg(outcome.value(Key::SEQUENCE).toInteger())
+                .arg(outcome.value(Key::STATUS).toInteger()).arg(outcome.value(Key::REASON).toInteger());
+            if (outcome.value(Key::STATUS).toInteger() == qint64(Outcome::FORWARDED))
+                html += describe(outcome.contains(Key::PLOT) ? outcome.value(Key::PLOT).toMap()
+                    : applyChanges(m_record->originalSnapshot, outcome.value(Key::CHANGES).toMap()));
+        }
+        m_archive->setHtml(html);
+    } else {
+        m_archive->setPlainText(tr("Historical diagnostic recording; compact original/outcome snapshots unavailable."));
     }
 
     const auto &snapshotInfo = m_record->snapshot;
@@ -349,6 +416,10 @@ void Prp3SignalWindow::setRecord(const QSharedPointer<const Prp3PlotRecord> &rec
             .arg(m_record->outputApoi.size())
             .arg(evidenceText, mhText)
             .arg(undefinedPhases));
+    if (m_record->compact && !m_record->originalSnapshot.isEmpty())
+        m_summary->setText(tr("Recorded decoded observation %1, radar %2. See the recorded observation/outcome tab. "
+                             "No PRP I/Q snapshot was supplied for this input.")
+                              .arg(m_record->inputOrdinal).arg(m_record->radarId));
     setWindowTitle(tr("PRP3 signal analysis — plot %1").arg(m_record->sequence));
     m_magnitudePlot->setAxisAutoScale(QwtPlot::yLeft);
     m_trajectoryRescaler->setIntervalHint(QwtPlot::xBottom, QwtInterval(-1.15 * extent, 1.15 * extent));
@@ -535,6 +606,7 @@ void Prp3SignalWindow::updateDiagnostics()
 void Prp3SignalWindow::clearRecord()
 {
     m_record.clear();
+    m_archive->clear();
     const QSignalBlocker branchBlocker(m_diagnosticBranch);
     m_diagnosticBranch->clear();
     updateDiagnostics();
